@@ -8,11 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="common-service" />
-        <module name="manager" />
         <module name="base-common" />
+        <module name="manager-service" />
         <module name="manage-service" />
         <module name="zuul-service" />
-        <module name="zuul" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -23,10 +22,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="base-common" options="-parameters -extdirs F:\future_project\hearts-project\base-saas-service\base-common/lib" />
-      <module name="common-service" options="-parameters -extdirs F:\future_project\hearts-project\base-saas-service\service\common-service/lib" />
-      <module name="manage-service" options="-parameters -extdirs F:\future_project\saas-base\base-saas-service\service\manage-service/lib" />
-      <module name="manager" options="-parameters -extdirs F:\future_project\hearts-project\base-saas-service\service\manage-service/lib" />
+      <module name="base-common" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\base-common/lib" />
+      <module name="common-service" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\service\common-service/lib" />
+      <module name="manage-service" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\service\manage-service/lib" />
+      <module name="manager-service" options="-parameters -extdirs F:\future_project\hearts-project\base-saas-service\service\manage-service/lib" />
     </option>
   </component>
 </project>
