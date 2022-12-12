@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.saas.hearts.mapper.AreaInfoMapper">
+    <resultMap id="BaseResultMap" type="com.base.saas.hearts.domain.entity.AreaInfo">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="namess" jdbcType="VARCHAR" property="namess"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, namess, pid, level
+  </sql>
+
+    <select id="selectProvinceList" resultMap="BaseResultMap">
+        select
+
+        <include refid="Base_Column_List"/>
+        from area_province
+    </select>
+
+    <select id="selectCityList" parameterType="String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from area_city
+        <where>
+            <if test="null!=pid and ''!=pid">
+                pid = #{pid}
+            </if>
+        </where>
+    </select>
+</mapper>

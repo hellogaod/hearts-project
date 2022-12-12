@@ -40,8 +40,8 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("saas服基础功能平台务-管理端 APIs")
-                .description("saas基础功能平台服务-管理端 APIs")
+                .title("福生语录app-管理端 APIs")
+                .description("福生语录app-管理端 APIs")
                 .version("0.0.1-SNAPSHOT")
                 .build();
     }
