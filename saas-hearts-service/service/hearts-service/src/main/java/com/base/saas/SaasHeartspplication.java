@@ -1,5 +1,6 @@
 package com.base.saas;
 
+
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +25,11 @@ import java.util.Properties;
 @EnableAsync
 @EnableDiscoveryClient
 @SpringBootApplication
-@EntityScan("com.base.saas.manage")
+@EntityScan("com.base.saas.hearts")
 @EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
 @EnableTransactionManagement
-public class BaseManagerApplication {
-    private static final Logger log = LoggerFactory.getLogger(BaseManagerApplication.class);
+public class SaasHeartspplication {
+    private static final Logger log = LoggerFactory.getLogger(SaasHeartspplication.class);
 
     @Bean
     public PageHelper pageHelper() {
@@ -48,13 +49,10 @@ public class BaseManagerApplication {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-//    @Bean
-//    public Queue unReduceSuccessQueue() {
-//        return new Queue(AppConstant.DATAINFO_CONFIRM_QE);
-//    }
+
 
     public static void main(String[] args) throws UnknownHostException {
-        SpringApplication app = new SpringApplication(BaseManagerApplication.class);
+        SpringApplication app = new SpringApplication(SaasHeartspplication.class);
         ConfigurableApplicationContext c =  app.run(args);
         Environment env =c.getEnvironment();
         log.info("\n----------------------------------------------------------\n\t" +

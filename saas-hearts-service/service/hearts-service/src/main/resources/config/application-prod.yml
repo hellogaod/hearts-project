@@ -1,14 +1,30 @@
 spring:
   profiles:
-    #当前环境
-    active: dev
+    active: prod
+
+  # 热部署
+  devtools:
+    restart:
+      #设置开启热部署
+      enabled: true
+
+    livereload:
+      #是否支持livereload
+      enabled: false # we use gulp + BrowserSync for livereload
+
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+    #加载的资源包文件缓存持续时间。 如果没有设置，捆绑包将被永久缓存。 如果没有指定持续时间后缀，将使用秒
+    cache-duration: 3600
 
   #mysql连接
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my-hearts-start?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-    username: root
-    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.19.28.133:3306/pangolin_business?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: cuidaren
+    password: CuiDaRen!23456
 
   #redis配置
   redis:
@@ -16,13 +32,13 @@ spring:
     host: 127.0.0.1
     port: 6379
     expireTime: 3600
-    password:
+    password: 123456
 
   #nacos服务地址
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: 192.168.102.135:8848
 
 # PageHelper 分页插件配置
 pagehelper:

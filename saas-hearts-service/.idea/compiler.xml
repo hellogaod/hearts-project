@@ -12,6 +12,7 @@
         <module name="manager-service" />
         <module name="manage-service" />
         <module name="zuul-service" />
+        <module name="hearts-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +25,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="base-common" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\base-common/lib" />
       <module name="common-service" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\service\common-service/lib" />
+      <module name="hearts-service" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\service\hearts-service/lib" />
       <module name="manage-service" options="-parameters -extdirs F:\future_project\hearts-project\saas-hearts-service\service\manage-service/lib" />
       <module name="manager-service" options="-parameters -extdirs F:\future_project\hearts-project\base-saas-service\service\manage-service/lib" />
     </option>
