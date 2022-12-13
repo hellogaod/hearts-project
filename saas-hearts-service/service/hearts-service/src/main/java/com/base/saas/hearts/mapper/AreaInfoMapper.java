@@ -6,9 +6,13 @@ import java.util.List;
 
 public interface AreaInfoMapper {
 
-    /*获取所有省*/
+    /**
+     * 获取所有省
+     */
     List<AreaInfo> selectProvinceList();
 
-    /*获取省下面的市*/
+    /**
+     * 获取省下面的市
+     */
     List<AreaInfo> selectCityList(String pid);
 }

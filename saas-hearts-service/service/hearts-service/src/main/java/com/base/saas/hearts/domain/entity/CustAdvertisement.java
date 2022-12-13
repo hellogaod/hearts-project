@@ -22,6 +22,12 @@ public class CustAdvertisement {
 
     private String createUser;
 
+    private String updateUser;
+
+    private String createUserName;
+
+    private String updateUserName;
+
     private Date createTime;
 
     private Date updateTime;

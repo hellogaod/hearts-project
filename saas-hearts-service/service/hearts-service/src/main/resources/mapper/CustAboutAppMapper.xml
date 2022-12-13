@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.saas.hearts.mapper.CustAboutAppMapper">
+    <resultMap id="BaseResultMap" type="com.base.saas.hearts.domain.entity.CustAboutApp">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="company_code" jdbcType="VARCHAR" property="companyCode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="android_code_name" jdbcType="VARCHAR" property="androidCodeName"/>
+        <result column="android_code_version" jdbcType="INTEGER" property="androidCodeVersion"/>
+        <result column="android_url" jdbcType="VARCHAR" property="androidUrl"/>
+        <result column="ios_code_name" jdbcType="VARCHAR" property="iosCodeName"/>
+        <result column="ios_code_version" jdbcType="INTEGER" property="iosCodeVersion"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="ios_url" jdbcType="VARCHAR" property="iosUrl"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="logo" jdbcType="VARCHAR" property="logo"/>
+        <result column="creater_user" jdbcType="VARCHAR" property="createrUser"/>
+        <result column="createrUserName" jdbcType="VARCHAR" property="createrUserName"/>
+        <result column="updateUserName" jdbcType="VARCHAR" property="updateUserName"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="android_update_description" jdbcType="VARCHAR" property="androidUpdateDescription"/>
+        <result column="ios_update_description" jdbcType="VARCHAR" property="iosUpdateDescription"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, company_code, name, android_code_name, android_code_version, android_url, ios_code_name, 
+    ios_code_version, ios_url, description, logo, creater_user, update_user, create_time, 
+    update_time,android_update_description,ios_update_description,status
+  </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select real_name from ent_user u where u.user_id = c.creater_user) as createrUserName,
+        (select real_name from ent_user u where u.user_id = c.update_user) as updateUserName
+        from cust_about_app c
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectNewsByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select real_name from ent_user u where u.user_id = c.creater_user) as createrUserName,
+        (select real_name from ent_user u where u.user_id = c.update_user) as updateUserName
+        from cust_about_app
+
+        limit 1
+    </select>
+
+    <select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select real_name from ent_user u where u.user_id = c.creater_user) as createrUserName,
+        (select real_name from ent_user u where u.user_id = c.update_user) as updateUserName
+        from cust_about_app
+        <where>
+            <if test="androidCodeVersion != 0">
+                and android_code_version = #{androidCodeVersion}
+            </if>
+            <if test="iosCodeVersion != 0">
+                and ios_code_version = #{iosCodeVersion}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+<!--    <update id="updateStatusByPrimaryKey" parameterType="map">-->
+<!--    update cust_about_app-->
+<!--    set-->
+<!--      status = #{status,jdbcType=INTEGER}-->
+
+<!--    where id = #{id,jdbcType=VARCHAR}-->
+<!--  </update>-->
+
+    <insert id="insertSelective" parameterType="com.base.saas.hearts.domain.entity.CustAboutApp">
+        insert into cust_about_app
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="companyCode != null">
+                company_code,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="androidCodeName != null">
+                android_code_name,
+            </if>
+            <if test="androidCodeVersion != null">
+                android_code_version,
+            </if>
+            <if test="androidUrl != null">
+                android_url,
+            </if>
+            <if test="iosCodeName != null">
+                ios_code_name,
+            </if>
+            <if test="iosCodeVersion != null">
+                ios_code_version,
+            </if>
+            <if test="iosUrl != null">
+                ios_url,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="logo != null">
+                logo,
+            </if>
+            <if test="createrUser != null">
+                creater_user,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="androidUpdateDescription != null">
+                android_update_description,
+            </if>
+            <if test="iosUpdateDescription != null">
+                ios_update_description,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="companyCode != null">
+                #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="androidCodeName != null">
+                #{androidCodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="androidCodeVersion != null">
+                #{androidCodeVersion,jdbcType=INTEGER},
+            </if>
+            <if test="androidUrl != null">
+                #{androidUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="iosCodeName != null">
+                #{iosCodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="iosCodeVersion != null">
+                #{iosCodeVersion,jdbcType=INTEGER},
+            </if>
+            <if test="iosUrl != null">
+                #{iosUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null">
+                #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="createrUser != null">
+                #{createrUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="androidUpdateDescription != null">
+                #{androidUpdateDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="iosUpdateDescription != null">
+                #{iosUpdateDescription,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.base.saas.hearts.domain.entity.CustAboutApp">
+        update cust_about_app
+        <set>
+            <if test="companyCode != null">
+                company_code = #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                name = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="androidCodeName != null">
+                android_code_name = #{androidCodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="androidCodeVersion != null">
+                android_code_version = #{androidCodeVersion,jdbcType=INTEGER},
+            </if>
+            <if test="androidUrl != null">
+                android_url = #{androidUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="iosCodeName != null">
+                ios_code_name = #{iosCodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="iosCodeVersion != null">
+                ios_code_version = #{iosCodeVersion,jdbcType=INTEGER},
+            </if>
+            <if test="iosUrl != null">
+                ios_url = #{iosUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="logo != null">
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="createrUser != null">
+                creater_user = #{createrUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="androidUpdateDescription != null">
+                android_update_description = #{androidUpdateDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="iosUpdateDescription != null">
+                ios_update_description = #{iosUpdateDescription,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

@@ -34,6 +34,10 @@ public class CustAboutApp {
 
     private String createrUser;
 
+    private String createrUserName;
+
+    private String updateUserName;
+
     private String updateUser;
 
     private Date createTime;
@@ -43,4 +47,6 @@ public class CustAboutApp {
     private String androidUpdateDescription;
     @ApiModelProperty("ios更新描述")
     private String iosUpdateDescription;
+    @ApiModelProperty("状态，0：停用；1：启用")
+    private Integer status;
 }
