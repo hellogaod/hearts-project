@@ -12,8 +12,10 @@ public class CustTalk {
     private String id;
     @ApiModelProperty("企业code")
     private String companyCode;
-
+    @ApiModelProperty("创建者id")
     private String createUser;
+    @ApiModelProperty("创建者姓名")
+    private String createUserName;
     @ApiModelProperty("标题")
     private String title;
     @ApiModelProperty("内容")
@@ -24,6 +26,12 @@ public class CustTalk {
     private Integer satisfaceRate;
     @ApiModelProperty("话题所属附件，逗号分隔")
     private String attachmentIds;
+
+    @ApiModelProperty("点赞数")
+    private int praiseCount;
+
+    @ApiModelProperty("评论数")
+    private int commentCount;
 
     private Date createTime;
 

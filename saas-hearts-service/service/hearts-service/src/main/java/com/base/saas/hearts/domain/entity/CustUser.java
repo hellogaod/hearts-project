@@ -41,6 +41,6 @@ public class CustUser {
     @ApiModelProperty("状态，0：停用；1：启用；2：锁定（达到一定错误次数会锁定，或者管理员锁定）")
     private Integer status;
     @ApiModelProperty("登录错误次数")
-    private Integer errorAccount;
+    private Integer errorCount;
 
 }

@@ -15,6 +15,12 @@ public class CustReport {
     @ApiModelProperty("内容")
     private String content;
 
+    @ApiModelProperty("举报发布者id")
+    private String creatorId;
+
+    @ApiModelProperty("举报发布者姓名")
+    private String creatorName;
+
     private Date createTime;
     @ApiModelProperty("状态，0：停用；1：启用")
     private Integer status;
@@ -23,6 +29,7 @@ public class CustReport {
     @ApiModelProperty("根据举报类型判断，0：当前是话题id；1：当前是评论id")
     private String sourceId;
 
-    private byte[] classify;
+    @ApiModelProperty("举报类别")
+    private String classify;
 
 }

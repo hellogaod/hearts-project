@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.saas.hearts.mapper.CustAttentionMapper">
+    <resultMap id="BaseResultMap" type="com.base.saas.hearts.domain.entity.CustAttention">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="company_code" jdbcType="VARCHAR" property="companyCode"/>
+        <result column="attention_id" jdbcType="VARCHAR" property="attentionId"/>
+        <result column="be_attention_id" jdbcType="VARCHAR" property="beAttentionId"/>
+        <result column="attentionName" jdbcType="VARCHAR" property="attentionName"/>
+        <result column="beAttentionName" jdbcType="VARCHAR" property="beAttentionName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, company_code, attention_id, be_attention_id, status, create_time, update_time
+  </sql>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select nickname from cust_user u where u.id = a.attention_id) as attentionName,
+        (select nickname from cust_user u where u.id = a.be_attention_id) as beAttentionName
+        from cust_attention a
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>,
+        (select nickname from cust_user u where u.id = a.attention_id) as attentionName,
+        (select nickname from cust_user u where u.id = a.be_attention_id) as beAttentionName
+        from cust_attention a
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="attentionId != null and attentionId != ''">
+                and attention_id = #{attentionId}
+            </if>
+            <if test="beAttentionId != null and beAttentionId != ''">
+                and be_attention_id = #{beAttentionId}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+
+    <insert id="insertSelective" parameterType="com.base.saas.hearts.domain.entity.CustAttention">
+        insert into cust_attention
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="companyCode != null">
+                company_code,
+            </if>
+            <if test="attentionId != null">
+                attention_id,
+            </if>
+            <if test="beAttentionId != null">
+                be_attention_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="companyCode != null">
+                #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="attentionId != null">
+                #{attentionId,jdbcType=VARCHAR},
+            </if>
+            <if test="beAttentionId != null">
+                #{beAttentionId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.base.saas.hearts.domain.entity.CustAttention">
+        update cust_attention
+        <set>
+            <if test="companyCode != null">
+                company_code = #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="attentionId != null">
+                attention_id = #{attentionId,jdbcType=VARCHAR},
+            </if>
+            <if test="beAttentionId != null">
+                be_attention_id = #{beAttentionId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

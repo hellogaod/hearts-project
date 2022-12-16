@@ -19,6 +19,9 @@ public class CustPraise {
     @ApiModelProperty("点赞者id")
     private String praiseUserId;
 
+    @ApiModelProperty("点赞者名称")
+    private String praiseUserName;
+
     private Date createTime;
 
     private Date updateTime;

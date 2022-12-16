@@ -20,6 +20,8 @@ public class CustMessage {
     private Integer status;
     @ApiModelProperty("所属用户")
     private String customerId;
+    @ApiModelProperty("所属用户名称")
+    private String customerName;
     @ApiModelProperty("类型：1:注册消息，修改密码；2.话题被赞，被评论了；3.用户被关注了；4.被举报了；5.举报受理情况；6. 意见反馈处理情况；")
     private Integer type;
 
