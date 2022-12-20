@@ -128,7 +128,7 @@ public class EntDictConfigController {
             if (map.getCode() == 1) {//保存成功
                 //刷新缓存
                 dictCacheLoader.refresh();
-                LoggerCommon.info(this.getClass(), "保存字典大类失败:" + logmsg);
+                LoggerCommon.info(this.getClass(), "保存字典大类成功" + logmsg);
                 return ResponseEntity.ok().body(null);
             } else {
                 LoggerCommon.info(this.getClass(), "保存字典大类失败:" + logmsg);

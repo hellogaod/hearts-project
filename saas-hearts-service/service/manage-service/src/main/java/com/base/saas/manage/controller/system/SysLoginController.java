@@ -196,7 +196,7 @@ public class SysLoginController {
         HttpSession session = request.getSession();
         if (UserContextUtil.getUserInfo(session.getId()) != null) {
             RedisUtil.del(RedisKeyConstants.LOGIN_PREFIX + UserContextUtil.getUserInfo().getAccount());
-            RedisUtil.del(AppConstant.APP_USER_INFO + session.getId());
+            RedisUtil.del(AppConstant.SAAS_USER_INFO + session.getId());
         }
         return ResponseEntity.ok().body(null);
     }

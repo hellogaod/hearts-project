@@ -1,153 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.base.saas.hearts.mapper.CustTalkMapper">
-  <resultMap id="BaseResultMap" type="com.base.saas.hearts.domain.entity.CustTalk">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
-    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="satisface_rate" jdbcType="INTEGER" property="satisfaceRate" />
-    <result column="attachment_ids" jdbcType="VARCHAR" property="attachmentIds" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="createUserName" jdbcType="VARCHAR" property="createUserName" />
-    <result column="praiseCount" jdbcType="INTEGER" property="praiseCount" />
-    <result column="commentCount" jdbcType="INTEGER" property="commentCount" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.base.saas.hearts.domain.entity.CustTalk">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="company_code" jdbcType="VARCHAR" property="companyCode"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="satisface_rate" jdbcType="INTEGER" property="satisfaceRate"/>
+        <result column="attachment_ids" jdbcType="VARCHAR" property="attachmentIds"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="createUserName" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="praiseCount" jdbcType="INTEGER" property="praiseCount"/>
+        <result column="commentCount" jdbcType="INTEGER" property="commentCount"/>
+        <collection property="custCommentList" column="{talkId = id}"
+                    select="com.base.saas.hearts.mapper.CustCommentMapper.selectList"></collection>
+    </resultMap>
 
-  <sql id="Base_Column_List">
+    <sql id="Base_Column_List">
     id, company_code, create_user, title, content, status, satisface_rate, attachment_ids, 
     create_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />,
-    (select nickname from cust_user u where u.id = t.create_user) as createUserName,
-    (select count(id) from cust_praise p where p.talk_id = t.id) as praiseCount,
-    (select count(id) from cust_comment c where c.talk_id = t.id) as commentCount
-    from cust_talk t
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select nickname from cust_user u where u.id = t.create_user) as createUserName,
+        (select count(id) from cust_praise p where p.talk_id = t.id) as praiseCount,
+        (select count(id) from cust_comment c where c.talk_id = t.id) as commentCount
+        from cust_talk t
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
 
-  <select id="selectList" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />,
-    (select nickname from cust_user u where u.id = t.create_user) as createUserName,
-    (select count(id) from cust_praise p where p.talk_id = t.id) as praiseCount,
-    (select count(id) from cust_comment c where c.talk_id = t.id) as commentCount
-    from cust_talk t
-    <where>
-      <if test="status != null">
-        and status = #{status}
-      </if>
-      <if test="createUser != null and createUser != ''">
-        and create_user = #{createUser}
-      </if>
-    </where>
-    order by update_time desc
-  </select>
+    <select id="selectList" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        (select nickname from cust_user u where u.id = t.create_user) as createUserName,
+        (select count(id) from cust_praise p where p.talk_id = t.id) as praiseCount,
+        (select count(id) from cust_comment c where c.talk_id = t.id) as commentCount
+        from cust_talk t
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="createUser != null and createUser != ''">
+                and create_user = #{createUser}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
 
-  <insert id="insertSelective" parameterType="com.base.saas.hearts.domain.entity.CustTalk">
-    insert into cust_talk
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="companyCode != null">
-        company_code,
-      </if>
-      <if test="createUser != null">
-        create_user,
-      </if>
-      <if test="title != null">
-        title,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="satisfaceRate != null">
-        satisface_rate,
-      </if>
-      <if test="attachmentIds != null">
-        attachment_ids,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="companyCode != null">
-        #{companyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="createUser != null">
-        #{createUser,jdbcType=VARCHAR},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="satisfaceRate != null">
-        #{satisfaceRate,jdbcType=INTEGER},
-      </if>
-      <if test="attachmentIds != null">
-        #{attachmentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insertSelective" parameterType="com.base.saas.hearts.domain.entity.CustTalk">
+        insert into cust_talk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="companyCode != null">
+                company_code,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="satisfaceRate != null">
+                satisface_rate,
+            </if>
+            <if test="attachmentIds != null">
+                attachment_ids,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="companyCode != null">
+                #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="satisfaceRate != null">
+                #{satisfaceRate,jdbcType=INTEGER},
+            </if>
+            <if test="attachmentIds != null">
+                #{attachmentIds,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.base.saas.hearts.domain.entity.CustTalk">
-    update cust_talk
-    <set>
-      <if test="companyCode != null">
-        company_code = #{companyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="createUser != null">
-        create_user = #{createUser,jdbcType=VARCHAR},
-      </if>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="satisfaceRate != null">
-        satisface_rate = #{satisfaceRate,jdbcType=INTEGER},
-      </if>
-      <if test="attachmentIds != null">
-        attachment_ids = #{attachmentIds,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.base.saas.hearts.domain.entity.CustTalk">
+        update cust_talk
+        <set>
+            <if test="companyCode != null">
+                company_code = #{companyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="satisfaceRate != null">
+                satisface_rate = #{satisfaceRate,jdbcType=INTEGER},
+            </if>
+            <if test="attachmentIds != null">
+                attachment_ids = #{attachmentIds,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
 </mapper>

@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
- * 用户信息存取:通过key:sessionId，value：userInfo存储在redis中
+ * app用户信息存取:通过key:sessionId，value：userInfo存储在redis中
  * 1. 如果是登录，将登录request中的session.getId()作为sessionId；
  * 2.将sessionId作为request头部header的x-userToken参数，之后的每次获取都是通过该参数获取；
  */
-public abstract class UserContextUtil {
+public abstract class AppUserContextUtil {
 
     private static ThreadLocal<HashMap<String, Object>> threadLocal = new ThreadLocal<HashMap<String, Object>>() {
         @Override
@@ -36,7 +36,7 @@ public abstract class UserContextUtil {
     //通过header获取sessionId
     public static String getUserTokenId() {
         if (getHttpServletRequest() != null) {
-            return getHttpServletRequest().getHeader("X-UserToken");
+            return getHttpServletRequest().getHeader("app-UserToken");
         }
 
         return null;
@@ -44,7 +44,7 @@ public abstract class UserContextUtil {
 
     //通过header获取sessionId
     public static String getUserTokenId(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("X-UserToken");
+        String token = httpServletRequest.getHeader("app-UserToken");
         return token;
     }
 
@@ -54,7 +54,7 @@ public abstract class UserContextUtil {
             return null;
         }
 
-        return RedisUtil.get(AppConstant.SAAS_USER_INFO + getUserTokenId());
+        return RedisUtil.get(AppConstant.APP_USER_INFO + getUserTokenId());
     }
 
     //如果是登录情况下，将登录request中国的sessionId作为tokenId
@@ -62,15 +62,15 @@ public abstract class UserContextUtil {
         if (tokenId == null) {
             return null;
         }
-        return RedisUtil.get(AppConstant.SAAS_USER_INFO + tokenId);
+        return RedisUtil.get(AppConstant.APP_USER_INFO + tokenId);
     }
 
     public static void setUserInfo(UserInfo userInfo) {
-        RedisUtil.set(AppConstant.SAAS_USER_INFO + getUserTokenId(), userInfo);
+        RedisUtil.set(AppConstant.APP_USER_INFO + getUserTokenId(), userInfo);
     }
 
     public static void setUserInfo(String tokenId, UserInfo userInfo) {
-        RedisUtil.set(AppConstant.SAAS_USER_INFO + tokenId, userInfo);
+        RedisUtil.set(AppConstant.APP_USER_INFO + tokenId, userInfo);
     }
 
 }

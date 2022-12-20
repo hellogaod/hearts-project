@@ -17,11 +17,15 @@ public class AppConstant {
     //添加日志接口
     public static final String MANAGE_ADDLOG_API = MANAGE_NAME + "/api/entLog/addLog";
 
+    /**
+     * USER_INFO 管理端用户信息
+     */
+    public static final String SAAS_USER_INFO = "SAAS_USER_INFO_";
 
     /**
-     * USER_INFO 用户信息
+     * USER_INFO APP端，最好的用法是拼接上companyCode
      */
-    public static final String APP_USER_INFO = "SAAS_USER_INFO_";
+    public static final String APP_USER_INFO = "APP_USER_INFO_";
 
 }
 

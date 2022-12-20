@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ApiModel("话题")
@@ -37,4 +38,6 @@ public class CustTalk {
 
     private Date updateTime;
 
+    @ApiModelProperty("话题所属评论列表")
+    private List<CustComment> custCommentList;
 }

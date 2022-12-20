@@ -28,6 +28,8 @@ public class UserInfo implements Serializable {
 
     private String tel;
 
+    private String uniqueKey;
+
     /**
      * 登录用户的类别；
      * 1：运营平台用户

@@ -183,7 +183,7 @@ public class EntLoginController {
         }
         if (UserContextUtil.getUserInfo() != null) {
             RedisUtil.del(RedisKeyConstants.LOGIN_PREFIX + UserContextUtil.getUserInfo().getCompanyCode() + "-" + UserContextUtil.getUserInfo().getAccount());
-            RedisUtil.del(AppConstant.APP_USER_INFO + UserContextUtil.getUserTokenId());
+            RedisUtil.del(AppConstant.SAAS_USER_INFO + UserContextUtil.getUserTokenId());
         }
         return ResponseEntity.ok().body(null);
     }

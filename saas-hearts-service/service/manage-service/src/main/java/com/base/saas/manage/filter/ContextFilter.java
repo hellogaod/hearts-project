@@ -1,5 +1,6 @@
 package com.base.saas.manage.filter;
 
+import com.base.saas.userinfo.AppUserContextUtil;
 import com.base.saas.userinfo.UserContextUtil;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,10 @@ public class ContextFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) {
         try {
+
             UserContextUtil.setHttpServletRequest(WebUtils.toHttp(request));
+
+            AppUserContextUtil.setHttpServletRequest(WebUtils.toHttp(request));
 
             chain.doFilter(request, response);
         } catch (Exception e) {

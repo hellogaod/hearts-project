@@ -36,4 +36,14 @@ public final class HeaderUtil {
         }
         return headers;
     }
+
+    public static HttpHeaders createAppToken(String sessionId) {
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.add("app-saas-token", URLEncoder.encode(sessionId, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return headers;
+    }
 }

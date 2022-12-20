@@ -14,6 +14,8 @@ public interface CustUserMapper {
 
     CustUser selectByPrimaryKey(String id);
 
+    CustUser selectByNickName(String nickName);
+
     int updateByPrimaryKeySelective(CustUser record);
 
     int increateErrorCount(String id);

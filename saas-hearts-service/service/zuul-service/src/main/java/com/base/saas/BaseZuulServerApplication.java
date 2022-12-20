@@ -57,6 +57,7 @@ public class BaseZuulServerApplication {
         corsConfig.addAllowedHeader("*");
         corsConfig.addExposedHeader("saas-error-message");
         corsConfig.addExposedHeader("saas-token");
+        corsConfig.addExposedHeader("app-saas-token");
 
         //跨域的请求方法
         corsConfig.addAllowedMethod("OPTIONS");
