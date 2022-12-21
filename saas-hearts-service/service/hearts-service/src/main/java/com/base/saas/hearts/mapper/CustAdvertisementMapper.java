@@ -1,9 +1,11 @@
 package com.base.saas.hearts.mapper;
 
 import com.base.saas.hearts.domain.entity.CustAdvertisement;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface CustAdvertisementMapper {
     /**
      * 新增一条item

@@ -1,10 +1,12 @@
 package com.base.saas.hearts.mapper;
 
 import com.base.saas.hearts.domain.entity.CustReport;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface CustReportMapper {
 
     /**插入一条item数据*/

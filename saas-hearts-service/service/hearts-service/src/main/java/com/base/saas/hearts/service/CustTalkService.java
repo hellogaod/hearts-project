@@ -18,5 +18,5 @@ public interface CustTalkService {
 
     CustTalk getCustTalkInfoById(String talkId);
 
-    List<CustTalk> getCustTalkList(Integer status,String createrUserId);
+    List<CustTalk> getCustTalkList(Integer status,String createrUserId, String companyCode);
 }

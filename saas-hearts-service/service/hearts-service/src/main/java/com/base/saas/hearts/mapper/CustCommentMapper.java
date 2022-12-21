@@ -2,10 +2,12 @@ package com.base.saas.hearts.mapper;
 
 
 import com.base.saas.hearts.domain.entity.CustComment;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface CustCommentMapper {
 
     /**

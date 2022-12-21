@@ -1,6 +1,8 @@
 package com.base.saas.hearts.controller;
 
+import com.base.saas.AppConstant;
 import com.base.saas.hearts.domain.entity.CustUser;
+import com.base.saas.hearts.domain.model.ReturnMap;
 import com.base.saas.hearts.service.CustUserService;
 import com.base.saas.language.LocaleMessage;
 import com.base.saas.logger.LoggerCommon;
@@ -8,6 +10,7 @@ import com.base.saas.userinfo.AppUserContextUtil;
 import com.base.saas.userinfo.UserInfo;
 import com.base.saas.util.ExceptionStackUtils;
 import com.base.saas.util.HeaderUtil;
+import com.base.saas.util.redis.RedisUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -87,12 +90,17 @@ public class CustUserController {
     }
 
     @ApiOperation(value = "app用户登录", notes = "app用户登录")
-    @PostMapping("/login")
+    @PostMapping("/doLogin")
     public ResponseEntity doLogin(@RequestBody CustUser custUser,HttpServletRequest request) {
         CustUser appUserInfo = null;
         String localeTipMsg = LocaleMessage.get("system.server.exception");
         try {
-            appUserInfo = custUserService.login(custUser.getNickname(),custUser.getPassword());
+            ReturnMap<CustUser> returnMap = custUserService.login(custUser.getNickname(),custUser.getPassword(),custUser.getCompanyCode());
+            if (returnMap.getCode() == 1){
+                appUserInfo = returnMap.getT();
+            }else {
+                localeTipMsg = LocaleMessage.get(returnMap.getMsg());
+            }
         } catch (Exception e) {
 
             LoggerCommon.info(this.getClass(), "app用户登录异常：" + ExceptionStackUtils.collectExceptionStackMsg(e));
@@ -119,19 +127,77 @@ public class CustUserController {
         return ResponseEntity.ok().headers(HeaderUtil.createToken(sessionId)).body(appUserInfo);
     }
 
-    2.修改用户信息
-    4. 错误次数
-    5. 修改状态
-    6. 修改密码
-    7. 获取用户信息
+    @ApiOperation(value = "退出", httpMethod = "POST", notes = "退出")
+    @PostMapping("/logout")
+    public ResponseEntity logout() {
 
-    1. 新增话题
-    2. 修改话题
-    3. 话题详情
-    4. 话题列表
+        if (AppUserContextUtil.getUserInfo() != null) {
+            RedisUtil.del(AppConstant.APP_USER_INFO + AppUserContextUtil.getUserTokenId());
+        }
+        return ResponseEntity.ok().body(null);
+    }
 
-    1. 新增评论
-    2. 修改评论状态
-    3. 评论列表-可能不需要
-    4. 话题详情
+    @ApiOperation(value = "修改密码", notes = "修改密码")
+    @PostMapping("/updateCustUserPwd")
+    public ResponseEntity updateCustUserPwd(@RequestBody CustUser custUser) {
+
+        String localeTipMsg = LocaleMessage.get("message.system.update.fail");
+        try {
+            boolean flag = custUserService.updateCustUserPassword(custUser.getNickname(), custUser.getUniqueIdenty(), custUser.getPassword());
+
+            if (flag) {
+                LoggerCommon.info(this.getClass(), "修改密码成功");
+                return ResponseEntity.ok().body(null);
+            } else {
+                LoggerCommon.info(this.getClass(), "修改密码失败：" + localeTipMsg);
+                return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(localeTipMsg)).body(null);
+            }
+        } catch (Exception e) {
+
+            LoggerCommon.info(this.getClass(), "修改密码：" + localeTipMsg);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(localeTipMsg)).body(null);
+        }
+    }
+
+    @GetMapping("/getUserDetailById")
+    @ApiOperation(value = "查询app用户详情", notes = "查询app用户详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", dataType = "String", paramType = "query", required = true),
+    })
+    public ResponseEntity getUserById(@RequestParam String userId) {
+        try {
+            CustUser user = custUserService.getCustUserInfoById(userId);
+            return ResponseEntity.ok().body(user);
+        } catch (Exception e) {
+            String logmsg = LocaleMessage.get("message.query.errorMessage");
+
+            LoggerCommon.info(this.getClass(), "查询app用户异常：" + ExceptionStackUtils.collectExceptionStackMsg(e));
+
+            return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(null);
+        }
+    }
+
+    @ApiOperation(value = "修改状态", notes = "修改状态")
+    @PostMapping("/updateCustUserStatus")
+    public ResponseEntity updateCustUserStatus(@RequestBody CustUser custUser) {
+
+        String localeTipMsg = LocaleMessage.get("message.system.update.fail");
+        try {
+            boolean flag = custUserService.updateCustUserStatus(custUser.getId(), custUser.getStatus());
+
+            if (flag) {
+                LoggerCommon.info(this.getClass(), "修改状态成功");
+                return ResponseEntity.ok().body(null);
+            } else {
+                LoggerCommon.info(this.getClass(), "修改状态失败：" + localeTipMsg);
+                return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(localeTipMsg)).body(null);
+            }
+        } catch (Exception e) {
+
+            LoggerCommon.info(this.getClass(), "修改状态：" + localeTipMsg);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(localeTipMsg)).body(null);
+        }
+    }
+
+
 }

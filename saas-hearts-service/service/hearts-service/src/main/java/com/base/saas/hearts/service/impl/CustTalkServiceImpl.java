@@ -3,9 +3,12 @@ package com.base.saas.hearts.service.impl;
 import com.base.saas.hearts.domain.entity.CustTalk;
 import com.base.saas.hearts.mapper.CustTalkMapper;
 import com.base.saas.hearts.service.CustTalkService;
+import com.base.saas.userinfo.AppUserContextUtil;
+import com.base.saas.userinfo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,11 +25,18 @@ public class CustTalkServiceImpl implements CustTalkService {
 
     @Override
     public boolean addCustTalk(CustTalk custTalk) {
+        UserInfo userInfo = AppUserContextUtil.getUserInfo();
+
+        custTalk.setCompanyCode(userInfo.getCompanyCode());
+        custTalk.setCreateTime(new Date());
+        custTalk.setCreateUser(userInfo.getUserId());
+        custTalk.setUpdateTime(new Date());
         return custTalkMapper.insertSelective(custTalk) == 1;
     }
 
     @Override
     public boolean updateCustTalk(CustTalk custTalk) {
+        custTalk.setUpdateTime(new Date());
         return custTalkMapper.updateByPrimaryKeySelective(custTalk) == 1;
     }
 
@@ -36,7 +46,7 @@ public class CustTalkServiceImpl implements CustTalkService {
     }
 
     @Override
-    public List<CustTalk> getCustTalkList(Integer status, String createrUserId) {
-        return custTalkMapper.selectList(status,createrUserId);
+    public List<CustTalk> getCustTalkList(Integer status, String createrUserId, String companyCode) {
+        return custTalkMapper.selectList(status,createrUserId,companyCode);
     }
 }

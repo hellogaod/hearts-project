@@ -23,6 +23,7 @@
     id, company_code, create_user, title, content, status, satisface_rate, attachment_ids, 
     create_time, update_time
   </sql>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>,
@@ -46,6 +47,9 @@
             </if>
             <if test="createUser != null and createUser != ''">
                 and create_user = #{createUser}
+            </if>
+            <if test="companyCode != null and companyCode != ''">
+                and company_code = #{companyCode}
             </if>
         </where>
         order by update_time desc

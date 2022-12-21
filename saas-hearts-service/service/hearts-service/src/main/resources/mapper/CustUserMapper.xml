@@ -33,11 +33,19 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectByNickName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectUserByNickNameAndCompanyCode" parameterType="map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from cust_user
-        where nickname = #{nickName,jdbcType=VARCHAR}
+        <where>
+            <if test="nickname != null">
+                and nickname = #{nickname}
+            </if>
+            <if test="companyCode != null">
+                and company_code = #{companyCode}
+            </if>
+        </where>
+
     </select>
 
     <select id="selectList" parameterType="map" resultMap="BaseResultMap">
@@ -224,6 +232,12 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
+    <update id="clearErrorCount" parameterType="String">
+    update cust_user
+    set error_count = 0
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
     <update id="updateLastLoginInfo" parameterType="map">
         update cust_user
         <set>
@@ -240,7 +254,7 @@
         where id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <update id="updatePassword" parameterType="map">
+    <update id="updatePasswordByNickNameAndCompanyCoode" parameterType="map">
         update cust_user
         <set>
 
@@ -249,7 +263,9 @@
             </if>
 
         </set>
-        where id = #{id,jdbcType=VARCHAR}
+        where nickname = #{nickname,jdbcType=VARCHAR}
+            and company_code = #{companyCode,jdbcType=VARCHAR}
+            and unique_identy = #{uniqueIdenty,jdbcType=VARCHAR}
     </update>
 
     <update id="updateStatus" parameterType="map">

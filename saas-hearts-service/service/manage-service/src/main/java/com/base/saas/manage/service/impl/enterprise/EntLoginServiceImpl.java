@@ -42,7 +42,7 @@ public class EntLoginServiceImpl implements EntLoginService {
         ReturnMap<EntUser> returnMap = new ReturnMap();
         EntUser user = loginMapper.getEntUser(account, companyCode);
         if (user == null) {
-            returnMap.setMsg("message.user.userOrCompany.not.exist");
+            returnMap.setMsg("message.user.not.exist");
             return returnMap;
         } else {
             String pwdMd5 = MD5Util.GetMD5Code(password);

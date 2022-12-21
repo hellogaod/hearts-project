@@ -1,6 +1,7 @@
 package com.base.saas.hearts.service;
 
 import com.base.saas.hearts.domain.entity.CustUser;
+import com.base.saas.hearts.domain.model.ReturnMap;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface CustUserService {
 
     boolean addCustUser(CustUser custUser);
 
-    CustUser login(String nickName,String password);
+    ReturnMap login(String nickName, String password, String companyCode) throws Exception;
 
     boolean updateCustUser(CustUser custUser);
 
@@ -27,7 +28,7 @@ public interface CustUserService {
 
     boolean updateCustUserLastLoginInfo(String userId, String lastLoginIp);
 
-    boolean updateCustUserPassword(String userId,String password);
+    boolean updateCustUserPassword(String nickName,String uniqueKey,String password);
 
     boolean updateCustUserStatus(String userId,Integer status);
 }
