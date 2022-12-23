@@ -5,8 +5,8 @@ import com.base.saas.hearts.domain.model.ReturnMap;
 import com.base.saas.hearts.mapper.CustUserMapper;
 import com.base.saas.hearts.service.CustUserService;
 import com.base.saas.userinfo.AppUserContextUtil;
-import com.base.saas.userinfo.UserContextUtil;
 import com.base.saas.userinfo.UserInfo;
+import com.base.saas.util.CreateIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +31,15 @@ public class CustUserServiceImpl implements CustUserService {
         if (existed != null) { //表示当前用户昵称已存在
             return false;
         }
+        Date date = new Date();
+        custUser.setId(CreateIDUtil.getId());
+        custUser.setCreateTime(date);
+        custUser.setUpdateTime(date);
         return custUserMapper.insertSelective(custUser) == 1;
     }
 
     @Override
-    public ReturnMap login(String nickName, String password, String companyCode) throws Exception {
+    public ReturnMap login(String nickName, String password, String companyCode) {
         ReturnMap<CustUser> returnMap = new ReturnMap();
 
         CustUser custUser = custUserMapper.selectUserByNickNameAndCompanyCode(nickName, companyCode);
@@ -95,7 +99,7 @@ public class CustUserServiceImpl implements CustUserService {
     @Override
     public boolean updateCustUserPassword(String nickName, String uniqueKey, String password) {
         UserInfo userInfo = AppUserContextUtil.getUserInfo();
-        return custUserMapper.updatePasswordByNickNameAndCompanyCoode(userInfo.getCompanyCode(),nickName,  uniqueKey, password) == 1;
+        return custUserMapper.updatePasswordByNickNameAndCompanyCoode(userInfo.getCompanyCode(), nickName, uniqueKey, password) == 1;
     }
 
     @Override

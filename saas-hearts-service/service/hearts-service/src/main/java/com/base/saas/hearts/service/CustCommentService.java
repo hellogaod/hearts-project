@@ -18,5 +18,5 @@ public interface CustCommentService {
 
     CustComment getCustCommentInfoById(String commentId);
 
-    List<CustComment> getCustCommentList(Integer status,String talkId,String talkCreateUserId);
+    List<CustComment> getCustCommentList(Integer status,String talkId,String talkCreateUserId, String companyCode);
 }

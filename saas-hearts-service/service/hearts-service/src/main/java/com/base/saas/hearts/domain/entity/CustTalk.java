@@ -38,6 +38,6 @@ public class CustTalk {
 
     private Date updateTime;
 
-    @ApiModelProperty("话题所属评论列表")
-    private List<CustComment> custCommentList;
+//    @ApiModelProperty("话题所属评论列表")
+//    private List<CustComment> custCommentList;
 }

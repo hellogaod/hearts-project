@@ -6,11 +6,17 @@ import com.base.saas.language.LocaleMessage;
 import com.base.saas.logger.LoggerCommon;
 import com.base.saas.util.ExceptionStackUtils;
 import com.base.saas.util.HeaderUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/custComment")
@@ -54,6 +60,34 @@ public class CustCommentController {
         } catch (Exception e) {
 
             LoggerCommon.info(this.getClass(), "修改评论状态异常：" + ExceptionStackUtils.collectExceptionStackMsg(e));
+
+            return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(null);
+        }
+    }
+    @GetMapping("/getCommentList")
+    @ApiOperation(value = "评论列表", notes = "评论列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "pageIndex", value = "当前页码", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "status", value = "状态，0：禁用，1：正常", dataType = "int", paramType = "query", required = false),
+            @ApiImplicitParam(name = "talkId", value = "所属话题", dataType = "String", paramType = "query", required = false),
+            @ApiImplicitParam(name = "companyCode", value = "所属企业", dataType = "String", paramType = "query", required = false),
+    })
+    public ResponseEntity getRoleList(@RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam("pageIndex") Integer pageIndex,
+                                      @RequestParam(value = "status", required = false) Integer status,
+                                      @RequestParam(value = "talkId", required = false) String talkId,
+                                      @RequestParam(value = "companyCode", required = false) String companyCode) {
+
+        try {
+            PageHelper.startPage(pageIndex, pageSize, true);
+            List<CustComment> list = custCommentService.getCustCommentList(status,talkId,null,companyCode);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseEntity.ok().body(pageInfo);
+        } catch (Exception e) {
+            String logmsg = LocaleMessage.get("message.query.errorMessage");
+
+            LoggerCommon.info(this.getClass(), "获取评论列表异常：" + ExceptionStackUtils.collectExceptionStackMsg(e));
 
             return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(null);
         }

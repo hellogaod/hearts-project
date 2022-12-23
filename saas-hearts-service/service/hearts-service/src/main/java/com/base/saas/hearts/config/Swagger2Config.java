@@ -27,7 +27,7 @@ public class Swagger2Config {
         ParameterBuilder tokenPar = new ParameterBuilder();
 
         List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("X-UserToken").description("会话令牌").modelRef(new ModelRef("String")).parameterType("header").required(false).build();
+        tokenPar.name("app-UserToken").description("app会话令牌").modelRef(new ModelRef("String")).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

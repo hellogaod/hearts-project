@@ -96,7 +96,7 @@ public class CustTalkController {
             @ApiImplicitParam(name = "pageSize", value = "分页大小", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "pageIndex", value = "当前页码", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "status", value = "状态，0：禁用，1：正常", dataType = "int", paramType = "query", required = false),
-            @ApiImplicitParam(name = "createrUserId", value = "状态，0：禁用，1：正常", dataType = "String", paramType = "query", required = false),
+            @ApiImplicitParam(name = "createrUserId", value = "创建者id", dataType = "String", paramType = "query", required = false),
             @ApiImplicitParam(name = "companyCode", value = "所属企业", dataType = "String", paramType = "query", required = false),
     })
     public ResponseEntity getRoleList(@RequestParam("pageSize") Integer pageSize,

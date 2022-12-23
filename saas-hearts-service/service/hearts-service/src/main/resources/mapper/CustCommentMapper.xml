@@ -34,6 +34,9 @@
       <if test="talkCreateUserId != null and talkCreateUserId != ''">
         and talkCreateUserId = #{talkCreateUserId}
       </if>
+      <if test="companyCode != null and companyCode != ''">
+        and company_code = #{companyCode}
+      </if>
     </where>
     order by update_time desc
   </select>

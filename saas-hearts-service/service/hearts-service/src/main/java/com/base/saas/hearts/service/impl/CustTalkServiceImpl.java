@@ -5,6 +5,7 @@ import com.base.saas.hearts.mapper.CustTalkMapper;
 import com.base.saas.hearts.service.CustTalkService;
 import com.base.saas.userinfo.AppUserContextUtil;
 import com.base.saas.userinfo.UserInfo;
+import com.base.saas.util.CreateIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,12 @@ public class CustTalkServiceImpl implements CustTalkService {
     public boolean addCustTalk(CustTalk custTalk) {
         UserInfo userInfo = AppUserContextUtil.getUserInfo();
 
+        custTalk.setId(CreateIDUtil.getId());
         custTalk.setCompanyCode(userInfo.getCompanyCode());
         custTalk.setCreateTime(new Date());
         custTalk.setCreateUser(userInfo.getUserId());
         custTalk.setUpdateTime(new Date());
+        custTalk.setStatus(1);
         return custTalkMapper.insertSelective(custTalk) == 1;
     }
 

@@ -5,6 +5,7 @@ import com.base.saas.hearts.mapper.CustCommentMapper;
 import com.base.saas.hearts.service.CustCommentService;
 import com.base.saas.userinfo.AppUserContextUtil;
 import com.base.saas.userinfo.UserInfo;
+import com.base.saas.util.CreateIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,12 @@ public class CustCommentServiceImpl implements CustCommentService {
     @Override
     public boolean addCustComment(CustComment custComment) {
         UserInfo userInfo = AppUserContextUtil.getUserInfo();
-
+        custComment.setId(CreateIDUtil.getId());
         custComment.setCompanyCode(userInfo.getCompanyCode());
         custComment.setCreateTime(new Date());
         custComment.setCreateUser(userInfo.getUserId());
         custComment.setUpdateTime(new Date());
-
+        custComment.setStatus(1);
         return custCommentMapper.insertSelective(custComment) == 1;
     }
 
@@ -48,7 +49,7 @@ public class CustCommentServiceImpl implements CustCommentService {
     }
 
     @Override
-    public List<CustComment> getCustCommentList(Integer status, String talkId, String talkCreateUserId) {
-        return custCommentMapper.selectList(status, talkId, talkCreateUserId);
+    public List<CustComment> getCustCommentList(Integer status, String talkId, String talkCreateUserId, String companyCode) {
+        return custCommentMapper.selectList(status, talkId, talkCreateUserId,companyCode);
     }
 }

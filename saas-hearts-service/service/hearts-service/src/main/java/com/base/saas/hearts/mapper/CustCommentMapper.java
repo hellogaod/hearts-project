@@ -28,6 +28,6 @@ public interface CustCommentMapper {
     /**
      * 获取评论列表
      */
-    List<CustComment> selectList(@Param("status") Integer status, @Param("talkId") String talkId, @Param("talkCreateUserId") String talkCreateUserId);
+    List<CustComment> selectList(@Param("status") Integer status, @Param("talkId") String talkId, @Param("talkCreateUserId") String talkCreateUserId, @Param("companyCode") String companyCode);
 
 }

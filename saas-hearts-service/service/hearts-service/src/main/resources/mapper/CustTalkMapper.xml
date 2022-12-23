@@ -15,8 +15,8 @@
         <result column="createUserName" jdbcType="VARCHAR" property="createUserName"/>
         <result column="praiseCount" jdbcType="INTEGER" property="praiseCount"/>
         <result column="commentCount" jdbcType="INTEGER" property="commentCount"/>
-        <collection property="custCommentList" column="{talkId = id}"
-                    select="com.base.saas.hearts.mapper.CustCommentMapper.selectList"></collection>
+<!--        <collection property="custCommentList" column="{talkId = id}"-->
+<!--                    select="com.base.saas.hearts.mapper.CustCommentMapper.selectList"></collection>-->
     </resultMap>
 
     <sql id="Base_Column_List">
