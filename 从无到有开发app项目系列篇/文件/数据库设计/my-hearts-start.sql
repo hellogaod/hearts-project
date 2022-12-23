@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 12/12/2022 16:20:23
+ Date: 23/12/2022 11:13:17
 */
 
 SET NAMES utf8mb4;
@@ -444,6 +444,7 @@ CREATE TABLE `cust_about_app`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最新一次修改时间',
   `android_update_description` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'android更新描述',
   `ios_update_description` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'ios更新描述',
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态，0：停用；1：启用',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '关于app表' ROW_FORMAT = Dynamic;
 
@@ -461,6 +462,7 @@ CREATE TABLE `cust_advertisement`  (
   `create_user` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '创建者id,企业用户',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '广告创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '广告修改时间',
+  `update_user` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '修改者id，企业用户',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '广告表' ROW_FORMAT = Dynamic;
 
@@ -508,6 +510,13 @@ CREATE TABLE `cust_comment`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of cust_comment
+-- ----------------------------
+INSERT INTO `cust_comment` VALUES ('7f1c1580-107e-4158-a5d2-54a83f6c49cf', 'string', 'string', 'dfc145b6-065c-4293-8463-ef7595f912c7', 'string', 1, '2022-12-23 02:26:49', '2022-12-23 02:26:49');
+INSERT INTO `cust_comment` VALUES ('9ee7f585-6ec4-4ce7-b458-59879a76fe0d', 'string', 'string', 'dfc145b6-065c-4293-8463-ef7595f912c7', 'string123', 1, '2022-12-23 02:28:33', '2022-12-23 02:28:33');
+INSERT INTO `cust_comment` VALUES ('f959853f-2b34-4ed0-a1ef-30ef8027b0d9', 'string', 'string', 'dfc145b6-065c-4293-8463-ef7595f912c7', 'string', 0, '2022-12-23 02:22:21', '2022-12-23 02:30:53');
+
+-- ----------------------------
 -- Table structure for cust_message
 -- ----------------------------
 DROP TABLE IF EXISTS `cust_message`;
@@ -518,7 +527,7 @@ CREATE TABLE `cust_message`  (
   `content` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '消息内容',
   `status` int(1) NULL DEFAULT 1 COMMENT '消息状态',
   `customer_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '消息所属客户',
-  `type` int(1) NULL DEFAULT NULL COMMENT '消息类型,1:登录，注册消息，修改密码；2.话题被赞，被评论了；3.用户被关注了；4.被举报了；5.举报受理情况；6. 意见反馈处理情况；',
+  `type` int(1) NULL DEFAULT NULL COMMENT '消息类型,1:注册消息，修改密码；2.话题被赞，被评论了；3.用户被关注了；4.被举报了；5.举报受理情况；6. 意见反馈处理情况；',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '消息创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '消息表' ROW_FORMAT = Dynamic;
@@ -546,11 +555,12 @@ CREATE TABLE `cust_report`  (
   `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '举报id',
   `company_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '举报所属企业',
   `content` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '举报内容',
-  `classify` varbinary(32) NULL DEFAULT NULL COMMENT '举报分类',
+  `classify` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '举报类别，配置在字典中',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '举报创建时间',
   `status` int(1) NULL DEFAULT 1 COMMENT '举报状态',
   `source_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '被举报的id，根据source_type值，0的话当前source_id表示话题id；1的话当前source_id表示评论id',
   `source_type` int(1) NULL DEFAULT NULL COMMENT '被举报类型,0:表示举报话题，1：表示举报评论',
+  `creator_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '举报发起人id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '举报表' ROW_FORMAT = Dynamic;
 
@@ -587,6 +597,11 @@ CREATE TABLE `cust_talk`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '话题表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of cust_talk
+-- ----------------------------
+INSERT INTO `cust_talk` VALUES ('dfc145b6-065c-4293-8463-ef7595f912c7', 'string', 'string', 'string', 'string', 0, 80, 'string', '2022-12-23 02:22:20', '2022-12-23 02:23:16');
+
+-- ----------------------------
 -- Table structure for cust_user
 -- ----------------------------
 DROP TABLE IF EXISTS `cust_user`;
@@ -607,9 +622,14 @@ CREATE TABLE `cust_user`  (
   `last_login_ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '最近一次登录的ip',
   `last_login_time` datetime(0) NULL DEFAULT NULL COMMENT '最近一次登录时间',
   `status` int(1) NULL DEFAULT 1 COMMENT '用户状态1：启用 0：停用2：锁定（在密码错误达到一定次数时，进行锁定）',
-  `error_account` int(1) NULL DEFAULT NULL COMMENT '用户登录错误次数',
+  `error_count` int(1) NULL DEFAULT 0 COMMENT '用户登录错误次数',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '用户表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of cust_user
+-- ----------------------------
+INSERT INTO `cust_user` VALUES ('string', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 0, 'string', 'string', '2022-12-21 06:58:02', '2022-12-21 06:58:02', '192.168.102.4', '2022-12-23 02:28:10', 1, 0);
 
 -- ----------------------------
 -- Table structure for ent_dict_config
@@ -689,6 +709,126 @@ CREATE TABLE `ent_log`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '企业日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of ent_log
+-- ----------------------------
+INSERT INTO `ent_log` VALUES ('0074fc32-d395-4bb6-8140-b728b4169345', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=216da748-27f7-45cf-9986-9b40e9ecd666&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 02:59:08', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:59:08', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('03500edd-8229-46dc-9fc1-989773ef7056', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:57:26', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:26', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('0728d055-c9e5-4fef-a702-00bae9781254', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 03:10:42', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:10:42', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('0842c830-dea8-431d-823e-25bf6926b371', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:46', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:46', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('0862939c-7c4e-456f-b1b7-83a8ea7b8b8f', '超级管理员', NULL, NULL, '/updateSysModule', NULL, '{\"moduleId\":\"dd44c89d-4c59-436d-aef1-abc6a3fbf4bc\",\"moduleName\":\"测试模块\",\"createUser\":\"admin\",\"createTime\":\"2022-11-17T07:18:36.000+0000\",\"updateUser\":\"admin\",\"updateTime\":\"2022-11-17T07:18:36.000+0000\",\"remark\":\"测试模块\",\"status\":1}', '2022-12-23 02:56:55', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:55', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('086aa9c1-a49e-4658-a33e-848c16a854a2', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 03:07:50', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:50', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('0992d528-8c5b-4c4e-bbcd-cff97c896236', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 02:55:05', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:55:05', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('0a742d78-bb41-4695-83fc-fe7059fe6fb1', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=d9e11dc6-8d0b-4890-8628-88896ef5b6d0&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:04:07', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:04:07', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('0d458652-73c8-4abc-99d4-d97dcce20b92', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 03:07:29', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:29', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('19b21067-2404-47af-940e-7227fc7106e5', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:18', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:18', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('1d2ba880-de17-4779-b3c6-3f36668e5afb', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:57:30', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:30', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('1dd31cf4-b6ca-408c-bba5-b9dfcf1ced43', '超级管理员', 'JXSG20221121c85d', NULL, '/index', NULL, NULL, '2022-12-23 02:56:27', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:27', 'adminGQ', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('1df97345-4771-409e-b9c3-bf7b8d318fb3', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=a4a3e7e0-6252-4a27-a281-80684d50882e&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:14', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:14', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('1f60dd0b-0a44-4fbe-9350-fc51437b1df2', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:04:44', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:04:44', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('242bc2bd-8bb4-425b-b2f5-8d879a45cb23', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=e3a1972b-5637-4e01-b080-670d555cf26f&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:24', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:24', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('25400622-8d46-420b-9931-8a1e5bd1e129', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=e3a1972b-5637-4e01-b080-670d555cf26f', '2022-12-23 03:02:33', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:33', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('2579fccc-9bff-4acf-8cc3-2413ce4e2e5e', '超级管理员', NULL, NULL, '/editMenu', NULL, '{\"menuId\":\"e3a1972b-5637-4e01-b080-670d555cf26f\",\"isDesensite\":null,\"menuName\":\"日志管理\",\"url\":null,\"sequence\":\"5\",\"icon\":\"fa fa-commenting-o\",\"parentId\":\"#\",\"parentName\":null,\"createUser\":\"admin\",\"createTime\":\"2022-11-17T11:52:25.000+0000\",\"updateUser\":\"admin\",\"updateTime\":\"2022-11-17T11:52:25.000+0000\",\"status\":1,\"desensitizeStatus\":-1,\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"remark\":\"企业端日志信息，登录日志和操作日志\",\"parentStatus\":null,\"parentUrl\":null,\"children\":null}', '2022-12-23 03:02:28', '192.168.102.19', '1', '0', '1', '400', '失败：修改成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:28', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('2a52e5d7-3d6d-40ba-a1bf-e61a446c5e6b', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=e3a1972b-5637-4e01-b080-670d555cf26f', '2022-12-23 03:02:24', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:24', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('2b0187b7-5c76-45d5-88b0-f28849c3b9f2', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=a4a3e7e0-6252-4a27-a281-80684d50882e', '2022-12-23 03:00:25', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:25', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('2dd33515-c06e-4cea-ac70-cf3c92639795', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 03:07:27', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:27', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('311e1df6-f442-4504-9de1-facb6f2a52b9', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:56:00', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:00', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('34474174-e1f6-4a20-9ac7-76aea1926eae', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=e3a1972b-5637-4e01-b080-670d555cf26f&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:20', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:20', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('3480354c-f0cf-41af-a03b-052459254581', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 03:07:53', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:53', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('3b8ff840-0e7b-40b8-a49c-d39fdb4c81f1', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:59:03', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:59:03', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('3c469440-3774-46d8-a5d1-d0d239b3ec1d', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=a4a3e7e0-6252-4a27-a281-80684d50882e&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:11', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:11', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('3c73f891-397b-49b0-b9f9-365ca34c9df6', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:58:20', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:58:20', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('42a212b4-2e8e-4ee4-9d6f-21189991c03f', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 03:07:29', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:29', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('42cf93aa-124e-4527-8ae9-5bc63cb45174', '超级管理员', NULL, NULL, '/addMenu', NULL, '{\"menuName\":\"话题列表\",\"desensitizeStatus\":1,\"sequence\":\"1\",\"url\":\"1234\",\"remark\":\"\",\"parentId\":\"d9e11dc6-8d0b-4890-8628-88896ef5b6d0\",\"parentName\":\"话题管理\",\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"status\":1,\"icon\":\"fa fa-assistive-listening-systems\"}', '2022-12-23 03:04:44', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:04:44', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('460f4263-e1c4-41c2-ae43-49181f50cadb', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 02:59:09', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:59:09', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('47647a77-9f3e-4817-9527-350b2915c513', '超级管理员', NULL, NULL, '/updateSysModuleStatus', NULL, '{\"status\":\"0\",\"moduleId\":\"dd44c89d-4c59-436d-aef1-abc6a3fbf4bc\"}', '2022-12-23 02:57:30', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:30', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('48f42f77-05aa-46ff-8bf8-7e33301b2e66', NULL, NULL, NULL, '/logout', NULL, '{}', '2022-12-23 03:07:23', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:23', NULL, NULL, NULL);
+INSERT INTO `ent_log` VALUES ('4c33d39c-b8b1-407c-92cb-2af9bed93fde', '超级管理员', NULL, NULL, '/updateMenuStatus', NULL, '{\"menuId\":\"1223709c-bf3f-4f54-8a85-895cc8709146\",\"status\":0}', '2022-12-23 02:57:01', '192.168.102.19', '1', '0', '1', '400', '失败：该配置部分企业正在使用，无法停用', 0, NULL, NULL, NULL, '2022-12-23 02:57:01', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('4d00f2f1-232a-4d5c-b513-e81e61807b1a', '超级管理员', NULL, NULL, '/editMenu', NULL, '{\"menuId\":\"d9e11dc6-8d0b-4890-8628-88896ef5b6d0\",\"isDesensite\":null,\"menuName\":\"话题管理\",\"url\":null,\"sequence\":3,\"icon\":\"fa fa-assistive-listening-systems\",\"parentId\":\"#\",\"parentName\":null,\"createUser\":\"admin\",\"createTime\":\"2022-12-23T03:01:12.000+0000\",\"updateUser\":\"admin\",\"updateTime\":\"2022-12-23T03:01:12.000+0000\",\"status\":1,\"desensitizeStatus\":-1,\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"remark\":\"\",\"parentStatus\":null,\"parentUrl\":null,\"children\":null}', '2022-12-23 03:02:59', '192.168.102.19', '1', '0', '1', '400', '失败：修改成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:59', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('4e6c4308-dee0-4542-a1d8-62dccd2af8c7', NULL, NULL, NULL, '/doLogin', NULL, '{\"username\":\"admin\",\"password\":\"e10adc3949ba59abbe56e057f20f883e\",\"code\":\"4394\",\"key\":\"096d3a817a272647f4ada2d6d733a8fb\"}', '2022-12-23 02:55:04', '192.168.102.19', '0', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:55:04', NULL, NULL, NULL);
+INSERT INTO `ent_log` VALUES ('4ecfe39a-b0b5-4240-b146-8240e9769e4e', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 02:56:19', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:19', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('508dbda5-5550-4d41-ad75-a9032429d0cb', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 03:03:33', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:33', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('5157e2e6-8520-4f7c-89c6-0abcf499f824', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 03:10:29', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:10:29', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('54659eb9-dadd-4628-a49c-1236f2dda631', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=d9e11dc6-8d0b-4890-8628-88896ef5b6d0&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:01:15', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:01:15', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('54af03ff-ffa1-4ce0-b17e-8e7555eee82e', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=f5cf8c1c-6491-44b5-9e54-e289a4fdb094&moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:57:21', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:21', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('58bb2b84-e04b-4199-a3b4-64a8683bd8f9', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 03:08:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:08:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('5b63fce4-b7ae-45be-bbf1-fd382714ef26', '超级管理员', NULL, NULL, '/editMenu', NULL, '{\"menuId\":\"e3a1972b-5637-4e01-b080-670d555cf26f\",\"isDesensite\":null,\"menuName\":\"日志管理\",\"url\":null,\"sequence\":5,\"icon\":\"fa fa-clock-o\",\"parentId\":\"#\",\"parentName\":null,\"createUser\":\"admin\",\"createTime\":\"2022-11-17T11:52:25.000+0000\",\"updateUser\":\"admin\",\"updateTime\":\"2022-12-23T03:02:28.000+0000\",\"status\":1,\"desensitizeStatus\":-1,\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"remark\":\"企业端日志信息，登录日志和操作日志\",\"parentStatus\":null,\"parentUrl\":null,\"children\":null}', '2022-12-23 03:02:46', '192.168.102.19', '1', '0', '1', '400', '失败：修改成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:46', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('60fcd1ec-7da7-4fd5-9aa4-131755abe7b5', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:06:16', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:06:16', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('639b85e9-8b43-498a-9a3b-b1deb02cd159', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=e3a1972b-5637-4e01-b080-670d555cf26f&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:33', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:33', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('651ba85d-7c38-4175-b81a-11e261060ad7', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:57:12', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:12', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('6be41e6c-90ab-4e90-b2fc-5471bb29fb1d', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=e3a1972b-5637-4e01-b080-670d555cf26f&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:19', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:19', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('6dbae1c9-8dbb-480c-a97f-1f9ce53ed89c', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=1223709c-bf3f-4f54-8a85-895cc8709146&moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:57:18', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:18', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('6e130887-64c2-4f81-bdbb-e3d583f10c82', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:15', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:15', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('6f1c627d-80fd-4338-b538-46119e35aeab', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:29', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:29', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('708a7170-ea4f-412b-8a84-563484fd254d', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('71201448-869f-4e83-9dba-664bae9fe64a', '超级管理员', 'JXSG20221121c85d', NULL, '/doLogin', NULL, '{\"keyScript\":\"gAyf5WyyNoJxLNFzzAcsE7aj9ymPSRzEFNIW6G7xtn5/N8pomGW92KbHSZa4kHLFPnlThs1DaYLqPgrgALYj7+3VuDkYgzQxePh/kuvmoQJG5ud/awDdjANU1dDkK7RNtfKRmuBhSHBf5Loe3YBU5d0dAN0qaUu/gUrxSbnXqSmluOlN/47PHuSDszYbqT/ZFFfdfW3BgOclu+nkDwaqPzTthLE61ayP3YENfX4pJTUP1GrDqfE2jAOIBY8l3aaUNm5nlNkaEJ7ecz+V7jjGrzcE/0sns/K0kYhKPahzXjiKTvujw9R737fZWx46EPHOTPUN4h/sz+CgdRbl1u2XACQc1Af9Hl7EIUZ49HSbI7R46HjNfkGpwYOixgqiU+wy8A4jxAn4FLec7JtWlWNWOFi0AfDaXXfSbbWxqJl6Rg8FHrwzmJOsp2MUu85ET20qmoikzhZI7kTQXBd7LpHsgSym/vZBsmPUS3IePTIpOgdO7WZmvLjhJSwQ4yaX3pXgdtBdW4zwRsv33OyAanpXLZ7QkN9rA8/81CzAf9ZEpwNgY4dP4Ie1Mg8AtjN2sPs2y949J+ozXNFOCBX2N5/IEWWDypGaIa9NDsP8atzIerJh/W8hX1rYe50B4oB6f200VzIyzbgyrtJ+NgSuGRob3AfDc6Wms1gq6TRUta4nDt4=\"}', '2022-12-23 02:56:27', '192.168.102.19', '0', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:27', 'adminGQ', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('741e2d53-85b6-485c-8a3d-0f915af2f951', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 02:59:05', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:59:05', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('77c38fa0-f55a-4f90-ae34-60be0b106753', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 02:58:57', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:58:57', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('7d6c4135-42e5-405c-bb24-1215602de86c', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:23', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:23', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('7fa51b0c-ddb4-4cb8-a90a-a2afc2353f53', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:05:49', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:05:49', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('807420b5-8d4a-45a1-8fb5-1595478389ae', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:28', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:28', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('8087b065-c092-43f5-aa64-dab7c1733ca1', '超级管理员', 'JXSG20221121c85d', NULL, '/doLogin', NULL, '{\"keyScript\":\"abLxDO09XkFn+I4rmYXj8c4MtziRKqnikZZSKKeU2Q7JqzB42IczH1nmtsJZl3DHxoXaVNWJ+m/OlJxgeduEMJ75CFQFexOTPgqlMX0IwsguIonF+q4Uvdty7ZNTiB9AipuVnAGVA39oC8z1djgc8hEIwWRdqDh4/m825WvNB4bZKEaK4vn+jHSUM0hhIihWtqyTSHW4AlDjaynwO0mgnG+VVe/aX0DKdQyRXJt8M6sZXD1hchQaVwk/cE4PqFMb3DtQDeHoU0HRlsGgpFSG6TDtOT1OEQIhOh9tQb4rdvIQ/qKQiv5SrO1lONnmUdxBldp62xSsf/T9Jj6TSIODI4bcQK/ustuOvKxff0l+crWAuRTGqNs8+SEpwfHjEvTG9LwzK9qT2UKhogu/Ds6f3iVBwi+uhw8Zjz1fCAaYJn3597gL8BsZEfmkUlbyhb7FQei6AmTNP7pfqrAzDvLNQCl+/Yz8eLxV0iTLy71IzW4fNHcSTOVpqD+c4x089nzhCeid9I9G9RVOo0ewXDM/oVQNNiTQogSlK/asaAH6fh9tbGhbfK+BqztQH6g1XmNVUYqRfdMBJuBrK4EVylksLcbBv1RIYLUot4a65oHqRsJxv8NIJ/+Ftwf4fR0l8ZrIxsQq1T2p+yva/8UzgI4+PuAF8D2ochdtHdGxCDFWnYg=\"}', '2022-12-23 03:08:00', '192.168.102.19', '0', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:08:00', 'adminGQ', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('81c6a272-f4ca-44ef-9c2a-b8cab02adac7', '超级管理员', NULL, NULL, '/getOtherList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 03:03:51', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:51', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('83b5b20f-dee7-4960-a890-77759832b77f', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 03:03:53', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:53', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('85b0766f-b174-4859-8c42-7283f2b6e41c', '超级管理员', NULL, NULL, '/updateSysEnterprise', NULL, '{\"companyName\":\"静馨舍工作室\",\"shortName\":\"恒馨\",\"tel\":\"18256908359\",\"companyManager\":\"高强\",\"email\":\"1105107264@qq.com\",\"wechatNo\":\"foxuetu\",\"status\":1,\"moduleIds\":[\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\"],\"companyCode\":\"JXSG20221121c85d\"}', '2022-12-23 03:07:53', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:53', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('861c4348-88cb-44c2-bc36-2a783646eb9f', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=d9e11dc6-8d0b-4890-8628-88896ef5b6d0&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:04:04', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:04:04', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('86fceeca-7d1e-4a4b-9714-6c93dcd046f8', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=d9e11dc6-8d0b-4890-8628-88896ef5b6d0', '2022-12-23 03:02:48', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:48', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('873c4cac-382f-4028-9e97-ae5f9e01a108', '超级管理员', 'JXSG20221121c85d', NULL, '/doLogin', NULL, '{\"keyScript\":\"q3+nooWyqh+TG0zmlGsjb8ZQBAqDlrpkzmOQk2OxKH1twZ+XecOh7Skkz7tcZ93JzoXMxtRPoSHloy1f3+/WuJ0dcfNp4RZTP7ExyYG0/G/F4/vA5gUdAKgqMmoYrjt9s/zNeK+N5d00owJUs8ZgeG/sUGsgmceVBZoBE0GqijKMdrHbOJy3w7wBA7bJE9ISaojOcfWHBXIo2oL61fynV0G8V/PJ4+f1PPOCtkwqfDD2nHSRo9QfCq7pVmEPc6kiAzQ5N/5xIH1Ex1Pvy4r1Ux20G82YHj5NmvxQeveytIYXHtoSTKyaaeIm35IOh5/1zeWEoopXoDjt04dL46I2VKVFN3NSK3XFCp3D1oU4IqVRaChPhb/dvSUL7vcoGt/HXim+LHHFTGnBWwhWc//716TCTwMrn+GXjIfedutkgW6ROZpwJF6qIcUs0DqPs3RxJoVUOGwUpPSCNZbflKyQEcjyv2MvoQgKD69vAamG+ccfFLzKdavQmumh/+SyfhPGEb7ZEQoMwpRC/EQcSuesAfLUHHHfLJtY+JbiZHxuQR7YZlugjhYIvKKISCwN+m82Q/Kikb25zY7rVjVmkB1nQFyPUSqazXnV369p8Nq8eivXtkOHVngudobM2js1yQWYqGttOYJREnI9jgFovE0GOn73AsczhS4/6zu7B6BGiN8=\"}', '2022-12-23 03:07:36', '192.168.102.19', '0', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:36', 'adminGQ', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('8a7b3841-23b3-40a5-81df-06263fd1fcb2', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:56:58', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:58', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('8afe75e4-d0a7-48b7-80a4-9dda17752828', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:57:16', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:16', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('8d518d48-b56b-4694-9a9e-040623fb2f03', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:03:55', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:55', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('8df404c9-c1b9-415b-83c1-83e373053db9', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=444fb273-673e-4b54-9e8d-b660f13e1888&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:30', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:30', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('8f94aa05-034d-4042-a1a5-11e46ea31c77', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=e3a1972b-5637-4e01-b080-670d555cf26f', '2022-12-23 03:00:20', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:20', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('90e01e5e-bc27-419d-944b-0f181f18ec6d', '超级管理员', 'JXSG20221121c85d', NULL, '/index', NULL, NULL, '2022-12-23 03:07:36', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:36', 'adminGQ', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('916c6a8d-7a15-426c-8351-1b453b664426', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:59', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:59', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('92dd5a52-2181-4929-bbba-076942b6489a', '超级管理员', NULL, NULL, '/getModuleInfo', NULL, 'moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:56:44', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:44', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('99d613a4-23e8-499a-b06b-69c7f89b08c5', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 03:10:42', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:10:42', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('9f188da1-438a-4c2a-8481-449a3c00cb46', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:57:19', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:19', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('9f36098e-59e1-4a75-a76d-a27cd4282c12', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 03:10:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:10:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('a57a9498-688a-4093-8a33-db5fd052cdd6', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:57:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('a60dd100-fe65-4c90-883b-e62be08e4ca6', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:13', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:13', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('a6164f87-f9f0-4152-bdcf-c074b3206179', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=444fb273-673e-4b54-9e8d-b660f13e1888&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:04:48', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:04:48', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('a89591f9-2e77-4695-a16d-18c4d553d412', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=e3a1972b-5637-4e01-b080-670d555cf26f&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:16', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:16', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('aa2f4f59-1d5b-4343-8b12-6055b618d7ec', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:56:06', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:06', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('aafae7d9-fb75-4b36-adfa-919f18f9247e', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=444fb273-673e-4b54-9e8d-b660f13e1888&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:05:56', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:05:56', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('abdac9a9-eaad-47bb-a19c-2bd3c8582e76', '超级管理员', 'JXSG20221121c85d', NULL, '/index', NULL, NULL, '2022-12-23 03:08:00', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:08:00', 'adminGQ', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('ae657f32-110c-4203-bf58-07153968a40a', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 03:03:42', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:42', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('af72159a-f230-4462-8f08-02cb011a4a43', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 02:58:56', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:58:56', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('b0925018-9aef-4a86-9004-6cd8e501e801', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 03:10:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:10:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('b1a80637-6a77-4e73-b9a1-cf6621abfd8f', '超级管理员', NULL, NULL, '/addMenu', NULL, '{\"menuName\":\"评论列表\",\"desensitizeStatus\":1,\"sequence\":\"1\",\"url\":\"1234\",\"remark\":\"\",\"parentId\":\"444fb273-673e-4b54-9e8d-b660f13e1888\",\"parentName\":\"评论管理\",\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"status\":1,\"icon\":\"fa fa-commenting\"}', '2022-12-23 03:05:39', '192.168.102.19', '1', '0', '1', '400', '失败：该菜单路径已经存在', 0, NULL, NULL, NULL, '2022-12-23 03:05:39', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('b21f47b2-219c-45cd-8ed1-e612dfbbd80a', '超级管理员', NULL, NULL, '/updateSysModule', NULL, '{\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"moduleName\":\"福生语录\",\"createUser\":\"admin\",\"createTime\":\"2022-11-17T07:23:12.000+0000\",\"updateUser\":\"admin\",\"updateTime\":\"2022-11-17T07:52:20.000+0000\",\"remark\":\"围绕我们身边的一些事情或礼仪方面，主要给自己看的语录\",\"status\":1}', '2022-12-23 02:58:19', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:58:19', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('b2a592ca-9b08-4414-be49-fe644c9bfa9e', '超级管理员', NULL, NULL, '/updateSysEnterprise', NULL, '{\"companyName\":\"静馨舍工作室\",\"shortName\":\"恒馨\",\"tel\":\"18256908359\",\"companyManager\":\"高强\",\"email\":\"1105107264@qq.com\",\"wechatNo\":\"foxuetu\",\"status\":1,\"moduleIds\":[\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\"],\"companyCode\":\"JXSG20221121c85d\"}', '2022-12-23 02:57:11', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:11', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('b495302b-805e-412d-97f3-0e5174a66452', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=b8bf4f17-0749-4251-b547-856ee4dff8dd', '2022-12-23 03:00:23', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:23', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('b7a7ea62-7fea-46cd-9f18-bd757815d671', '超级管理员', NULL, NULL, '/updateMenuStatus', NULL, '{\"menuId\":\"1223709c-bf3f-4f54-8a85-895cc8709146\",\"status\":0}', '2022-12-23 02:57:19', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:19', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('bce3ec91-9d32-4706-9d3f-e729384a8dd9', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:56:39', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:39', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('bed3888f-5c7c-4831-9251-e7276962f77e', '超级管理员', NULL, NULL, '/getMenuById', NULL, 'menuId=444fb273-673e-4b54-9e8d-b660f13e1888', '2022-12-23 03:05:56', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:05:56', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('c1de6fac-e278-41a2-be96-4c85f6b36fb0', '超级管理员', NULL, NULL, '/index', NULL, 'userId=fb616e4e-2f24-4666-9fa1-e0749a60d228', '2022-12-23 02:55:04', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:55:04', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('c5237a67-28ba-41d3-8f5e-bd6b5d57c7f6', '超级管理员', NULL, NULL, '/getAllMenuTree', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:01:12', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:01:12', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('cb373622-8bff-46dd-8b44-a91751afd4d4', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 02:57:11', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:11', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('cfa20865-1a08-4afd-8685-ee8fb15c429b', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:56:17', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:17', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('d2a4ed07-fb29-4160-b67a-2afb89b2cd8b', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=444fb273-673e-4b54-9e8d-b660f13e1888&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:05:53', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:05:53', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('d46b813d-affe-4448-9d26-065cab901133', '超级管理员', NULL, NULL, '/addMenu', NULL, '{\"menuName\":\"评论管理\",\"sequence\":\"4\",\"remark\":\"\",\"parentId\":\"#\",\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"status\":1,\"icon\":\"fa fa-commenting-o\"}', '2022-12-23 03:02:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('d6a79a84-e0c6-40d1-ba32-55f178452510', '超级管理员', NULL, NULL, '/getOtherList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 03:03:41', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:41', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('d811098a-bff8-43dc-8b44-5b547accd56c', '超级管理员', NULL, NULL, '/getModuleInfo', NULL, 'moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 02:57:34', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:34', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('d84fc6e2-6edc-40ea-a26e-0c7fb993f45b', '超级管理员', NULL, NULL, '/addMenu', NULL, '{\"menuName\":\"评论列表\",\"desensitizeStatus\":1,\"sequence\":\"1\",\"url\":\"123456\",\"remark\":\"\",\"parentId\":\"444fb273-673e-4b54-9e8d-b660f13e1888\",\"parentName\":\"评论管理\",\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"status\":1,\"icon\":\"fa fa-commenting\"}', '2022-12-23 03:06:16', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:06:16', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('dd3960b9-c9e2-4c30-a261-9ceb793f8d59', '超级管理员', NULL, NULL, '/addMenu', NULL, '{\"menuName\":\"话题管理\",\"sequence\":\"3\",\"remark\":\"\",\"parentId\":\"#\",\"moduleId\":\"04c3ea3f-18b5-46bc-83d4-f45c573a6210\",\"status\":1,\"icon\":\"fa fa-heart\"}', '2022-12-23 03:01:12', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:01:12', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('e6e1b6b4-3707-4232-8a0a-2d8277a83c9e', '超级管理员', NULL, NULL, '/updateMenuStatus', NULL, '{\"menuId\":\"f5cf8c1c-6491-44b5-9e54-e289a4fdb094\",\"status\":0}', '2022-12-23 02:57:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('e7f79503-25f0-4252-ae0e-b72e77ab33ce', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=a4a3e7e0-6252-4a27-a281-80684d50882e&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:00:25', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:00:25', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('eb8e0052-44fa-490e-8553-002c9800ebf8', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 02:58:57', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:58:57', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('ec57d225-0e66-4629-947b-fe97f3dc0d63', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 02:57:06', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:06', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('ee21b3eb-3529-4446-9b98-ae2dcdb7da1d', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=444fb273-673e-4b54-9e8d-b660f13e1888&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:05:58', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:05:58', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('ef28cf78-1d21-49cf-b7c0-de972cdbfb02', NULL, NULL, NULL, '/logout', NULL, '{}', '2022-12-23 03:07:56', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:56', NULL, NULL, NULL);
+INSERT INTO `ent_log` VALUES ('efb21c62-76bc-4a0d-ad22-c6c63eabe28f', '超级管理员', NULL, NULL, '/getEffectiveModule', NULL, NULL, '2022-12-23 02:57:08', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:08', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('efdc1a57-96b9-4cf6-b946-94b771071901', '超级管理员', NULL, NULL, '/getSysEnterpriseList', NULL, 'pageIndex=1&pageSize=10', '2022-12-23 03:03:39', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:39', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f0c887d0-81ba-4834-870c-27cde97cbb87', '超级管理员', NULL, NULL, '/getModuleList', NULL, 'status=-1&pageIndex=1&pageSize=10', '2022-12-23 02:56:55', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:56:55', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f18c7f9b-24fe-4bb2-bb3e-60f5e58b9f9b', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=1223709c-bf3f-4f54-8a85-895cc8709146&moduleId=dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '2022-12-23 02:57:00', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:00', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f26f1318-16a6-4035-9839-05dc8ec9c8a1', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 02:57:08', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 02:57:08', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f3958284-df21-4dfa-a952-2051d37a0ece', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 03:08:22', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:08:22', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f74b5950-9e0e-4adc-8501-c430b7af07a6', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=b8bf4f17-0749-4251-b547-856ee4dff8dd&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:03:56', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:03:56', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f8be1631-7b70-42ff-9858-c66c27d59535', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 03:10:29', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:10:29', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('f8cdeaca-d590-4133-8eda-b5f385fabe7d', '超级管理员', NULL, NULL, '/getAllMenuList', NULL, 'parentId=d9e11dc6-8d0b-4890-8628-88896ef5b6d0&moduleId=04c3ea3f-18b5-46bc-83d4-f45c573a6210', '2022-12-23 03:02:48', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:02:48', 'admin', NULL, NULL);
+INSERT INTO `ent_log` VALUES ('fffc0cb6-671e-4174-a9a8-08446fc9a881', '超级管理员', NULL, NULL, '/getEnterpriseByCompanyCode', NULL, 'companyCode=JXSG20221121c85d', '2022-12-23 03:07:50', '192.168.102.19', '1', '0', '0', '200', '成功', 0, NULL, NULL, NULL, '2022-12-23 03:07:50', 'admin', NULL, NULL);
+
+-- ----------------------------
 -- Table structure for ent_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `ent_menu`;
@@ -708,20 +848,21 @@ CREATE TABLE `ent_menu`  (
 -- ----------------------------
 -- Records of ent_menu
 -- ----------------------------
-INSERT INTO `ent_menu` VALUES ('12703580-a7bb-431c-bf08-1e4e656b48b4', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', '69b60731-6b35-423f-a52a-bb524fe0ec09', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'e3a1972b-5637-4e01-b080-670d555cf26f');
-INSERT INTO `ent_menu` VALUES ('1cf74031-75a5-47c5-8291-2a83e82bf426', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'c0bd9ae4-6375-462f-85c0-526aba1c486a', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
-INSERT INTO `ent_menu` VALUES ('1de1f942-a8df-48b2-b314-a8e4f8b931cc', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'fe98249c-0d01-4ecf-85a3-e360ed21f172', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
-INSERT INTO `ent_menu` VALUES ('35d2d1d6-075f-483e-95e9-81d60db191af', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', '1223709c-bf3f-4f54-8a85-895cc8709146', 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '#');
-INSERT INTO `ent_menu` VALUES ('39777dd4-61f1-498d-904c-57f8c8bba628', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'f5cf8c1c-6491-44b5-9e54-e289a4fdb094', 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '#');
-INSERT INTO `ent_menu` VALUES ('4a2790c1-90e5-434d-9ec9-baf9cd4b2167', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'b8bf4f17-0749-4251-b547-856ee4dff8dd', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
-INSERT INTO `ent_menu` VALUES ('4fea593d-3f75-48ca-aaff-bf116c57ac4d', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'db095c80-111f-4326-b183-d2e43e343f04', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
-INSERT INTO `ent_menu` VALUES ('8b118006-d784-4b5e-af6f-4577dc40c0da', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'c2d82c74-0b30-41e2-9c0d-5f4f861c24e6', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'e3a1972b-5637-4e01-b080-670d555cf26f');
-INSERT INTO `ent_menu` VALUES ('ba0d4ea4-09c9-4633-8d23-4618d1bcf9a2', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', '3e751234-7949-4562-b73c-cf0370351d95', 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '1223709c-bf3f-4f54-8a85-895cc8709146');
-INSERT INTO `ent_menu` VALUES ('cf07d723-ec57-4aa6-8fcf-7523c6848f95', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', '216da748-27f7-45cf-9986-9b40e9ecd666', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'b8bf4f17-0749-4251-b547-856ee4dff8dd');
-INSERT INTO `ent_menu` VALUES ('d6652ae7-69a9-4127-ac1c-7d99ccad3f94', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'a4a3e7e0-6252-4a27-a281-80684d50882e', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
-INSERT INTO `ent_menu` VALUES ('d9a485ee-c9be-402e-98d3-3439bc066419', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'e3a1972b-5637-4e01-b080-670d555cf26f', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
-INSERT INTO `ent_menu` VALUES ('da01d78d-a0f4-4b77-a0c1-34d04cad07a0', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'a7d6dc6b-c9f3-4763-a186-4a86840f9e4c', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
-INSERT INTO `ent_menu` VALUES ('f73347fc-336d-43f8-836d-5b0118f07bd1', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'a1ca0716-1236-4acc-9bb1-1708a2199f6c', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
+INSERT INTO `ent_menu` VALUES ('1a8a5f67-2245-4d06-bee6-d507ad6b18d1', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'c0bd9ae4-6375-462f-85c0-526aba1c486a', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
+INSERT INTO `ent_menu` VALUES ('245263b5-4957-4d89-9870-f1d3abcb98a6', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'fe98249c-0d01-4ecf-85a3-e360ed21f172', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
+INSERT INTO `ent_menu` VALUES ('2b1f8f34-7316-412a-9845-de8c95d28b68', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'a4a3e7e0-6252-4a27-a281-80684d50882e', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
+INSERT INTO `ent_menu` VALUES ('4194ad8c-e5b2-4a0a-b6f5-a1de8c00fc9c', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', '69b60731-6b35-423f-a52a-bb524fe0ec09', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'e3a1972b-5637-4e01-b080-670d555cf26f');
+INSERT INTO `ent_menu` VALUES ('4a0b16af-6f5b-4bf3-bc5e-11b0de0d7b4d', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'b8bf4f17-0749-4251-b547-856ee4dff8dd', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
+INSERT INTO `ent_menu` VALUES ('5f1cb3a6-ec4b-4f50-9f92-f618b29f4efc', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'db095c80-111f-4326-b183-d2e43e343f04', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
+INSERT INTO `ent_menu` VALUES ('61d396f6-1ad2-47f5-a53a-38c12a6d63c6', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'c2d82c74-0b30-41e2-9c0d-5f4f861c24e6', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'e3a1972b-5637-4e01-b080-670d555cf26f');
+INSERT INTO `ent_menu` VALUES ('71013e94-a92d-4499-838b-792941c594e3', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', '444fb273-673e-4b54-9e8d-b660f13e1888', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
+INSERT INTO `ent_menu` VALUES ('7a342b59-4f19-4c08-aca9-57d707a60034', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'a7d6dc6b-c9f3-4763-a186-4a86840f9e4c', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
+INSERT INTO `ent_menu` VALUES ('a77f17e0-2313-408f-8cb0-c6c14fa78025', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'eae4cea1-a52a-4935-82ba-89315c2502f6', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'd9e11dc6-8d0b-4890-8628-88896ef5b6d0');
+INSERT INTO `ent_menu` VALUES ('adcbca18-b493-49f8-89f2-1d4eb9ce5bfb', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'd9e11dc6-8d0b-4890-8628-88896ef5b6d0', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
+INSERT INTO `ent_menu` VALUES ('ba840706-baed-4b7a-9753-002fd7ce2175', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'e3a1972b-5637-4e01-b080-670d555cf26f', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '#');
+INSERT INTO `ent_menu` VALUES ('effc0b27-600a-490b-8489-955d853cd5d5', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'a1ca0716-1236-4acc-9bb1-1708a2199f6c', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'a4a3e7e0-6252-4a27-a281-80684d50882e');
+INSERT INTO `ent_menu` VALUES ('f627ba40-91d5-4970-8280-c0ad0290613e', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', 'ec51d925-a81e-4c55-ae58-95176110f53f', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', '444fb273-673e-4b54-9e8d-b660f13e1888');
+INSERT INTO `ent_menu` VALUES ('faa2c003-b884-4056-882f-bbadce161ce0', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', '216da748-27f7-45cf-9986-9b40e9ecd666', '04c3ea3f-18b5-46bc-83d4-f45c573a6210', 'b8bf4f17-0749-4251-b547-856ee4dff8dd');
 
 -- ----------------------------
 -- Table structure for ent_module
@@ -741,8 +882,7 @@ CREATE TABLE `ent_module`  (
 -- ----------------------------
 -- Records of ent_module
 -- ----------------------------
-INSERT INTO `ent_module` VALUES ('3f8282e0-40dc-49c4-b6e8-8ee454e5c007', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-24 05:52:16', '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
-INSERT INTO `ent_module` VALUES ('dbb1911f-17fd-4ad0-8701-ed90633418aa', 'JXSG20221121c85d', 'admin', '2022-11-23 05:52:16', 'admin', '2022-11-23 05:52:16', 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
+INSERT INTO `ent_module` VALUES ('8a12be5e-6549-4a4c-b2e1-29b885cddda1', 'JXSG20221121c85d', 'admin', '2022-12-23 03:07:53', 'admin', '2022-12-23 03:07:53', '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 
 -- ----------------------------
 -- Table structure for ent_organization
@@ -856,25 +996,26 @@ CREATE TABLE `ent_role_menu`  (
 -- Records of ent_role_menu
 -- ----------------------------
 INSERT INTO `ent_role_menu` VALUES ('007f3402-6112-4b57-9787-f67829382742', '', 'ff920c1b-d555-4706-8dc8-78a50d5cb399', 'aed7bade-638f-4923-897a-20c1ec56a386', 'admin', '2018-06-12 15:44:30');
+INSERT INTO `ent_role_menu` VALUES ('03702192-21a4-49a7-b15d-b97ba5236496', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'db095c80-111f-4326-b183-d2e43e343f04', 'admin', '2022-12-23 03:07:53');
 INSERT INTO `ent_role_menu` VALUES ('047008fb-685f-47c0-90d8-12d6ed548339', '', 'ff920c1b-d555-4706-8dc8-78a50d5cb399', 'bed7bade-638f-4923-897a-20c1ec56a123', 'admin', '2018-06-12 15:45:01');
-INSERT INTO `ent_role_menu` VALUES ('08ff8122-ce91-4014-a960-8f9764e179ed', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('0afbe20d-6588-45fc-ad96-c2a47739904b', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '3e751234-7949-4562-b73c-cf0370351d95', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('3b1ae199-3742-430b-837e-3574226ff975', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'c2d82c74-0b30-41e2-9c0d-5f4f861c24e6', 'admin', '2022-11-23 05:52:16');
+INSERT INTO `ent_role_menu` VALUES ('08e03378-51c4-4b99-9961-950d7897ed5d', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'b8bf4f17-0749-4251-b547-856ee4dff8dd', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('15cff7cd-7b44-447c-9af6-ede866a1ea3a', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'fe98249c-0d01-4ecf-85a3-e360ed21f172', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('17920a27-5c9d-42b2-8916-9d2e72286a15', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'a7d6dc6b-c9f3-4763-a186-4a86840f9e4c', 'admin', '2022-12-23 03:07:53');
 INSERT INTO `ent_role_menu` VALUES ('3b2c5584-ba02-4d89-8841-b3e6c1ac7f36', 'JXSG20221121c85d', '8bec474a-f8e8-4a22-9979-3b08af0ce77b', 'f5cf8c1c-6491-44b5-9e54-e289a4fdb094', 'adminGQ', '2022-11-25 02:18:40');
-INSERT INTO `ent_role_menu` VALUES ('46ff8da4-4088-4c0e-8279-4e01788359b2', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '69b60731-6b35-423f-a52a-bb524fe0ec09', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('4e848967-b1ef-4721-848d-f55c15e11cdf', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'c0bd9ae4-6375-462f-85c0-526aba1c486a', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('52366e0c-fd7c-47ac-8fd6-feb1d4a30c60', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'db095c80-111f-4326-b183-d2e43e343f04', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('719adddf-ecd7-4117-8835-49f1aa483ffe', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'a1ca0716-1236-4acc-9bb1-1708a2199f6c', 'admin', '2022-11-23 05:52:16');
+INSERT INTO `ent_role_menu` VALUES ('3ea8f966-e447-4d70-9fc1-c73c10296ee6', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'c0bd9ae4-6375-462f-85c0-526aba1c486a', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('7170e735-5b4f-4acd-a986-01ce3ec56c46', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '444fb273-673e-4b54-9e8d-b660f13e1888', 'admin', '2022-12-23 03:07:53');
 INSERT INTO `ent_role_menu` VALUES ('7e0bc18d-a17a-43bc-b234-ae1c0c0352ff', 'JXSG20221121c85d', '8bec474a-f8e8-4a22-9979-3b08af0ce77b', 'c2d82c74-0b30-41e2-9c0d-5f4f861c24e6', 'adminGQ', '2022-11-25 02:18:40');
-INSERT INTO `ent_role_menu` VALUES ('9665edf6-9b8e-4dbb-9fc1-f2ea6963f17d', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '1223709c-bf3f-4f54-8a85-895cc8709146', 'admin', '2022-11-23 05:52:16');
+INSERT INTO `ent_role_menu` VALUES ('7ea8e576-c583-4fe6-bb67-6ab216a66385', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'a1ca0716-1236-4acc-9bb1-1708a2199f6c', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('89521858-82d6-44be-86bd-c28a3a5b8c60', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '216da748-27f7-45cf-9986-9b40e9ecd666', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('aa97eb35-9b2f-4350-8d3f-6d8d120f1d15', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'c2d82c74-0b30-41e2-9c0d-5f4f861c24e6', 'admin', '2022-12-23 03:07:53');
 INSERT INTO `ent_role_menu` VALUES ('as56gh67-6112-4b57-9787-as4566ugh678', '', 'ff920c1b-d555-4706-8dc8-78a50d5cb399', '7d19cf26-f334-4c16-bebd-d8f789aa8d5c', 'admin', '2018-06-12 15:44:30');
 INSERT INTO `ent_role_menu` VALUES ('as56gh67-6112-4b57-9787-f67829382742', '', 'ff920c1b-d555-4706-8dc8-78a50d5cb399', '82b25d15-dcf8-44db-87be-035d5c8fd630', 'admin', '2018-06-12 15:44:30');
-INSERT INTO `ent_role_menu` VALUES ('dadfc435-4bfd-40c9-bf86-f7fdf854b3b9', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'a7d6dc6b-c9f3-4763-a186-4a86840f9e4c', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('e4831c81-88d4-41ec-890a-322d597c7e53', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'fe98249c-0d01-4ecf-85a3-e360ed21f172', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('e57bb583-bec8-4bbd-9d7c-8ccdab991fd5', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '216da748-27f7-45cf-9986-9b40e9ecd666', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('f0cb4319-187c-4a3b-959c-3debf2aa09bb', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'e3a1972b-5637-4e01-b080-670d555cf26f', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('f298be7b-e13b-4063-b7c4-dfd2abdb6376', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'f5cf8c1c-6491-44b5-9e54-e289a4fdb094', 'admin', '2022-11-23 05:52:16');
-INSERT INTO `ent_role_menu` VALUES ('fd61a9b6-ec9b-4938-be65-8523abb36c6f', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'b8bf4f17-0749-4251-b547-856ee4dff8dd', 'admin', '2022-11-23 05:52:16');
+INSERT INTO `ent_role_menu` VALUES ('c149cedd-8089-49d7-8066-90640da84d81', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('d61824ee-5d23-4bd3-a29e-43e090f4bfb9', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', '69b60731-6b35-423f-a52a-bb524fe0ec09', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('e5fc58d2-624b-4b7c-9253-e97c15f7f5ea', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'd9e11dc6-8d0b-4890-8628-88896ef5b6d0', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('e6d463c5-6405-4a4c-a2f1-6e94a2b6360e', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'eae4cea1-a52a-4935-82ba-89315c2502f6', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('efde5fb0-45d6-4a48-bfa0-d0a6891ae3cf', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'e3a1972b-5637-4e01-b080-670d555cf26f', 'admin', '2022-12-23 03:07:53');
+INSERT INTO `ent_role_menu` VALUES ('f2e40772-30b0-4dc0-8cba-be0011d65d1c', 'JXSG20221121c85d', 'a4713756-137f-4a19-8492-1af5190a1dde', 'ec51d925-a81e-4c55-ae58-95176110f53f', 'admin', '2022-12-23 03:07:53');
 
 -- ----------------------------
 -- Table structure for ent_user
@@ -910,7 +1051,7 @@ CREATE TABLE `ent_user`  (
 -- ----------------------------
 -- Records of ent_user
 -- ----------------------------
-INSERT INTO `ent_user` VALUES ('02c09399-ab1f-471c-b6ff-160ad082face', 'JXSG20221121c85d', 'f01b7758-744b-4c3f-b531-9c784464a8cf', NULL, 'adminGQ', 'e10adc3949ba59abbe56e057f20f883e', '超级管理员', 0, NULL, '18256909696', NULL, 1, NULL, 'a4713756-137f-4a19-8492-1af5190a1dde', NULL, '2022-11-25 11:02:09', '192.168.102.4', 0, 'admin', '2022-11-21 03:19:28', 'adminGQ', '2022-11-24 02:27:07');
+INSERT INTO `ent_user` VALUES ('02c09399-ab1f-471c-b6ff-160ad082face', 'JXSG20221121c85d', 'f01b7758-744b-4c3f-b531-9c784464a8cf', NULL, 'adminGQ', 'e10adc3949ba59abbe56e057f20f883e', '超级管理员', 0, NULL, '18256909696', NULL, 1, NULL, 'a4713756-137f-4a19-8492-1af5190a1dde', NULL, '2022-12-23 11:07:59', '192.168.102.4', 0, 'admin', '2022-11-21 03:19:28', 'adminGQ', '2022-11-24 02:27:07');
 INSERT INTO `ent_user` VALUES ('3c0d4353-96ab-4b42-86c0-0220f3b551b6', 'JXSG20221121c85d', 'e2655d9a-d5e1-44ab-a4cc-7806b3f5b88c', '', 'hengxin', 'e10adc3949ba59abbe56e057f20f883e', '恒馨', 1, '11051072654@qq.com', '18225603323', '1105107265', 1, '领导当然是管财政的', '8bec474a-f8e8-4a22-9979-3b08af0ce77b', NULL, '2022-11-25 11:02:27', '192.168.102.4', 0, 'adminGQ', '2022-11-24 01:49:45', 'adminGQ', '2022-11-24 10:13:48');
 INSERT INTO `ent_user` VALUES ('9aa851d8-f314-4efb-a78d-370c6f949f66', 'JXSG20221121c85d', 'e2604acf-1368-4873-8b16-4cba823c8ef3', '9527', 'gaoq', 'e10adc3949ba59abbe56e057f20f883e', '佛学徒', 0, '1105107264@qq.com', '17654433322', '1105107264', 1, '科技小组中坚力量，俗称技男', NULL, NULL, NULL, NULL, 0, 'adminGQ', '2022-11-24 02:02:40', 'adminGQ', '2022-11-24 02:16:38');
 
@@ -961,7 +1102,7 @@ CREATE TABLE `sys_enterprise`  (
 -- ----------------------------
 -- Records of sys_enterprise
 -- ----------------------------
-INSERT INTO `sys_enterprise` VALUES ('JXSG20221121c85d', '静馨舍工作室', '1105107264@qq.com', '18256908359', '高强', NULL, NULL, 1, 'admin', '2022-11-21 03:19:28', 'admin', '2022-11-23 05:52:15', '恒馨', 'foxuetu');
+INSERT INTO `sys_enterprise` VALUES ('JXSG20221121c85d', '静馨舍工作室', '1105107264@qq.com', '18256908359', '高强', NULL, NULL, 1, 'admin', '2022-11-21 03:19:28', 'admin', '2022-12-23 03:07:53', '恒馨', 'foxuetu');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -988,20 +1129,24 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('1223709c-bf3f-4f54-8a85-895cc8709146', '系统管理', '', 1, 'fa fa-cogs', '#', 'admin', '2022-11-17 07:18:36', 'admin', '2022-11-17 07:18:36', '系统管理,添加模块时，会默认生成一个系统菜单', 1, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
+INSERT INTO `sys_menu` VALUES ('1223709c-bf3f-4f54-8a85-895cc8709146', '系统管理', '', 1, 'fa fa-cogs', '#', 'admin', '2022-11-17 07:18:36', 'admin', '2022-12-23 10:57:18', '系统管理,添加模块时，会默认生成一个系统菜单', 0, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
 INSERT INTO `sys_menu` VALUES ('216da748-27f7-45cf-9986-9b40e9ecd666', '客户列表', '1223', 1, 'fa fa-address-card-o', 'b8bf4f17-0749-4251-b547-856ee4dff8dd', 'admin', '2022-11-18 07:46:48', 'admin', '2022-11-21 01:57:57', '', 1, 1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
-INSERT INTO `sys_menu` VALUES ('3e751234-7949-4562-b73c-cf0370351d95', '功能管理', 'moduletest', 1, 'fa fa-bank', '1223709c-bf3f-4f54-8a85-895cc8709146', 'admin', '2022-11-23 05:36:06', 'admin', '2022-11-23 05:36:06', '', 1, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
+INSERT INTO `sys_menu` VALUES ('3e751234-7949-4562-b73c-cf0370351d95', '功能管理', 'moduletest', 1, 'fa fa-bank', '1223709c-bf3f-4f54-8a85-895cc8709146', 'admin', '2022-11-23 05:36:06', 'admin', '2022-12-23 10:57:18', '', 0, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
+INSERT INTO `sys_menu` VALUES ('444fb273-673e-4b54-9e8d-b660f13e1888', '评论管理', NULL, 4, 'fa fa-commenting-o', '#', 'admin', '2022-12-23 03:02:22', 'admin', '2022-12-23 03:02:22', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('69b60731-6b35-423f-a52a-bb524fe0ec09', '操作日志', '/ent-manage/operation-log', 2, 'fa fa-eye', 'e3a1972b-5637-4e01-b080-670d555cf26f', 'admin', '2022-11-18 07:11:36', 'admin', '2022-11-18 07:11:36', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
-INSERT INTO `sys_menu` VALUES ('9a563537-398c-4f97-9d30-41d331970789', '不支持脱敏', 'test', 1, 'fa fa-balance-scale', 'f5cf8c1c-6491-44b5-9e54-e289a4fdb094', 'admin', '2022-11-24 06:35:56', 'admin', '2022-11-24 06:36:10', '', 1, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
+INSERT INTO `sys_menu` VALUES ('9a563537-398c-4f97-9d30-41d331970789', '不支持脱敏', 'test', 1, 'fa fa-balance-scale', 'f5cf8c1c-6491-44b5-9e54-e289a4fdb094', 'admin', '2022-11-24 06:35:56', 'admin', '2022-12-23 10:57:22', '', 0, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
 INSERT INTO `sys_menu` VALUES ('a1ca0716-1236-4acc-9bb1-1708a2199f6c', '架构管理', '/ent-manage/organization', 3, 'fa fa-calendar-check-o', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-11-18 06:54:31', 'admin', '2022-11-18 06:54:31', '公司组织架构', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('a4a3e7e0-6252-4a27-a281-80684d50882e', '系统管理', '', 1, 'fa fa-cogs', '#', 'admin', '2022-11-17 07:23:12', 'admin', '2022-11-18 06:57:18', '系统管理,添加模块时，会默认生成一个系统菜单', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('a7d6dc6b-c9f3-4763-a186-4a86840f9e4c', '公司简介', '/ent-manage/company', 4, 'fa fa-anchor', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-11-18 06:58:32', 'admin', '2022-11-18 07:05:37', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('b8bf4f17-0749-4251-b547-856ee4dff8dd', '客户管理', '', 2, 'fa fa-address-book-o', '#', 'admin', '2022-11-17 08:52:24', 'admin', '2022-11-18 06:45:32', 'app用户管理', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('c0bd9ae4-6375-462f-85c0-526aba1c486a', '用户管理', '/ent-manage/user', 1, 'fa fa-user-o', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-11-17 12:26:03', 'admin', '2022-11-21 01:58:18', '企业下的用户管理', 1, 1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('c2d82c74-0b30-41e2-9c0d-5f4f861c24e6', '登录日志', '/ent-manage/login-log', 1, 'fa fa-lock', 'e3a1972b-5637-4e01-b080-670d555cf26f', 'admin', '2022-11-18 07:10:06', 'admin', '2022-11-18 07:10:06', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
+INSERT INTO `sys_menu` VALUES ('d9e11dc6-8d0b-4890-8628-88896ef5b6d0', '话题管理', NULL, 3, 'fa fa-assistive-listening-systems', '#', 'admin', '2022-12-23 03:01:12', 'admin', '2022-12-23 03:02:59', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 INSERT INTO `sys_menu` VALUES ('db095c80-111f-4326-b183-d2e43e343f04', '字典管理', '/ent-manage/dict', 5, 'fa fa-book', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-11-18 07:04:13', 'admin', '2022-11-18 07:05:31', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
-INSERT INTO `sys_menu` VALUES ('e3a1972b-5637-4e01-b080-670d555cf26f', '日志管理', NULL, 3, 'fa fa-commenting-o', '#', 'admin', '2022-11-17 11:52:25', 'admin', '2022-11-17 11:52:25', '企业端日志信息，登录日志和操作日志', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
-INSERT INTO `sys_menu` VALUES ('f5cf8c1c-6491-44b5-9e54-e289a4fdb094', '测试管理', NULL, 1, 'fa fa-adjust', '#', 'admin', '2022-11-23 05:35:36', 'admin', '2022-11-23 05:35:36', '', 1, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
+INSERT INTO `sys_menu` VALUES ('e3a1972b-5637-4e01-b080-670d555cf26f', '日志管理', NULL, 5, 'fa fa-clock-o', '#', 'admin', '2022-11-17 11:52:25', 'admin', '2022-12-23 03:02:46', '企业端日志信息，登录日志和操作日志', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
+INSERT INTO `sys_menu` VALUES ('eae4cea1-a52a-4935-82ba-89315c2502f6', '话题列表', '1234', 1, 'fa fa-assistive-listening-systems', 'd9e11dc6-8d0b-4890-8628-88896ef5b6d0', 'admin', '2022-12-23 03:04:44', 'admin', '2022-12-23 03:04:44', '', 1, 1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
+INSERT INTO `sys_menu` VALUES ('ec51d925-a81e-4c55-ae58-95176110f53f', '评论列表', '123456', 1, 'fa fa-commenting', '444fb273-673e-4b54-9e8d-b660f13e1888', 'admin', '2022-12-23 03:06:16', 'admin', '2022-12-23 03:06:16', '', 1, 1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
+INSERT INTO `sys_menu` VALUES ('f5cf8c1c-6491-44b5-9e54-e289a4fdb094', '测试管理', NULL, 1, 'fa fa-adjust', '#', 'admin', '2022-11-23 05:35:36', 'admin', '2022-12-23 10:57:22', '', 0, -1, 'dd44c89d-4c59-436d-aef1-abc6a3fbf4bc');
 INSERT INTO `sys_menu` VALUES ('fe98249c-0d01-4ecf-85a3-e360ed21f172', '角色管理', '/ent-manage/role', 2, 'fa fa-calendar-plus-o', 'a4a3e7e0-6252-4a27-a281-80684d50882e', 'admin', '2022-11-18 06:50:35', 'admin', '2022-11-18 06:50:35', '', 1, -1, '04c3ea3f-18b5-46bc-83d4-f45c573a6210');
 
 -- ----------------------------
@@ -1052,8 +1197,8 @@ CREATE TABLE `sys_module`  (
 -- ----------------------------
 -- Records of sys_module
 -- ----------------------------
-INSERT INTO `sys_module` VALUES ('04c3ea3f-18b5-46bc-83d4-f45c573a6210', '身旁事', 'admin', '2022-11-17 07:23:12', 'admin', '2022-11-17 07:52:20', '围绕我们身边的一些事情或礼仪方面的语录', 1);
-INSERT INTO `sys_module` VALUES ('dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '慧分期', 'admin', '2022-11-17 07:18:36', 'admin', '2022-11-17 07:18:36', '购买商品分期付款的一个项目', 1);
+INSERT INTO `sys_module` VALUES ('04c3ea3f-18b5-46bc-83d4-f45c573a6210', '福生语录', 'admin', '2022-11-17 07:23:12', 'admin', '2022-12-23 02:58:19', '围绕我们身边的一些事情或礼仪方面，主要给自己看的语录', 1);
+INSERT INTO `sys_module` VALUES ('dd44c89d-4c59-436d-aef1-abc6a3fbf4bc', '测试模块', 'admin', '2022-11-17 07:18:36', 'admin', '2022-12-23 02:57:30', '测试模块', 0);
 
 -- ----------------------------
 -- Table structure for sys_other_columns_conf
@@ -1141,6 +1286,6 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('fb616e4e-2f24-4666-9fa1-e0749a60d228', '20b99b5e-3d9b-4591-a501-f15dd6bd00a7', 'zzl463381', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '超级管理员', 1, NULL, NULL, NULL, 1, NULL, 'ff920c1b-d555-4706-8dc8-78a50d5cb399', NULL, '2022-11-24 14:31:33', '192.168.102.4', 0, 'admin', '2018-05-23 17:31:51', 'admin', '2018-05-29 17:20:58');
+INSERT INTO `sys_user` VALUES ('fb616e4e-2f24-4666-9fa1-e0749a60d228', '20b99b5e-3d9b-4591-a501-f15dd6bd00a7', 'zzl463381', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '超级管理员', 1, NULL, NULL, NULL, 1, NULL, 'ff920c1b-d555-4706-8dc8-78a50d5cb399', NULL, '2022-12-23 10:55:04', '192.168.102.4', 0, 'admin', '2018-05-23 17:31:51', 'admin', '2018-05-29 17:20:58');
 
 SET FOREIGN_KEY_CHECKS = 1;
