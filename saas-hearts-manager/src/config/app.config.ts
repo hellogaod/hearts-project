@@ -2,7 +2,7 @@ const customConfig = require("app-config")
 const env: any = process.env
 
 let appConfig = {
-  name: 'saas基础平台',
+  name: '福生语录',
   version: 'V1.0',
   url: {
     server: env.URL.SERVER,

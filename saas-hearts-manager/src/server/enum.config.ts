@@ -3,6 +3,7 @@ export const servicePreName = "saas-"
 
 export const managerServiceName = servicePreName + 'manage-service'
 export const commonServiceName = servicePreName + 'common-service'
+export const appServiceName = servicePreName + 'hearts-service'
 
 
 /**
