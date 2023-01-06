@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.saas.hearts.R
 import com.app.saas.hearts.api.HttpManage
 import com.app.saas.hearts.databinding.FragmentHomeBinding
+import com.app.saas.hearts.ui.talk.TalkFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +27,9 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private var recommentFragment: TalkFragment? = null
+    private var talkFragment: TalkFragment? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,12 +41,58 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        getData()
+        switchTab(0)
+        lisenter()
+
         return root
+    }
+
+    fun lisenter() {
+        binding.tvTalk.setOnClickListener({ switchTab(1) })
+        binding.tvRecommend.setOnClickListener { switchTab(0) }
+    }
+
+    fun switchTab(index: Int) {
+        switchTalkTextColor(index)
+        swiftTalkTabContent(index)
+    }
+
+    fun switchTalkTextColor(index: Int) {
+        //切换fragment：0表示推荐，1表示话题
+        if (index == 0) {
+            binding.tvRecommend.setTextColor(getResources().getColor(R.color.selected_color))
+            binding.tvTalk.setTextColor(getResources().getColor(R.color.unselected_color))
+        } else {
+            binding.tvRecommend.setTextColor(getResources().getColor(R.color.unselected_color))
+            binding.tvTalk.setTextColor(getResources().getColor(R.color.selected_color))
+        }
+    }
+
+    fun swiftTalkTabContent(index: Int) {
+        //切换fragment：0表示推荐，1表示话题
+        //不要使用activity?.getSupportFragmentManager()：会出现内存泄漏问题
+        //val transaction =activity?.getSupportFragmentManager()?.beginTransaction()
+
+        val transaction = childFragmentManager?.beginTransaction()
+
+        if (recommentFragment == null) {
+            recommentFragment = TalkFragment()
+            transaction?.add(R.id.fg_transaction, recommentFragment!!)
+        }
+        if (talkFragment == null) {
+            talkFragment = TalkFragment()
+            transaction?.add(R.id.fg_transaction, talkFragment!!)
+        }
+
+        if (index == 0) {
+            transaction!!.hide(talkFragment!!)
+            transaction.show(recommentFragment!!)
+        } else {
+            transaction!!.hide(recommentFragment!!)
+            transaction.show(talkFragment!!)
+        }
+
+        transaction!!.commit()
     }
 
     override fun onDestroyView() {
@@ -49,8 +100,8 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    fun getData(){
-        HttpManage.getHttpCustUserService().getList(0,0,0)
+    fun getData() {
+        HttpManage.getHttpCustUserService().getList(0, 0, 0)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : io.reactivex.Observer<Any> {
