@@ -36,7 +36,7 @@ public class CustUserController {
 
     @ApiOperation(value = "app用户注册", httpMethod = "POST", notes = "app用户注册")
     @PostMapping("/register")
-    public ResponseEntity saveDict(@RequestBody CustUser custUser) {
+    public ResponseEntity register(@RequestBody CustUser custUser) {
 
         String logmsg ;
         try {
@@ -91,15 +91,14 @@ public class CustUserController {
         userInfo.setUserId(appUserInfo.getId());
         userInfo.setCompanyCode(appUserInfo.getCompanyCode());
         userInfo.setAccount(appUserInfo.getNickname());
+        userInfo.setToken(sessionId);
         AppUserContextUtil.setUserInfo(sessionId, userInfo);
 
         String loginIp = request.getRemoteAddr();
         //最后一次登录ip和登录时间修改
         custUserService.updateCustUserLastLoginInfo(appUserInfo.getId(),loginIp);
 
-
-
-        return ResponseEntity.ok().headers(HeaderUtil.createToken(sessionId)).body(appUserInfo);
+        return ResponseEntity.ok().headers(HeaderUtil.createAppToken(sessionId)).body(appUserInfo);
     }
 
     @ApiOperation(value = "app列表", notes = "app用户列表")
@@ -109,7 +108,7 @@ public class CustUserController {
             @ApiImplicitParam(name = "status", value = "状态", dataType = "int", paramType = "query", required = false)
     })
     @GetMapping("/getList")
-    public ResponseEntity getDictList(@RequestParam(value = "pageSize") Integer pageSize,
+    public ResponseEntity getList(@RequestParam(value = "pageSize") Integer pageSize,
                                       @RequestParam(value = "pageIndex") Integer pageIndex,
                                       @RequestParam(value = "status", required = false) Integer status) {
         LoggerCommon.info(this.getClass(), "app用户列表");

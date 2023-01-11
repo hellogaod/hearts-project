@@ -28,7 +28,7 @@ public class CustCommentController {
 
     @PostMapping("/addComment")
     @ApiOperation(value = "新增评论", notes = "新增评论")
-    public ResponseEntity addRole(@RequestBody CustComment custComment) {
+    public ResponseEntity addComment(@RequestBody CustComment custComment) {
 
         String logmsg = LocaleMessage.get("message.system.save.fail");
         try {
@@ -73,7 +73,7 @@ public class CustCommentController {
             @ApiImplicitParam(name = "talkId", value = "所属话题", dataType = "String", paramType = "query", required = false),
             @ApiImplicitParam(name = "companyCode", value = "所属企业", dataType = "String", paramType = "query", required = false),
     })
-    public ResponseEntity getRoleList(@RequestParam("pageSize") Integer pageSize,
+    public ResponseEntity getCommentList(@RequestParam("pageSize") Integer pageSize,
                                       @RequestParam("pageIndex") Integer pageIndex,
                                       @RequestParam(value = "status", required = false) Integer status,
                                       @RequestParam(value = "talkId", required = false) String talkId,
