@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--透明-->
+    <color name="transparent">#00000000</color>
+    <!--半透明-->
+    <color name="translucent">#22050505</color>
+
+    <!--gray_color:line,button-->
+    <color name="gray_color">#d2d2d2</color>
+
+    <color name="ef">#efefef</color>
+
+    <color name="selected_color">#43cf7c</color>
+    <color name="unselected_color">#666</color>
 </resources>

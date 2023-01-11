@@ -1,15 +1,13 @@
-package com.app.saas.hearts.ui.home
+package com.app.saas.hearts.ui.talk
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class TalkViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "This is talk Fragment"
     }
     val text: LiveData<String> = _text
-
-
 }
