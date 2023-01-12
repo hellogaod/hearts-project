@@ -31,7 +31,7 @@ public class CustTalkController {
 
     @PostMapping("/addTalk")
     @ApiOperation(value = "新增话题", notes = "新增话题")
-    public ResponseEntity addRole(@RequestBody CustTalk custTalk) {
+    public ResponseEntity addTalk(@RequestBody CustTalk custTalk) {
 
         String logmsg = LocaleMessage.get("message.system.save.fail");
         try {
@@ -76,7 +76,7 @@ public class CustTalkController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "talkId", value = "话题id", dataType = "String", paramType = "query", required = true),
     })
-    public ResponseEntity getRoleList( @RequestParam(value = "talkId") String talkId) {
+    public ResponseEntity getTalkDetail( @RequestParam(value = "talkId") String talkId) {
 
         try {
             CustTalk custTalk = custTalkService.getCustTalkInfoById(talkId);
@@ -99,7 +99,7 @@ public class CustTalkController {
             @ApiImplicitParam(name = "createrUserId", value = "创建者id", dataType = "String", paramType = "query", required = false),
             @ApiImplicitParam(name = "companyCode", value = "所属企业", dataType = "String", paramType = "query", required = false),
     })
-    public ResponseEntity getRoleList(@RequestParam("pageSize") Integer pageSize,
+    public ResponseEntity getTalkList(@RequestParam("pageSize") Integer pageSize,
                                       @RequestParam("pageIndex") Integer pageIndex,
                                       @RequestParam(value = "status", required = false) Integer status,
                                       @RequestParam(value = "createrUserId", required = false) String createrUserId,

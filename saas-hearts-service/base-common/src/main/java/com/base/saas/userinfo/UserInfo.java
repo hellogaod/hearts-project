@@ -40,5 +40,5 @@ public class UserInfo implements Serializable {
     /**
      * 登录令牌
      */
-//    private String token;
+    private String token;
 }
