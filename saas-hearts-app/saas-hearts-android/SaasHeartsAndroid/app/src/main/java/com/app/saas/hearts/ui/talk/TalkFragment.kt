@@ -1,44 +1,99 @@
 package com.app.saas.hearts.ui.talk
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewbinding.ViewBinding
+import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentTalkBinding
+import com.app.saas.hearts.ui.talk.adapter.TalkAdapter
 
-class TalkFragment : Fragment() {
+class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
 
-    private lateinit var talkViewModel: TalkViewModel
-    private var _binding: FragmentTalkBinding? = null
+    private var talkAdapter: TalkAdapter? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
+    override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        talkViewModel =
-            ViewModelProvider(this).get(TalkViewModel::class.java)
-
-        _binding = FragmentTalkBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textTalk
-        talkViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+    ): FragmentTalkBinding {
+        return FragmentTalkBinding.inflate(inflater, container, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun initView() {
+
+        talkAdapter = TalkAdapter()
+        binding.rlTalk.adapter = talkAdapter
+
+
+        binding.sfTalk.setOnRefreshListener {
+
+            binding.sfTalk.isRefreshing = false
+
+            talkAdapter?.clearList()
+
+            viewModel.getData(true)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.rlTalk.setOnScrollChangeListener(View.OnScrollChangeListener() { view: View, i: Int, i1: Int, i2: Int, i3: Int ->
+
+                val lm: LinearLayoutManager = binding.rlTalk.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = lm.findLastVisibleItemPosition()
+                val totalCount: Int = lm.itemCount
+
+                if (totalCount > 10
+                    && lastVisibleItemPosition == totalCount - 1
+                    && !viewModel.isLastPage()
+                ) {
+
+                    viewModel.getData(false)
+                }
+
+            })
+        }
+    }
+
+    override fun getViewModel(viewModelProvider: ViewModelProvider?): TalkViewModel {
+
+        return ViewModelProvider(this).get(TalkViewModel::class.java)
+    }
+
+    override fun initData() {
+
+        viewModel.talkPageInfo.observe(viewLifecycleOwner, Observer {
+
+
+            talkAdapter?.setList(it.list)
+            showTalkListUI()
+        })
+
+        viewModel.getData(true)
+    }
+
+
+    fun showTalkListUI() {
+        if (talkAdapter?.listSize == 0) {
+
+            binding.tvEmpty.visibility = View.VISIBLE
+            binding.rlTalk.visibility = View.GONE
+        } else {
+
+            binding.tvEmpty.visibility = View.GONE
+            binding.rlTalk.visibility = View.VISIBLE
+
+        }
+    }
+
+
+    override fun clearView() {
+        talkAdapter = null
     }
 }
+

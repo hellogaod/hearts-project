@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.17239583333333333" />
+        <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable/bg_radius3_and_colorgray.xml" value="0.26979166666666665" />
+        <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable/bg_radiusthree_and_colorgray.xml" value="0.26979166666666665" />
+        <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable/bottom_btn_selected_color.xml" value="0.26564102564102565" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.17239583333333333" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.26979166666666665" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/drawable/ic_launcher_background.xml" value="0.17239583333333333" />
@@ -12,6 +15,9 @@
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/layout/fragment_dashboard.xml" value="0.17300724637681159" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/layout/fragment_talk.xml" value="0.17300724637681159" />
+        <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/layout/layout_double_line.xml" value="0.1598731884057971" />
+        <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/layout/talk_img_item.xml" value="0.25364583333333335" />
+        <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/layout/talk_item.xml" value="0.4" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25364583333333335" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/menu/talk_menu.xml" value="0.25364583333333335" />
         <entry key="..\:/future-project/hearts-project/saas-hearts-app/saas-hearts-android/SaasHeartsAndroid/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.26979166666666665" />
