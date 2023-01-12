@@ -42,7 +42,7 @@
         (select count(id) from cust_comment c where c.talk_id = t.id) as commentCount
         from cust_talk t
         <where>
-            <if test="status != null">
+            <if test="status != null and status != -1">
                 and status = #{status}
             </if>
             <if test="createUser != null and createUser != ''">
