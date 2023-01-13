@@ -197,7 +197,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.base.saas.SaasHeartspplication</mainClass>
+                    <mainClass>com.base.saas.SaasHeartsApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

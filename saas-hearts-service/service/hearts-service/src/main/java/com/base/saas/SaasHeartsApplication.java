@@ -28,8 +28,8 @@ import java.util.Properties;
 @EntityScan("com.base.saas.hearts")
 @EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
 @EnableTransactionManagement
-public class SaasHeartspplication {
-    private static final Logger log = LoggerFactory.getLogger(SaasHeartspplication.class);
+public class SaasHeartsApplication {
+    private static final Logger log = LoggerFactory.getLogger(SaasHeartsApplication.class);
 
     @Bean
     public PageHelper pageHelper() {
@@ -52,7 +52,7 @@ public class SaasHeartspplication {
 
 
     public static void main(String[] args) throws UnknownHostException {
-        SpringApplication app = new SpringApplication(SaasHeartspplication.class);
+        SpringApplication app = new SpringApplication(SaasHeartsApplication.class);
         ConfigurableApplicationContext c =  app.run(args);
         Environment env =c.getEnvironment();
         log.info("\n----------------------------------------------------------\n\t" +
