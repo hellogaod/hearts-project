@@ -1,0 +1,22 @@
+<resources>
+
+    <!--txt文本只能显示一行，超过则显示省略号-->
+    <style name="base_txtLinesOnlyOne">
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!--txt文本只能显示2行，超过则显示省略号-->
+    <style name="base_txtLinesTwoOne">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!--设置于edittext父级布局，以防止edittext获取焦点-->
+    <style name="base_edittextLoseFocus">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+
+</resources>
