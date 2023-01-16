@@ -37,6 +37,7 @@ public class TalkAdapter extends RecyclerView.Adapter<TalkAdapter.InnerHolder> {
     //构造器，只留这一个构造器，将list传入
     public TalkAdapter() {
         list = new ArrayList<>();
+
     }
 
     public void clearList() {

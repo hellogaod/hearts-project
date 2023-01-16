@@ -32,8 +32,6 @@ public abstract class BaseFragment<V extends ViewBinding, M extends ViewModel> e
 
         if (binding == null) {
             binding = getViewBinding(inflater, container, savedInstanceState);
-
-            initView();
         }
 
         return binding.getRoot();
@@ -48,6 +46,8 @@ public abstract class BaseFragment<V extends ViewBinding, M extends ViewModel> e
             viewModel = getViewModel(viewModelProvider);
 
             initData();
+
+            initView();
         }
 
     }
@@ -77,14 +77,17 @@ public abstract class BaseFragment<V extends ViewBinding, M extends ViewModel> e
     @Override
     public void onDestroyView() {
 
+
+        clearView();
+        clearData();
+
         View view  = binding.getRoot();
         if (view instanceof ViewGroup){
             ((ViewGroup) view).removeAllViews();
         }
         binding = null;
         viewModel = null;
-        clearView();
-        clearData();
+
         super.onDestroyView();
     }
 

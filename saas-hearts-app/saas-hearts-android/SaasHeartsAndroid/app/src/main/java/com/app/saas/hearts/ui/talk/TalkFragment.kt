@@ -26,6 +26,16 @@ class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
         return FragmentTalkBinding.inflate(inflater, container, false)
     }
 
+    companion object{
+        fun newInstance():  TalkFragment{
+            val args = Bundle()
+
+            val fragment = TalkFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun initView() {
 
         talkAdapter = TalkAdapter()
