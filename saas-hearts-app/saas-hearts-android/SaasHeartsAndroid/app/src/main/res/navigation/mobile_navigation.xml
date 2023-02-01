@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_my"
-        android:name="com.app.saas.hearts.ui.dashboard.DashboardFragment"
+        android:name="com.app.saas.hearts.ui.my.MyFragment"
         android:label="@string/title_my"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_my" />
 </navigation>
