@@ -3,6 +3,9 @@ package com.app.saas.hearts.base
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewbinding.ViewBinding
 
 /**
  * Copyright (C), 2019-2023, 佛生
@@ -12,16 +15,67 @@ import androidx.appcompat.app.AppCompatActivity
  * Description:
  * History:
  */
- open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<V : ViewBinding?, M : ViewModel?> : AppCompatActivity() {
+
+    protected var binding: V? = null
+    protected var viewModel: M? = null
+
+    // ------------------ 初始化共工作 start ---------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //去掉左标题栏
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar()?.hide()
+        }
+
+        if (binding == null) {
+            binding = getViewBinding()
+            setContentView(binding?.root)
+        }
+
+        if (viewModel == null) {
+            val viewModelProvider = ViewModelProvider(this)
+            viewModel = getViewModel(viewModelProvider)
+            initData()
+            initView()
         }
     }
 
+    /**
+     * View初始化
+     */
+    abstract fun initView()
+
+    /**
+     * 初始化数据
+     */
+    abstract fun initData()
+
+    abstract fun getViewModel(viewModelProvider: ViewModelProvider?): M?
+
+    /**
+     * 初始化viewbinding
+     *
+     * @return
+     */
+    abstract fun getViewBinding(): V
+
+    open fun clearView() {}
+    open fun clearData() {}
+
+    override fun onDestroy() {
+        clearView()
+        clearData()
+
+        binding = null
+        viewModel = null
+        super.onDestroy()
+    }
+
+    // ------------------ 初始化共工作 end ---------------
+
+    //------------ 防止段时间内快速点击 start ----------------------
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean { // 防止段时间内快速点击
         if (ev.action == MotionEvent.ACTION_DOWN) {
             if (isFastDoubleClick()) {
@@ -43,4 +97,5 @@ import androidx.appcompat.app.AppCompatActivity
             false
         }
     }
+    //------------ 防止段时间内快速点击 end ----------------------
 }

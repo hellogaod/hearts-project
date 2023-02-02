@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewbinding.ViewBinding
 import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentTalkBinding
 import com.app.saas.hearts.ui.talk.adapter.TalkAdapter

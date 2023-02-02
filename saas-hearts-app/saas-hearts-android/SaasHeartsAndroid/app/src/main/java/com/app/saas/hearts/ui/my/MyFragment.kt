@@ -1,5 +1,6 @@
 package com.app.saas.hearts.ui.my
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.app.saas.hearts.R
 import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentMyBinding
+import com.app.saas.hearts.ui.user.login.LoginActivity
 
 class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickListener {
 
@@ -36,7 +38,8 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.tv_login -> {//登录
-
+                val intent = Intent(activity,LoginActivity::class.java)
+                startActivity(intent)
             }
         }
 

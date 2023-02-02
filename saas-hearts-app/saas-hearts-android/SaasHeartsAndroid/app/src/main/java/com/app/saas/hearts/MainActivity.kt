@@ -1,25 +1,19 @@
 package com.app.saas.hearts
 
-import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.saas.hearts.base.BaseActivity
 import com.app.saas.hearts.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding, ViewModel>() {
 
-    private lateinit var binding: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val navView: BottomNavigationView = binding.navView
+    override fun initView() {
+        val navView: BottomNavigationView? = binding?.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
@@ -30,6 +24,18 @@ class MainActivity : BaseActivity() {
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        navView?.setupWithNavController(navController)
+    }
+
+    override fun initData() {
+
+    }
+
+    override fun getViewModel(viewModelProvider: ViewModelProvider?): ViewModel? {
+        return null
+    }
+
+    override fun getViewBinding(): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
     }
 }
