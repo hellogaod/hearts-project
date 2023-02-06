@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.app.saas.hearts.utils.SoftKeyboardUtils
 
 /**
  * Copyright (C), 2019-2023, 佛生
@@ -98,4 +99,18 @@ abstract class BaseActivity<V : ViewBinding?, M : ViewModel?> : AppCompatActivit
         }
     }
     //------------ 防止段时间内快速点击 end ----------------------
+
+    //------------ 判断软键盘如果开启，关闭软键盘 start -----------------
+    override fun onPause() {
+        super.onPause()
+        hideSoftKeyBoard()
+    }
+
+    open fun hideSoftKeyBoard() {
+        //如果软键盘开启，关闭软键盘
+        if (SoftKeyboardUtils.isSoftShowing(this)) {
+            SoftKeyboardUtils.hideSoftKeyboard(this)
+        }
+    }
+    //------------ 判断软键盘如果开启，关闭软键盘 end  -----------------
 }
