@@ -23,9 +23,13 @@
         android:text="标题"
         android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/iv_right"
+    <TextView
+        android:id="@+id/tv_right"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:text=""
+        android:visibility="invisible"
+        android:gravity="center"
+        android:layout_height="match_parent"
         android:background="@color/transparent" />
+
 </LinearLayout>

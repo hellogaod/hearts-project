@@ -2,6 +2,7 @@ package com.app.saas.hearts.api;
 
 import com.app.saas.hearts.entity.CustUser;
 import com.app.saas.hearts.entity.PageInfo;
+import com.app.saas.hearts.entity.ResponseDate;
 import com.app.saas.hearts.entity.UserInfo;
 
 import io.reactivex.Observable;
@@ -22,7 +23,7 @@ public interface HttpCustUserService {
 
     //注册
     @POST("/saas-hearts-service/api/custUser/register")
-    Observable<Object> register(@Body CustUser custUser);
+    Observable<ResponseDate> register(@Body CustUser custUser);
 
     //登录
     @POST("/saas-hearts-service/api/custUser/doLogin")

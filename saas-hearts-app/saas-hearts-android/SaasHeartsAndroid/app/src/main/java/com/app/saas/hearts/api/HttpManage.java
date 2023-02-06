@@ -22,6 +22,7 @@ public class HttpManage {
     private static HttpCustUserService httpCustUserService;
     private static HttpCustTalkService httpCustTalkService;
     private static HttpCustCommentService httpCustCommentService;
+    private static HttpCommonService httpCommonService;
 
     private static String baseUrl = "http://192.168.102.19:9000";
 
@@ -99,5 +100,18 @@ public class HttpManage {
             }
         }
         return httpCustCommentService;
+    }
+
+    public static HttpCommonService getHttpCommonService() {
+        getRetrofitInstall();
+        if (httpCommonService == null) {
+            synchronized (HttpManage.class) {
+                if (httpCommonService == null) {
+
+                    httpCommonService = retrofit.create(HttpCommonService.class);
+                }
+            }
+        }
+        return httpCommonService;
     }
 }
