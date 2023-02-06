@@ -27,22 +27,24 @@ public class CustUserServiceImpl implements CustUserService {
 
     @Override
     public boolean addCustUser(CustUser custUser) {
-        CustUser existed = custUserMapper.selectUserByNickNameAndCompanyCode(custUser.getNickname(), custUser.getCompanyCode());
+        CustUser existed = custUserMapper.selectUserByPhoneAndCompanyCode(custUser.getPhone(), custUser.getCompanyCode());
         if (existed != null) { //表示当前用户昵称已存在
             return false;
         }
+        custUser.setNickname("u_" + custUser.getPhone());
         Date date = new Date();
         custUser.setId(CreateIDUtil.getId());
         custUser.setCreateTime(date);
+        custUser.setStatus(1);
         custUser.setUpdateTime(date);
         return custUserMapper.insertSelective(custUser) == 1;
     }
 
     @Override
-    public ReturnMap login(String nickName, String password, String companyCode) {
+    public ReturnMap login(String phone, String password, String companyCode) {
         ReturnMap<CustUser> returnMap = new ReturnMap();
 
-        CustUser custUser = custUserMapper.selectUserByNickNameAndCompanyCode(nickName, companyCode);
+        CustUser custUser = custUserMapper.selectUserByPhoneAndCompanyCode(phone, companyCode);
         Integer status = custUser.getStatus();
 
         if (custUser != null) {

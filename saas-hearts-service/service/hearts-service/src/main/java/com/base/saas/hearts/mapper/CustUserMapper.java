@@ -26,9 +26,9 @@ public interface CustUserMapper {
     CustUser selectByPrimaryKey(String id);
 
     /**
-     * 根据nickname和companyCode获取用户信息
+     * 根据phone和companyCode获取用户信息
      */
-    CustUser selectUserByNickNameAndCompanyCode(@Param("nickname") String nickname, @Param("companyCode") String companyCode);
+    CustUser selectUserByPhoneAndCompanyCode(@Param("phone") String phone, @Param("companyCode") String companyCode);
 
     /**
      * 更新用户信息

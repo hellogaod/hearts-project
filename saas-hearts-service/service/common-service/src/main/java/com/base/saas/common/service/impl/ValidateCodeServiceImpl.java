@@ -45,6 +45,7 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
      * @author Mr.Zhang
      * @since 2020-04-16
      */
+    @Override
     public boolean check(ValidateCode validateCode){
 
         return ValidateCodeOperationUtils.check(redisUtil,validateCode.getKey(),validateCode.getCode());

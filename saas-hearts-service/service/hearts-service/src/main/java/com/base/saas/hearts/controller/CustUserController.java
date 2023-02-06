@@ -2,6 +2,7 @@ package com.base.saas.hearts.controller;
 
 import com.base.saas.AppConstant;
 import com.base.saas.hearts.domain.entity.CustUser;
+import com.base.saas.hearts.domain.model.ResponseData;
 import com.base.saas.hearts.domain.model.ReturnMap;
 import com.base.saas.hearts.service.CustUserService;
 import com.base.saas.language.LocaleMessage;
@@ -38,20 +39,26 @@ public class CustUserController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody CustUser custUser) {
 
-        String logmsg ;
+        String logmsg;
         try {
+
+            ResponseData responseData = new ResponseData();
+
             boolean flag = custUserService.addCustUser(custUser);//保存
 
             if (flag) {//保存成功
 
-                LoggerCommon.info(this.getClass(), "app用户注册成功" );
-                return ResponseEntity.ok().body(null);
+                responseData.setCode(200);
+                responseData.setMsg("app用户注册成功");
+                LoggerCommon.info(this.getClass(), "app用户注册成功");
+                return ResponseEntity.ok().body(responseData);
             } else {
-                LoggerCommon.info(this.getClass(), "app用户注册失败" );
-
+                responseData.setCode(400);
+                LoggerCommon.info(this.getClass(), "app用户注册失败");
+                responseData.setMsg("app用户手机号码重复！");
                 logmsg = LocaleMessage.get("message.system.save.fail");
 
-                return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(null);
+                return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(responseData);
             }
         } catch (Exception e) {
             logmsg = LocaleMessage.get("message.system.save.fail");
@@ -65,14 +72,14 @@ public class CustUserController {
 
     @ApiOperation(value = "app用户登录", notes = "app用户登录")
     @PostMapping("/doLogin")
-    public ResponseEntity doLogin(@RequestBody CustUser custUser,HttpServletRequest request) {
+    public ResponseEntity doLogin(@RequestBody CustUser custUser, HttpServletRequest request) {
         CustUser appUserInfo = null;
         String localeTipMsg = LocaleMessage.get("system.server.exception");
         try {
-            ReturnMap<CustUser> returnMap = custUserService.login(custUser.getNickname(),custUser.getPassword(),custUser.getCompanyCode());
-            if (returnMap.getCode() == 1){
+            ReturnMap<CustUser> returnMap = custUserService.login(custUser.getNickname(), custUser.getPassword(), custUser.getCompanyCode());
+            if (returnMap.getCode() == 1) {
                 appUserInfo = returnMap.getT();
-            }else {
+            } else {
                 localeTipMsg = LocaleMessage.get(returnMap.getMsg());
             }
         } catch (Exception e) {
@@ -81,7 +88,7 @@ public class CustUserController {
 
         }
 
-        if (appUserInfo == null){
+        if (appUserInfo == null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(localeTipMsg))
                     .body(null);
         }
@@ -96,7 +103,7 @@ public class CustUserController {
 
         String loginIp = request.getRemoteAddr();
         //最后一次登录ip和登录时间修改
-        custUserService.updateCustUserLastLoginInfo(appUserInfo.getId(),loginIp);
+        custUserService.updateCustUserLastLoginInfo(appUserInfo.getId(), loginIp);
 
         return ResponseEntity.ok().headers(HeaderUtil.createAppToken(sessionId)).body(appUserInfo);
     }
@@ -109,8 +116,8 @@ public class CustUserController {
     })
     @GetMapping("/getList")
     public ResponseEntity getList(@RequestParam(value = "pageSize") Integer pageSize,
-                                      @RequestParam(value = "pageIndex") Integer pageIndex,
-                                      @RequestParam(value = "status", required = false) Integer status) {
+                                  @RequestParam(value = "pageIndex") Integer pageIndex,
+                                  @RequestParam(value = "status", required = false) Integer status) {
         LoggerCommon.info(this.getClass(), "app用户列表");
 
         PageHelper.startPage(pageIndex, pageSize, true);

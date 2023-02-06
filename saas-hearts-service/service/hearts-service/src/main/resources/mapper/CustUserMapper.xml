@@ -33,13 +33,13 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectUserByNickNameAndCompanyCode" parameterType="map" resultMap="BaseResultMap">
+    <select id="selectUserByPhoneAndCompanyCode" parameterType="map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from cust_user
         <where>
-            <if test="nickname != null">
-                and nickname = #{nickname}
+            <if test="phone != null">
+                and phone = #{phone}
             </if>
             <if test="companyCode != null">
                 and company_code = #{companyCode}
