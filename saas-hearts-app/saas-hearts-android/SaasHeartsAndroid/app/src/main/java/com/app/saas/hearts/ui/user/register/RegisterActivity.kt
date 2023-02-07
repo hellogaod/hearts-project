@@ -4,24 +4,22 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
 import androidx.lifecycle.ViewModelProvider
-import com.app.saas.hearts.base.BaseActivity
 import com.app.saas.hearts.databinding.ActivityRegisterBinding
 
 import android.view.View
 import com.app.saas.hearts.R
-import com.app.saas.hearts.databinding.IncludeHeaderBinding
+import com.app.saas.hearts.base.IncludeHeaderBaseActivity
 import com.app.saas.hearts.utils.StringUtils
 import com.app.saas.hearts.utils.ToastUtil
 import com.bumptech.glide.Glide
+import java.lang.ref.WeakReference
 
 
 /**
- * 登录界面
+ * 注册用户
  */
-class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel>(),
+class RegisterActivity : IncludeHeaderBaseActivity<ActivityRegisterBinding, RegisterViewModel>(),
     View.OnClickListener, TextWatcher {
-
-    private lateinit var includeHeaderBinding: IncludeHeaderBinding
 
     override fun initView() {
 
@@ -31,13 +29,17 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
         binding?.etPassword?.addTextChangedListener(this)
         binding?.etPasswordAgain?.addTextChangedListener(this)
 
-        includeHeaderBinding.ivBack.setOnClickListener(this)
-        includeHeaderBinding.tvTitle.setText("注册")
+
 
         binding?.ivImgCode?.setOnClickListener(this)
         binding?.container
 
         binding?.tvRegister?.setOnClickListener(this)
+    }
+
+    override fun initIncludeView() {
+        includeHeaderBinding.ivBack.setOnClickListener(this)
+        includeHeaderBinding.tvTitle.setText("注册")
     }
 
     override fun initData() {
@@ -54,10 +56,10 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
 
         viewModel?.registFalg?.observe(this) {
             if (it) {
-                ToastUtil.show(this.applicationContext,"注册成功")
+                ToastUtil.show(this.application,"注册成功")
                 finish()
             }else {
-                ToastUtil.show(this.applicationContext,"注册失败")
+                ToastUtil.show(this.application,"注册失败")
             }
         }
     }
@@ -68,8 +70,6 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
 
     override fun getViewBinding(): ActivityRegisterBinding {
         val registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
-
-        includeHeaderBinding = IncludeHeaderBinding.bind(registerBinding.root)
 
         return registerBinding
     }
@@ -90,8 +90,8 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
                         binding?.etPassword?.text.toString()
                     )
                 }
-                else -> {
-                }
+
+                else -> {}
             }
         }
     }
@@ -137,4 +137,5 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
         }
         binding?.tvRegister?.setBackgroundColor(getResources().getColor(color))
     }
+
 }

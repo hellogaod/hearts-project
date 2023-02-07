@@ -18,6 +18,7 @@
 
         <TextView
             android:id="@+id/tv_login"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:text="请登录"
             android:textSize="20sp"
@@ -27,7 +28,6 @@
         <LinearLayout
             android:id="@+id/ll_user_base"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -38,7 +38,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="昵称"
+                android:text=""
                 android:textSize="20sp" />
 
             <ImageView

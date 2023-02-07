@@ -22,7 +22,8 @@
             android:layout_marginTop="10dp">
 
             <EditText
-                android:id="@+id/et_username"
+                android:id="@+id/et_phone"
+                android:maxLength="11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
@@ -42,6 +43,8 @@
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="20"
+                android:inputType="textPassword"
                 android:background="@color/transparent"
                 android:hint="密码"
                 android:maxLines="1" />
@@ -80,9 +83,11 @@
         android:layout_weight="1"/>
 
     <TextView
+        android:id="@+id/tv_login"
         android:layout_width="match_parent"
         android:background="@color/gray_color"
         android:text="登录"
+        android:clickable="false"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="18sp"
