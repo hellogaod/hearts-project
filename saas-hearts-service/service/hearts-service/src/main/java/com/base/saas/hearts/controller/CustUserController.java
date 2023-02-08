@@ -76,7 +76,7 @@ public class CustUserController {
         CustUser appUserInfo = null;
         String localeTipMsg = LocaleMessage.get("system.server.exception");
         try {
-            ReturnMap<CustUser> returnMap = custUserService.login(custUser.getNickname(), custUser.getPassword(), custUser.getCompanyCode());
+            ReturnMap<CustUser> returnMap = custUserService.login(custUser.getPhone(), custUser.getPassword(), custUser.getCompanyCode());
             if (returnMap.getCode() == 1) {
                 appUserInfo = returnMap.getT();
             } else {
@@ -105,7 +105,7 @@ public class CustUserController {
         //最后一次登录ip和登录时间修改
         custUserService.updateCustUserLastLoginInfo(appUserInfo.getId(), loginIp);
 
-        return ResponseEntity.ok().headers(HeaderUtil.createAppToken(sessionId)).body(appUserInfo);
+        return ResponseEntity.ok().headers(HeaderUtil.createAppToken(sessionId)).body(userInfo);
     }
 
     @ApiOperation(value = "app列表", notes = "app用户列表")
@@ -176,6 +176,7 @@ public class CustUserController {
     public ResponseEntity getUserById(@RequestParam String userId) {
         try {
             CustUser user = custUserService.getCustUserInfoById(userId);
+            user.setPassword(null);
             return ResponseEntity.ok().body(user);
         } catch (Exception e) {
             String logmsg = LocaleMessage.get("message.query.errorMessage");

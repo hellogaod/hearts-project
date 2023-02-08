@@ -31,7 +31,7 @@ public class CustUserServiceImpl implements CustUserService {
         if (existed != null) { //表示当前用户昵称已存在
             return false;
         }
-        custUser.setNickname("u_" + custUser.getPhone());
+        custUser.setNickname("u_" + custUser.getPhone().substring(5));
         Date date = new Date();
         custUser.setId(CreateIDUtil.getId());
         custUser.setCreateTime(date);
