@@ -73,11 +73,11 @@ class HomeFragment : Fragment() {
         val transaction = childFragmentManager?.beginTransaction()
 
         if (recommentFragment == null) {
-            recommentFragment = TalkFragment()
+            recommentFragment = TalkFragment.newInstance(null)
             transaction?.add(R.id.fg_transaction, recommentFragment!!)
         }
         if (talkFragment == null) {
-            talkFragment = TalkFragment()
+            talkFragment = TalkFragment.newInstance(null)
             transaction?.add(R.id.fg_transaction, talkFragment!!)
         }
 

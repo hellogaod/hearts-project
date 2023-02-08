@@ -18,95 +18,104 @@
 
         <TextView
             android:id="@+id/tv_login"
-            android:visibility="gone"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="请登录"
-            android:textSize="20sp"
             android:textColor="@color/purple_700"
-            android:layout_height="wrap_content"/>
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/ll_user_base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_nickname"
-                android:layout_width="0dp"
-                android:layout_marginLeft="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text=""
-                android:textSize="20sp" />
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginRight="10dp"
-                android:src="@mipmap/icon_head_default" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_user_talk"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
-                android:layout_width="0dp"
+
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_saticifies"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="0%"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    style="@style/base_txtLinesOnlyOne"
+                    android:drawableRight="@mipmap/icon_edit"
+                    android:layout_weight="1"
+                    android:text=""
                     android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="自我满意度"
-                    android:textSize="20sp" />
-
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/icon_head_default" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_praise"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="20sp" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_saticifies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自我满意度"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="收到的赞"
-                    android:textSize="20sp" />
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/tv_praise"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收到的赞"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:visibility="invisible"></LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:visibility="invisible"></LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
     <View
@@ -120,10 +129,11 @@
         android:layout_weight="1"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <LinearLayout
+            android:id="@+id/ll_user_info"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center_vertical"
@@ -190,6 +200,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/gray_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -223,6 +234,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/gray_color" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"

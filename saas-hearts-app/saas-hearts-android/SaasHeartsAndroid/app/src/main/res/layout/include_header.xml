@@ -26,8 +26,8 @@
     <TextView
         android:id="@+id/tv_right"
         android:layout_width="50dp"
+        android:clickable="false"
         android:text=""
-        android:visibility="invisible"
         android:gravity="center"
         android:layout_height="match_parent"
         android:background="@color/transparent" />

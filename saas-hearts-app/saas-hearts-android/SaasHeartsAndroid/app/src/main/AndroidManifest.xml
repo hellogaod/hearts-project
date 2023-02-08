@@ -29,6 +29,10 @@
         <activity android:name=".ui.user.register.RegisterActivity"/>
 
         <activity android:name=".ui.user.forgetpwd.ForgetPasswordActivity"/>
+
+        <activity android:name=".ui.user.detail.UserInfoActivity"/>
+
+        <activity android:name=".ui.user.edit.UserEditActivity"/>
     </application>
 
 </manifest>

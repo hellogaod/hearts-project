@@ -31,7 +31,7 @@ public interface HttpCustUserService {
 
     //获取详情
     @GET("/saas-hearts-service/api/custUser/getUserDetailById")
-    Observable<CustUser> getUserDetailById(@Query("pageIndex") int pageIndex,@Query("pageSize") int pageSize,@Query("status") int status);
+    Observable<CustUser> getUserDetailById(@Query("userId") String userId);
 
     //列表
     @GET("/saas-hearts-service/api/custUser/getList")

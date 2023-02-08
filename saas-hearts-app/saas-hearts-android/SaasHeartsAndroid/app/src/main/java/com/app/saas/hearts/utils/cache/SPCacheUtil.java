@@ -13,11 +13,11 @@ import java.lang.ref.WeakReference;
  * 注：1.如果不是永久有效存储一定会有个时间，最长不会超过一周
  * 2.该方法不允许外界直接使用，必须在CacheManager方法中使用
  */
- class SPCacheUtil {
+class SPCacheUtil {
 
     private static SPCacheUtil spCacheUtil;
 
-     static SPCacheUtil getInstance() {
+    static SPCacheUtil getInstance() {
 
         if (spCacheUtil == null) {
             synchronized (SPCacheUtil.class) {
@@ -38,15 +38,15 @@ import java.lang.ref.WeakReference;
     private SharedPreferences sp;
 
     //保存时间单位
-     final int TIME_SECOND = 1;
-     final int TIME_MINUTES = 60 * TIME_SECOND;
-     final int TIME_HOUR = 60 * TIME_MINUTES;
-     final int TIME_DAY = TIME_HOUR * 24;
-     final int TIME_WEEK = TIME_DAY * 7;//除了永久有效外，最长时间单位就是1周，存储不会超过一周
-     final int DURATION_UNIT = 1000;
+    final int TIME_SECOND = 1;
+    final int TIME_MINUTES = 60 * TIME_SECOND;
+    final int TIME_HOUR = 60 * TIME_MINUTES;
+    final int TIME_DAY = TIME_HOUR * 24;
+    final int TIME_WEEK = TIME_DAY * 7;//除了永久有效外，最长时间单位就是1周，存储不会超过一周
+    final int DURATION_UNIT = 1000;
 
 
-     final int EDIT_TIME = TIME_MINUTES * 10;//编辑类，保存时间一律统一:10分钟
+    final int EDIT_TIME = TIME_MINUTES * 10;//编辑类，保存时间一律统一:10分钟
 
     /**
      * @param contextWeakReference
@@ -56,7 +56,7 @@ import java.lang.ref.WeakReference;
      * @param saveTime             只有timeEffictive = true，该字段才有效
      * @param <T>                  String,Boolean,object,int等等类型
      */
-     <T> void putObject(WeakReference<Context> contextWeakReference, String key, T value, boolean timeEffictive, int saveTime) {
+    <T> void putObject(WeakReference<Context> contextWeakReference, String key, T value, boolean timeEffictive, int saveTime) {
         if (contextWeakReference == null || contextWeakReference.get() == null) {
             return;
         }
@@ -77,7 +77,7 @@ import java.lang.ref.WeakReference;
      * @param <T>
      * @return
      */
-     <T> T getObject(WeakReference<Context> contextWeakReference, String key, T defValue, Class<T> cls) {
+    <T> T getObject(WeakReference<Context> contextWeakReference, String key, T defValue, Class<T> cls) {
         if (contextWeakReference == null || contextWeakReference.get() == null) {
             return defValue;
         }
@@ -112,7 +112,8 @@ import java.lang.ref.WeakReference;
      * @return
      */
     private <T> T unKnownToEntity(T value, Class<T> cls) {
-        if (cls != null) {//如果是bean，则会先转换成linkeTreeMap，所以需要转换成对象
+        String clsName = cls != null ? cls.getCanonicalName() : "";
+        if (cls != null && !clsName.equals("java.lang.String")) {//如果是bean，则会先转换成linkeTreeMap，所以需要转换成对象
             LinkedTreeMap<String, Object> linkedTreeMap = (LinkedTreeMap) value;
             String dataStr = GsonUtil.GsonToString(linkedTreeMap);
             return GsonUtil.GsonToBean(dataStr, cls);
@@ -123,7 +124,7 @@ import java.lang.ref.WeakReference;
 
 
     @SuppressWarnings("unchecked")
-     void clear(WeakReference<Context> contextWeakReference, String key) {
+    void clear(WeakReference<Context> contextWeakReference, String key) {
 
         if (contextWeakReference == null || contextWeakReference.get() == null) {
             return;

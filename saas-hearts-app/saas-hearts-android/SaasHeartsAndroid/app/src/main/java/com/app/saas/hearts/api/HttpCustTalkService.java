@@ -25,7 +25,7 @@ public interface HttpCustTalkService {
 
     //列表
     @GET("/saas-hearts-service/api/custTalk/getTalkList")
-    Observable<PageInfo<CustTalk>> getTalkList(@Query("pageIndex") int pageIndex, @Query("pageSize") int pageSize, @Query("status") int status);
+    Observable<PageInfo<CustTalk>> getTalkList(@Query("pageIndex") int pageIndex, @Query("pageSize") int pageSize,@Query("createrUserId") String createrUserId, @Query("status") int status);
 
     //详情
     @GET("/saas-hearts-service/api/custTalk/getTalkDetail")

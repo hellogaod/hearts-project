@@ -12,7 +12,22 @@ import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentTalkBinding
 import com.app.saas.hearts.ui.talk.adapter.TalkAdapter
 
+
 class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
+
+    companion object{
+
+        val userIdKey = "userId"
+
+        fun newInstance(userId:String?):  TalkFragment{
+            val args = Bundle()
+            args?.putString(userIdKey,userId)
+            val fragment = TalkFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
 
     private var talkAdapter: TalkAdapter? = null
 
@@ -24,15 +39,7 @@ class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
         return FragmentTalkBinding.inflate(inflater, container, false)
     }
 
-    companion object{
-        fun newInstance():  TalkFragment{
-            val args = Bundle()
 
-            val fragment = TalkFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     override fun initView() {
 
@@ -75,8 +82,9 @@ class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
 
     override fun initData() {
 
-        viewModel.talkPageInfo.observe(viewLifecycleOwner, Observer {
+        arguments?.getString(userIdKey)?.let { viewModel?.setUserId(it) }
 
+        viewModel.talkPageInfo.observe(viewLifecycleOwner, Observer {
 
             talkAdapter?.setList(it.list)
             showTalkListUI()

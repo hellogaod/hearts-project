@@ -34,8 +34,8 @@ class LoginActivity : IncludeHeaderBaseActivity<ActivityLoginBinding, LoginViewM
     override fun initData() {
 
         viewModel?.userInfo?.observe(this){
-            CacheManager.getInstance().storageCache(this,CacheConstant.USER_INFO,it,true,0)
-            CacheManager.getInstance().storageCache(this,CacheConstant.TOKEN,it.token,true,0)
+            CacheManager.getInstance().storageCache(this,CacheConstant.USER_INFO,it,true,1)
+            CacheManager.getInstance().storageCache(this,CacheConstant.TOKEN,it.token,true,1)
             ToastUtil.show(this.application,"登录成功")
             finish()
         }

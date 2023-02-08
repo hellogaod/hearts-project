@@ -10,6 +10,8 @@ import com.app.saas.hearts.R
 import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentMyBinding
 import com.app.saas.hearts.entity.UserInfo
+import com.app.saas.hearts.ui.user.detail.UserInfoActivity
+import com.app.saas.hearts.ui.user.edit.UserEditActivity
 import com.app.saas.hearts.ui.user.login.LoginActivity
 import com.app.saas.hearts.utils.cache.CacheConstant
 import com.app.saas.hearts.utils.cache.CacheManager
@@ -19,26 +21,40 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
     override fun initView() {
 
         binding.tvLogin.setOnClickListener(this)
+
+        binding.llUserInfo.setOnClickListener(this)
+
+        binding.llUserBase.setOnClickListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel?.setToken(
+            CacheManager.getInstance()
+                .readCache(activity, CacheConstant.TOKEN, null, String::class.java)
+        )
     }
 
     override fun initData() {
 
-        viewModel?.setToken(CacheManager.getInstance().readCache(activity,CacheConstant.TOKEN,null,String::class.java))
+        viewModel?.token?.observe(viewLifecycleOwner) {
 
-        viewModel?.token?.observe(viewLifecycleOwner){
-
-            if (it != null){
-                binding.llUserBase.visibility = View.GONE
-                binding.tvLogin.visibility = View.VISIBLE
-                viewModel?.setUserInfo(CacheManager.getInstance().readCache(activity,CacheConstant.USER_INFO,null,UserInfo::class.java))
-            }else{
-                binding.tvLogin.visibility = View.GONE
+            if (it != null) {
                 binding.llUserBase.visibility = View.VISIBLE
+                binding.tvLogin.visibility = View.GONE
+                viewModel?.setUserInfo(
+                    CacheManager.getInstance()
+                        .readCache(activity, CacheConstant.USER_INFO, null, UserInfo::class.java)
+                )
+            } else {
+                binding.tvLogin.visibility = View.VISIBLE
+                binding.llUserBase.visibility = View.GONE
             }
 
         }
 
-        viewModel.userInfo.observe(viewLifecycleOwner){
+        viewModel.userInfo.observe(viewLifecycleOwner) {
             binding.tvNickname.setText(it.account)
         }
     }
@@ -58,12 +74,40 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
     }
 
     override fun onClick(v: View?) {
+
+        if (!isLogin()) {//如果没有登录，先跳转到登录页面
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+            return
+        }
+
         when (v?.id) {
             R.id.tv_login -> {//登录
-                val intent = Intent(activity,LoginActivity::class.java)
+
+            }
+
+            R.id.ll_user_info -> {//进入主页
+
+                viewModel?.userInfo?.value?.userId?.let {
+                    activity?.let { it1 ->
+                        UserInfoActivity.jumpUserInfo(
+                            it1,
+                            it
+                        )
+                    }
+                }
+
+            }
+
+            R.id.ll_user_base -> {//进入编辑页
+                val intent = Intent(activity, UserEditActivity::class.java)
                 startActivity(intent)
             }
         }
 
+    }
+
+    fun isLogin(): Boolean {//是否登录
+        return viewModel?.token?.value != null
     }
 }

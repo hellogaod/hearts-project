@@ -13,6 +13,8 @@ import io.reactivex.schedulers.Schedulers
 
 class TalkViewModel : ViewModel() {
 
+    private var userId: String? = null
+
     private val _text = MutableLiveData<String>().apply {
         value = "This is talk Fragment"
     }
@@ -28,6 +30,10 @@ class TalkViewModel : ViewModel() {
         return _talkPageInfo.value?.isHasNextPage == true
     }
 
+    fun setUserId(userId: String) {
+        this.userId = userId
+    }
+
 
     fun getData(isRefresh: Boolean) {
         if (isRefresh) {
@@ -41,7 +47,7 @@ class TalkViewModel : ViewModel() {
         }
 
 
-        HttpManage.getHttpCustTalkService().getTalkList(pageIndex, pageSize, -1)
+        HttpManage.getHttpCustTalkService().getTalkList(pageIndex, pageSize,userId, -1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : io.reactivex.Observer<PageInfo<CustTalk>> {

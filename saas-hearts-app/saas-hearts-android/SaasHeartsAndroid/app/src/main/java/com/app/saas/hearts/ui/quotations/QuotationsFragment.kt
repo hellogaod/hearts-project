@@ -77,7 +77,7 @@ class QuotationsFragment : BaseFragment<FragmentQuotationsBinding, QuotationsVie
             override fun createFragment(position: Int): Fragment {
                 //FragmentStateAdapter内部自己会管理已实例化的fragment对象。
                 // 所以不需要考虑复用的问题
-                return TalkFragment()
+                return TalkFragment.newInstance(null)
             }
         }
 
