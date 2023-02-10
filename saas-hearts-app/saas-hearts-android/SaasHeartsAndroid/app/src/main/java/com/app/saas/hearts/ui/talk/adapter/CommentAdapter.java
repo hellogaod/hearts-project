@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.saas.hearts.R;
-import com.app.saas.hearts.entity.CustTalk;
-import com.app.saas.hearts.ui.talk.TalkDetailsActivity;
+import com.app.saas.hearts.entity.CustComment;
 import com.app.saas.hearts.utils.DateUtils;
 import com.app.saas.hearts.utils.GlideUtils;
 
@@ -26,19 +24,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Copyright (C), 2019-2023, 佛生
- * FileName: TalkAdapter
+ * FileName: CommentAdapter
  * Author: 佛学徒
- * Date: 2023/1/6 13:52
- * Description: 话题item
+ * Date: 2023/2/10 13:52
+ * Description: 评论item
  * 借鉴:①list去重参考地址：https://blog.csdn.net/weixin_41405524/article/details/120717488
  */
-public class TalkAdapter extends RecyclerView.Adapter<TalkAdapter.InnerHolder> {
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.InnerHolder> {
 
     //从数据源获取的数组存入list，demo的数据源是模拟，在代码中生成
-    private List<CustTalk> list;
+    private List<CustComment> list;
 
     //构造器，只留这一个构造器，将list传入
-    public TalkAdapter() {
+    public CommentAdapter() {
         list = new ArrayList<>();
 
     }
@@ -52,15 +50,16 @@ public class TalkAdapter extends RecyclerView.Adapter<TalkAdapter.InnerHolder> {
         return list.size();
     }
 
-    public void setList(List<CustTalk> list) {
+    public void setList(List<CustComment> list) {
 
         this.list.addAll(list);
 
+        //去重
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             this.list = this.list.stream().collect(Collectors.collectingAndThen(
                     Collectors.toCollection(() -> new TreeSet<>(
                             Comparator.comparing(
-                                    CustTalk::getId))), ArrayList::new));
+                                    CustComment::getId))), ArrayList::new));
         } else {//api 24以下的去重，可以暂时不写
 
         }
@@ -72,33 +71,23 @@ public class TalkAdapter extends RecyclerView.Adapter<TalkAdapter.InnerHolder> {
     @Override
     public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //将XML布局文件，加载到Java代码（和Activity的onCreate()的setContentVIew()作用一样），参数先复制粘贴，感兴趣可去研究传不同参数的效果
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.talk_item, null, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item, null, false);
 
         return new InnerHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InnerHolder holder,final int position) {
-        final CustTalk custTalk = list.get(position);
+    public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
+        CustComment custTalk = list.get(position);
 
         if (custTalk != null) {
-            GlideUtils.load(holder.ivHeader,"");
+            GlideUtils.load(holder.ivHeader, "");
             giveUIValuing(holder.tvHeader, custTalk.getCreateUserName());
             giveUIValuing(holder.tvDate, DateUtils.dateTransSpecialFormat(custTalk.getCreateTime(), new Date()));
-            giveUIValuing(holder.tvTitle, custTalk.getTitle());
             giveUIValuing(holder.tvContent, custTalk.getContent());
-            giveUIValuing(holder.tvLike, custTalk.getSatisfaceRate() + "%");
-            giveUIValuing(holder.tvPraise, custTalk.getPraiseCount() + "");
-            giveUIValuing(holder.tvComment, custTalk.getCommentCount() + "");
-
-            holder.llTalkItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    TalkDetailsActivity.Companion.jumpUserInfo(holder.llTalkItem.getContext(),custTalk.getId());
-                }
-            });
         }
 
+        String it =1 + "";
     }
 
     private void giveUIValuing(TextView tv, String value) {
@@ -120,29 +109,16 @@ public class TalkAdapter extends RecyclerView.Adapter<TalkAdapter.InnerHolder> {
         TextView tvHeader;
         TextView tvDate;
 
-        TextView tvTitle;
         TextView tvContent;
-
-        TextView tvLike;
-        TextView tvPraise;
-        TextView tvComment;
-
-        LinearLayout llTalkItem;
 
 
         public InnerHolder(@NonNull View itemView) {
             super(itemView);
-            llTalkItem = itemView.findViewById(R.id.ll_talk_item);
             ivHeader = itemView.findViewById(R.id.iv_head);
             tvHeader = itemView.findViewById(R.id.tv_header);
             tvDate = itemView.findViewById(R.id.tv_date);
 
-            tvTitle = itemView.findViewById(R.id.tv_title);
             tvContent = itemView.findViewById(R.id.tv_content);
-
-            tvLike = itemView.findViewById(R.id.tv_like);
-            tvPraise = itemView.findViewById(R.id.tv_praise);
-            tvComment = itemView.findViewById(R.id.tv_comment);
         }
     }
 }

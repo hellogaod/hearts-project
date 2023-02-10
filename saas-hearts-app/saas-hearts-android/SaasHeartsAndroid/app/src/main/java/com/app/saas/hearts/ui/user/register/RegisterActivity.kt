@@ -9,10 +9,9 @@ import com.app.saas.hearts.databinding.ActivityRegisterBinding
 import android.view.View
 import com.app.saas.hearts.R
 import com.app.saas.hearts.base.IncludeHeaderBaseActivity
+import com.app.saas.hearts.utils.GlideUtils
 import com.app.saas.hearts.utils.StringUtils
 import com.app.saas.hearts.utils.ToastUtil
-import com.bumptech.glide.Glide
-import java.lang.ref.WeakReference
 
 
 /**
@@ -48,7 +47,7 @@ class RegisterActivity : IncludeHeaderBaseActivity<ActivityRegisterBinding, Regi
 
             var base64Str = it.code.replace("data:image/png;base64,", "")
             val decodedString: ByteArray = Base64.decode(base64Str, Base64.DEFAULT)
-            Glide.with(this).load(decodedString).into(binding?.ivImgCode)
+            GlideUtils.load(binding?.ivImgCode,decodedString)
 
         }
 

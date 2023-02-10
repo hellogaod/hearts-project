@@ -31,6 +31,6 @@ public interface HttpCustTalkService {
 
     //详情
     @GET("/saas-hearts-service/api/custTalk/getTalkDetail")
-    Observable<CustTalk> getTalkDetail(@Query("talkId") int talkId);
+    Observable<CustTalk> getTalkDetail(@Query("talkId") String talkId);
 
 }

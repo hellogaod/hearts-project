@@ -1,94 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_talk_item"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:background="@color/transparent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <include layout="@layout/include_header" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_radiusthree_and_colorgray"
-        android:orientation="vertical">
-        <!--  头部布局  -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-            <ImageView
-                android:id="@+id/iv_head"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginRight="10dp"
-                android:src="@mipmap/icon_head_default" />
+        <TextView
+            android:id="@+id/tv_talk_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="标题"
+            android:textColor="@color/b_333"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="标题"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_color" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_head"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/icon_head_default" />
+
+        <LinearLayout
+            android:id="@+id/ll_user_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_head"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_header"
                 style="@style/base_txtLinesOnlyOne"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="" />
+                android:text="昵称"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
-
+                android:layout_marginTop="3dp"
+                android:text="时间"
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <include layout="@layout/layout_double_line" />
-
-        <!--  内容布局  -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_title"
-                style="@style/base_txtLinesOnlyOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/b_333"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_content"
-                style="@style/base_txtLinesTwoOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rc_img"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:visibility="gone"
-                android:layout_marginTop="10dp" />
-
-        </LinearLayout>
-
-        <!--  底部布局  -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/ll_user_base"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -150,6 +150,40 @@
                     android:text="0" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
+    <FrameLayout
+        android:id="@+id/fg_transaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_content"
+            style="@style/base_txtLinesOnlyOne"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/gray_color"
+            android:gravity="center_vertical"
+            android:hint="说些什么"
+            android:maxLength="20"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+
+        <TextView
+            android:id="@+id/tv_submit"
+            android:layout_width="50dp"
+            android:clickable="false"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="发布" />
+    </LinearLayout>
 </LinearLayout>

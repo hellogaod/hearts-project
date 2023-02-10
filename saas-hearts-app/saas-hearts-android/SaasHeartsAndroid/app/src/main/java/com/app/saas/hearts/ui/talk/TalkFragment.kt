@@ -12,7 +12,6 @@ import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentTalkBinding
 import com.app.saas.hearts.ui.talk.adapter.TalkAdapter
 
-
 class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
 
     companion object{
@@ -94,7 +93,6 @@ class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
             talkAdapter?.setList(it.list)
             showTalkListUI()
         })
-
 
     }
 

@@ -37,6 +37,8 @@
         <activity android:name=".ui.set.SetActivity"/>
 
         <activity android:name=".ui.talk.CreateTalkActivity"/>
+
+        <activity android:name=".ui.talk.TalkDetailsActivity"/>
     </application>
 
 </manifest>
