@@ -9,6 +9,7 @@ import com.app.saas.hearts.base.IncludeHeaderBaseActivity
 import com.app.saas.hearts.databinding.ActivityCreateTalkBinding
 import com.app.saas.hearts.utils.StringUtils
 import com.app.saas.hearts.utils.ToastUtil
+import com.app.saas.hearts.utils.userInfo.CacheUserInfo
 
 /**
  * 创建话题界面
@@ -57,6 +58,7 @@ class CreateTalkActivity :
 
                 R.id.tv_right -> {//创建话题
                     viewModel?.createTalk(
+                        CacheUserInfo.getToken(this),
                         binding?.etTitle?.text.toString(),
                         binding?.etContent?.text.toString()
 

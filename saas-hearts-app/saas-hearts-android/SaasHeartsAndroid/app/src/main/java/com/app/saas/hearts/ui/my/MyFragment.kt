@@ -9,13 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.app.saas.hearts.R
 import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentMyBinding
-import com.app.saas.hearts.entity.UserInfo
 import com.app.saas.hearts.ui.set.SetActivity
 import com.app.saas.hearts.ui.user.detail.UserInfoActivity
 import com.app.saas.hearts.ui.user.edit.UserEditActivity
 import com.app.saas.hearts.ui.user.login.LoginActivity
-import com.app.saas.hearts.utils.cache.CacheConstant
-import com.app.saas.hearts.utils.cache.CacheManager
+import com.app.saas.hearts.utils.StringUtils
+import com.app.saas.hearts.utils.userInfo.CacheUserInfo
 
 class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickListener {
 
@@ -34,8 +33,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
         super.onResume()
 
         viewModel?.setToken(
-            CacheManager.getInstance()
-                .readCache(activity, CacheConstant.TOKEN, null, String::class.java)
+            CacheUserInfo.getToken(activity)
         )
     }
 
@@ -43,12 +41,11 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
 
         viewModel?.token?.observe(viewLifecycleOwner) {
 
-            if (it != null) {
+            if (StringUtils.isNotEmpty(it)) {
                 binding.llUserBase.visibility = View.VISIBLE
                 binding.tvLogin.visibility = View.GONE
                 viewModel?.setUserInfo(
-                    CacheManager.getInstance()
-                        .readCache(activity, CacheConstant.USER_INFO, null, UserInfo::class.java)
+                    CacheUserInfo.getUserInfo(activity)
                 )
             } else {
                 binding.tvLogin.visibility = View.VISIBLE

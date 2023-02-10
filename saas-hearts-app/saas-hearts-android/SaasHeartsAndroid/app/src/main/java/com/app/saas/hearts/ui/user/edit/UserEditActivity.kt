@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.app.saas.hearts.R
 import com.app.saas.hearts.base.IncludeHeaderBaseActivity
 import com.app.saas.hearts.databinding.ActivityUserEditBinding
-import com.app.saas.hearts.entity.UserInfo
-import com.app.saas.hearts.utils.cache.CacheConstant
-import com.app.saas.hearts.utils.cache.CacheManager
+import com.app.saas.hearts.utils.userInfo.CacheUserInfo
 
 /**
  * 用户编辑界面
@@ -30,8 +28,7 @@ class UserEditActivity : IncludeHeaderBaseActivity<ActivityUserEditBinding, User
 
     override fun initData() {
         viewModel?.setUserInfo(
-            CacheManager.getInstance()
-                .readCache(this, CacheConstant.USER_INFO, null, UserInfo::class.java)
+            CacheUserInfo.getUserInfo(this)
         )
     }
 

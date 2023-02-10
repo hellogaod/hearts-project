@@ -31,29 +31,17 @@ public class HttpManage {
 
     private static String baseUrl = "http://192.168.102.19:9000";
 
-    private static Application application;
+    private static String token = "";
 
     private static Retrofit retrofit;
-
-    public static void setApplication(Application application) {
-        HttpManage.application = application;
-    }
 
     private static Retrofit getRetrofitInstall() {
         if (retrofit == null) {
             synchronized (HttpManage.class) {
                 if (retrofit == null) {
-                    String token = null;
-                    if (application != null) {
-                        token = CacheManager.getInstance()
-                                .readCache(application.getApplicationContext(), CacheConstant.TOKEN, null, String.class);
-                    }
 
                     // OkHttp3.0的使用方式
-                    String finalToken = token;
                     OkHttpClient client = new OkHttpClient.Builder()
-//                            .addInterceptor(signingInterceptor)
-//                            .addInterceptor(loggingInterceptor)
                             .addInterceptor(new Interceptor() {
                                 @Override
                                 public Response intercept(Chain chain) throws IOException {
@@ -61,7 +49,7 @@ public class HttpManage {
 
                                     //加入header
                                     Request authorised = originalRequest.newBuilder()
-                                            .header("app-UserToken", finalToken)
+//                                            .header("app-UserToken", token)
                                             .build();
                                     return chain.proceed(authorised);
                                 }

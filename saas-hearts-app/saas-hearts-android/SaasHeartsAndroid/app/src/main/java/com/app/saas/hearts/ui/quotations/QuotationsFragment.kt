@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -20,8 +19,8 @@ import com.app.saas.hearts.databinding.FragmentQuotationsBinding
 import com.app.saas.hearts.ui.talk.CreateTalkActivity
 import com.app.saas.hearts.ui.talk.TalkFragment
 import com.app.saas.hearts.ui.user.login.LoginActivity
-import com.app.saas.hearts.utils.cache.CacheConstant
-import com.app.saas.hearts.utils.cache.CacheManager
+import com.app.saas.hearts.utils.StringUtils
+import com.app.saas.hearts.utils.userInfo.CacheUserInfo
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -75,10 +74,9 @@ class QuotationsFragment : BaseFragment<FragmentQuotationsBinding, QuotationsVie
 
         //如果未登录跳转登录页面；否则，跳转到创建话题界面
         binding?.btnCreateTalk?.setOnClickListener(View.OnClickListener {
-            val token = CacheManager.getInstance()
-                .readCache(activity, CacheConstant.TOKEN, null, String::class.java)
+            val token = CacheUserInfo.getToken(activity)
 
-            if (token == null) {
+            if (StringUtils.isEmpty(token)) {
                 val intent = Intent(activity, LoginActivity::class.java)
                 startActivity(intent)
 

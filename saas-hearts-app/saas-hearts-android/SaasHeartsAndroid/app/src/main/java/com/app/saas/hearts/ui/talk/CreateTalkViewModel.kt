@@ -24,12 +24,12 @@ class CreateTalkViewModel : ViewModel() {
     private val _createFlag = MutableLiveData<Boolean>()
     val createFlag: LiveData<Boolean> = _createFlag
 
-    fun createTalk(title: String, content: String) {
+    fun createTalk(token:String,title: String, content: String) {
         val custTalk = CustTalk()
         custTalk.content = content
         custTalk.title = title
 
-        HttpManage.getHttpCustTalkService().addTalk(custTalk)
+        HttpManage.getHttpCustTalkService().addTalk(token,custTalk)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : io.reactivex.Observer<ResponseDate<Any>> {
