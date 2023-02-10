@@ -13,5 +13,6 @@ public class MyApplication extends Application {
 
         //加在这里
         MultiDex.install(this);
+
     }
 }

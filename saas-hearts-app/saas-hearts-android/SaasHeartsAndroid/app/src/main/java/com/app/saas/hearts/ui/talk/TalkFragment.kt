@@ -80,6 +80,11 @@ class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
         return ViewModelProvider(this).get(TalkViewModel::class.java)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getData(true)
+    }
+
     override fun initData() {
 
         arguments?.getString(userIdKey)?.let { viewModel?.setUserId(it) }
@@ -90,7 +95,7 @@ class TalkFragment: BaseFragment<FragmentTalkBinding,TalkViewModel>() {
             showTalkListUI()
         })
 
-        viewModel.getData(true)
+
     }
 
 

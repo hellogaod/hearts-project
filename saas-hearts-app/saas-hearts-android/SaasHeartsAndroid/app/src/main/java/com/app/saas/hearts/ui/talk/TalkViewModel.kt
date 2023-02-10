@@ -47,7 +47,7 @@ class TalkViewModel : ViewModel() {
         }
 
 
-        HttpManage.getHttpCustTalkService().getTalkList(pageIndex, pageSize,userId, -1)
+        HttpManage.getHttpCustTalkService().getTalkList(pageIndex, pageSize,userId, 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : io.reactivex.Observer<PageInfo<CustTalk>> {

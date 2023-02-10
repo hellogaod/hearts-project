@@ -30,16 +30,14 @@ class RegisterActivity : IncludeHeaderBaseActivity<ActivityRegisterBinding, Regi
         binding?.etPasswordAgain?.addTextChangedListener(this)
 
 
-
         binding?.ivImgCode?.setOnClickListener(this)
-        binding?.container
 
         binding?.tvRegister?.setOnClickListener(this)
     }
 
     override fun initIncludeView() {
-        includeHeaderBinding.ivBack.setOnClickListener(this)
-        includeHeaderBinding.tvTitle.setText("注册")
+        includeHeaderBinding?.ivBack?.setOnClickListener(this)
+        includeHeaderBinding?.tvTitle?.setText("注册")
     }
 
     override fun initData() {
@@ -56,10 +54,10 @@ class RegisterActivity : IncludeHeaderBaseActivity<ActivityRegisterBinding, Regi
 
         viewModel?.registFalg?.observe(this) {
             if (it) {
-                ToastUtil.show(this.application,"注册成功")
+                ToastUtil.show(this.application, "注册成功")
                 finish()
-            }else {
-                ToastUtil.show(this.application,"注册失败")
+            } else {
+                ToastUtil.show(this.application, "注册失败")
             }
         }
     }
@@ -91,7 +89,8 @@ class RegisterActivity : IncludeHeaderBaseActivity<ActivityRegisterBinding, Regi
                     )
                 }
 
-                else -> {}
+                else -> {
+                }
             }
         }
     }

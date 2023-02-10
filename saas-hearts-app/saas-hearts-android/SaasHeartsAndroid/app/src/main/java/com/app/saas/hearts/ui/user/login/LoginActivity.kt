@@ -12,8 +12,7 @@ import com.app.saas.hearts.ui.user.forgetpwd.ForgetPasswordActivity
 import com.app.saas.hearts.ui.user.register.RegisterActivity
 import com.app.saas.hearts.utils.StringUtils
 import com.app.saas.hearts.utils.ToastUtil
-import com.app.saas.hearts.utils.cache.CacheConstant
-import com.app.saas.hearts.utils.cache.CacheManager
+import com.app.saas.hearts.utils.userInfo.CacheUserInfo
 
 /**
  * 登录界面
@@ -34,8 +33,8 @@ class LoginActivity : IncludeHeaderBaseActivity<ActivityLoginBinding, LoginViewM
     override fun initData() {
 
         viewModel?.userInfo?.observe(this){
-            CacheManager.getInstance().storageCache(this,CacheConstant.USER_INFO,it,true,1)
-            CacheManager.getInstance().storageCache(this,CacheConstant.TOKEN,it.token,true,1)
+            CacheUserInfo.setUserInfo(this,it)
+            CacheUserInfo.setToken(this,it.token)
             ToastUtil.show(this.application,"登录成功")
             finish()
         }
@@ -43,8 +42,8 @@ class LoginActivity : IncludeHeaderBaseActivity<ActivityLoginBinding, LoginViewM
 
 
     override fun initIncludeView() {
-        includeHeaderBinding.ivBack.setOnClickListener(this)
-        includeHeaderBinding.tvTitle.setText("登录")
+        includeHeaderBinding?.ivBack?.setOnClickListener(this)
+        includeHeaderBinding?.tvTitle?.setText("登录")
     }
 
     override fun getViewModel(viewModelProvider: ViewModelProvider?): LoginViewModel? {

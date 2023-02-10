@@ -236,6 +236,7 @@
             android:background="@color/gray_color" />
 
         <LinearLayout
+            android:id="@+id/ll_set"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center_vertical"

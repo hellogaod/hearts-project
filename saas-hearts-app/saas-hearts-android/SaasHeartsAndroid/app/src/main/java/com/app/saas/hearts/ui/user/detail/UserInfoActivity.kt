@@ -58,8 +58,8 @@ class UserInfoActivity : IncludeHeaderBaseActivity<ActivityUserInfoBinding, User
     }
 
     override fun initIncludeView() {
-        includeHeaderBinding.tvTitle.setText("个人主页")
-        includeHeaderBinding.ivBack.setOnClickListener(this)
+        includeHeaderBinding?.tvTitle?.setText("个人主页")
+        includeHeaderBinding?.ivBack?.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {

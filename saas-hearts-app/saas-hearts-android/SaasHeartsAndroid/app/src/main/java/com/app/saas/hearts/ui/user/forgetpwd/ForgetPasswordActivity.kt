@@ -30,8 +30,8 @@ class ForgetPasswordActivity :
     }
 
     override fun initIncludeView() {
-        includeHeaderBinding.ivBack.setOnClickListener(this)
-        includeHeaderBinding.tvTitle.setText("忘记密码")
+        includeHeaderBinding?.ivBack?.setOnClickListener(this)
+        includeHeaderBinding?.tvTitle?.setText("忘记密码")
     }
 
     override fun onClick(v: View?) {

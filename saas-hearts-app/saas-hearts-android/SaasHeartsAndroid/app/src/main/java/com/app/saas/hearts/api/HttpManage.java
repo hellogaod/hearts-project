@@ -1,5 +1,10 @@
 package com.app.saas.hearts.api;
 
+import android.app.Application;
+
+import com.app.saas.hearts.utils.cache.CacheConstant;
+import com.app.saas.hearts.utils.cache.CacheManager;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -26,16 +31,17 @@ public class HttpManage {
 
     private static String baseUrl = "http://192.168.102.19:9000";
 
+    private static String token = "";
+
     private static Retrofit retrofit;
 
-    private static Retrofit getRetrofitInstall(){
+    private static Retrofit getRetrofitInstall() {
         if (retrofit == null) {
             synchronized (HttpManage.class) {
                 if (retrofit == null) {
+
                     // OkHttp3.0的使用方式
                     OkHttpClient client = new OkHttpClient.Builder()
-//                            .addInterceptor(signingInterceptor)
-//                            .addInterceptor(loggingInterceptor)
                             .addInterceptor(new Interceptor() {
                                 @Override
                                 public Response intercept(Chain chain) throws IOException {
@@ -43,14 +49,14 @@ public class HttpManage {
 
                                     //加入header
                                     Request authorised = originalRequest.newBuilder()
-                                            .header("app-UserToken", "1#0")
+//                                            .header("app-UserToken", token)
                                             .build();
                                     return chain.proceed(authorised);
                                 }
                             })
                             .build();
 
-                     retrofit = new Retrofit.Builder()                        //创建Retrofit的实例
+                    retrofit = new Retrofit.Builder()                        //创建Retrofit的实例
                             .baseUrl(baseUrl)
                             .addConverterFactory(GsonConverterFactory.create())  //请求结果转换成实体类
                             .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) //适配Rxjava
