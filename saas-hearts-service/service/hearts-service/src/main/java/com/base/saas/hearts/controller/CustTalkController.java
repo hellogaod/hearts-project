@@ -1,6 +1,7 @@
 package com.base.saas.hearts.controller;
 
 import com.base.saas.hearts.domain.entity.CustTalk;
+import com.base.saas.hearts.domain.model.ResponseData;
 import com.base.saas.hearts.service.CustTalkService;
 import com.base.saas.language.LocaleMessage;
 import com.base.saas.logger.LoggerCommon;
@@ -36,9 +37,9 @@ public class CustTalkController {
         String logmsg = LocaleMessage.get("message.system.save.fail");
         try {
             boolean flag = custTalkService.addCustTalk(custTalk);
-
+            ResponseData responseData = new ResponseData();
             if (flag) {
-                return ResponseEntity.ok().body(null);
+                return ResponseEntity.ok().body(responseData);
             } else {
                 return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(null);
             }

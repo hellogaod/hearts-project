@@ -28,6 +28,10 @@ public class CustTalkServiceImpl implements CustTalkService {
     public boolean addCustTalk(CustTalk custTalk) {
         UserInfo userInfo = AppUserContextUtil.getUserInfo();
 
+        if (userInfo == null) {
+            return false;
+        }
+
         custTalk.setId(CreateIDUtil.getId());
         custTalk.setCompanyCode(userInfo.getCompanyCode());
         custTalk.setCreateTime(new Date());
@@ -50,6 +54,6 @@ public class CustTalkServiceImpl implements CustTalkService {
 
     @Override
     public List<CustTalk> getCustTalkList(Integer status, String createrUserId, String companyCode) {
-        return custTalkMapper.selectList(status,createrUserId,companyCode);
+        return custTalkMapper.selectList(status, createrUserId, companyCode);
     }
 }

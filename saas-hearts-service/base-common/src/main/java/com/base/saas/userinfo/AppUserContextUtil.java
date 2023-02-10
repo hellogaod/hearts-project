@@ -36,7 +36,8 @@ public abstract class AppUserContextUtil {
     //通过header获取sessionId
     public static String getUserTokenId() {
         if (getHttpServletRequest() != null) {
-            return getHttpServletRequest().getHeader("app-UserToken");
+            String token = getHttpServletRequest().getHeader("app-UserToken");
+            return token;
         }
 
         return null;

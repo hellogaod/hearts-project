@@ -99,6 +99,7 @@ public class CustUserController {
         userInfo.setCompanyCode(appUserInfo.getCompanyCode());
         userInfo.setAccount(appUserInfo.getNickname());
         userInfo.setToken(sessionId);
+//        System.out.println("token:" + sessionId);
         AppUserContextUtil.setUserInfo(sessionId, userInfo);
 
         String loginIp = request.getRemoteAddr();
@@ -140,10 +141,13 @@ public class CustUserController {
     @PostMapping("/logout")
     public ResponseEntity logout() {
 
+        ResponseData responseData = new ResponseData();
+
         if (AppUserContextUtil.getUserInfo() != null) {
             RedisUtil.del(AppConstant.APP_USER_INFO + AppUserContextUtil.getUserTokenId());
         }
-        return ResponseEntity.ok().body(null);
+
+        return ResponseEntity.ok().body(responseData);
     }
 
     @ApiOperation(value = "修改密码", notes = "修改密码")
