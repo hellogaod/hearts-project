@@ -43,8 +43,8 @@ class LoginActivity : IncludeHeaderBaseActivity<ActivityLoginBinding, LoginViewM
 
 
     override fun initIncludeView() {
-        includeHeaderBinding.ivBack.setOnClickListener(this)
-        includeHeaderBinding.tvTitle.setText("登录")
+        includeHeaderBinding?.ivBack?.setOnClickListener(this)
+        includeHeaderBinding?.tvTitle?.setText("登录")
     }
 
     override fun getViewModel(viewModelProvider: ViewModelProvider?): LoginViewModel? {

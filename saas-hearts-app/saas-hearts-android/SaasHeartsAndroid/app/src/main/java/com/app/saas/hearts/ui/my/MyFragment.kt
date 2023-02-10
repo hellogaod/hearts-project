@@ -10,6 +10,7 @@ import com.app.saas.hearts.R
 import com.app.saas.hearts.base.BaseFragment
 import com.app.saas.hearts.databinding.FragmentMyBinding
 import com.app.saas.hearts.entity.UserInfo
+import com.app.saas.hearts.ui.set.SetActivity
 import com.app.saas.hearts.ui.user.detail.UserInfoActivity
 import com.app.saas.hearts.ui.user.edit.UserEditActivity
 import com.app.saas.hearts.ui.user.login.LoginActivity
@@ -25,6 +26,8 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
         binding.llUserInfo.setOnClickListener(this)
 
         binding.llUserBase.setOnClickListener(this)
+
+        binding.llSet.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -54,8 +57,8 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
 
         }
 
-        viewModel.userInfo.observe(viewLifecycleOwner) {
-            binding.tvNickname.setText(it.account)
+        viewModel.userInfo?.observe(viewLifecycleOwner) {
+            binding.tvNickname.setText(it?.account)
         }
     }
 
@@ -84,6 +87,11 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
         when (v?.id) {
             R.id.tv_login -> {//登录
 
+            }
+
+            R.id.ll_set -> {//设置
+                val intent = Intent(activity, SetActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.ll_user_info -> {//进入主页

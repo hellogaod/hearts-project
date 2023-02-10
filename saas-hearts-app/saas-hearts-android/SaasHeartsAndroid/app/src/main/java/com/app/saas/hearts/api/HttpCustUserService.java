@@ -29,6 +29,10 @@ public interface HttpCustUserService {
     @POST("/saas-hearts-service/api/custUser/doLogin")
     Observable<UserInfo> doLogin(@Body CustUser custUser);
 
+    //退出登录
+    @POST("/saas-hearts-service/api/custUser/logout")
+    Observable<ResponseDate> logout();
+
     //获取详情
     @GET("/saas-hearts-service/api/custUser/getUserDetailById")
     Observable<CustUser> getUserDetailById(@Query("userId") String userId);

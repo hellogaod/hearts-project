@@ -44,10 +44,10 @@ class UserEditActivity : IncludeHeaderBaseActivity<ActivityUserEditBinding, User
     }
 
     override fun initIncludeView() {
-        includeHeaderBinding.tvTitle.setText("编辑")
-        includeHeaderBinding.tvRight.setText("提交")
-        includeHeaderBinding.tvRight.setOnClickListener(this)
-        includeHeaderBinding.ivBack.setOnClickListener(this)
+        includeHeaderBinding?.tvTitle?.setText("编辑")
+        includeHeaderBinding?.tvRight?.setText("提交")
+        includeHeaderBinding?.tvRight?.setOnClickListener(this)
+        includeHeaderBinding?.ivBack?.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {

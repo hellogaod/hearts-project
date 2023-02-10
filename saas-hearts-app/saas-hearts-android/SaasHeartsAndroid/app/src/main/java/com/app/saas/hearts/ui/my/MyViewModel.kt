@@ -12,22 +12,19 @@ class MyViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
 
-    private val _userInfo = MutableLiveData<UserInfo>()
-    val userInfo: LiveData<UserInfo> = _userInfo
+    private val _userInfo = MutableLiveData<UserInfo?>()
+    val userInfo: MutableLiveData<UserInfo?> = _userInfo
 
     fun setUserInfo(userInfo: UserInfo?) {
-
-        userInfo?.let {
-            _userInfo.value = it
-        }
+        _userInfo.value = userInfo
     }
 
-    private val _token = MutableLiveData<String>()
-    val token: LiveData<String> = _token
+    private val _token = MutableLiveData<String?>()
+    val token: LiveData<String?> = _token
 
     fun setToken(token: String?) {
 
-        token?.let { _token.value = it }
+        _token.value = token
 
     }
 }

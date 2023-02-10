@@ -16,7 +16,7 @@ import com.app.saas.hearts.databinding.IncludeHeaderBinding
 public abstract class IncludeHeaderBaseActivity<V : ViewBinding?, M : ViewModel?> :
     BaseActivity<V?, M?>() {
 
-    lateinit var includeHeaderBinding: IncludeHeaderBinding
+     var includeHeaderBinding: IncludeHeaderBinding? = null
 
     fun initIncludeBinding() {
         binding?.let {

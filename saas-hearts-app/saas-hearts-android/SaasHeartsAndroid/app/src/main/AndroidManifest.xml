@@ -33,6 +33,10 @@
         <activity android:name=".ui.user.detail.UserInfoActivity"/>
 
         <activity android:name=".ui.user.edit.UserEditActivity"/>
+
+        <activity android:name=".ui.set.SetActivity"/>
+
+        <activity android:name=".ui.talk.CreateTalkActivity"/>
     </application>
 
 </manifest>
