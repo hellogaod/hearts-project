@@ -27,6 +27,9 @@ public class CustCommentServiceImpl implements CustCommentService {
     @Override
     public boolean addCustComment(CustComment custComment) {
         UserInfo userInfo = AppUserContextUtil.getUserInfo();
+        if (userInfo == null){
+            return false;
+        }
         custComment.setId(CreateIDUtil.getId());
         custComment.setCompanyCode(userInfo.getCompanyCode());
         custComment.setCreateTime(new Date());

@@ -1,6 +1,7 @@
 package com.base.saas.hearts.controller;
 
 import com.base.saas.hearts.domain.entity.CustComment;
+import com.base.saas.hearts.domain.model.ResponseData;
 import com.base.saas.hearts.service.CustCommentService;
 import com.base.saas.language.LocaleMessage;
 import com.base.saas.logger.LoggerCommon;
@@ -34,7 +35,8 @@ public class CustCommentController {
         try {
             boolean flag = custCommentService.addCustComment(custComment);
             if (flag) {
-                return ResponseEntity.ok().body(null);
+                ResponseData responseData = new ResponseData();
+                return ResponseEntity.ok().body(responseData);
             } else {
                 return ResponseEntity.badRequest().headers(HeaderUtil.createErrorMsg(logmsg)).body(null);
             }
