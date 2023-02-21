@@ -3,49 +3,88 @@
 	<view class="container">
 		<cu-custom bgColor="bg-gradual-blue" :isBack="true">
 			<block slot="backText"></block>
-			<block slot="content">文章资讯</block>
+			<block slot="content">话题详情</block>
 		</cu-custom>
 
 		<view v-if="newsData.title">
 			<view style="background-color: #FFFFFF;padding: 30rpx 30rpx 30rpx 30rpx;">
 				<view class="titleBox text-xl text-black text-bold">{{newsData.title}}</view>
-				<view class="text-center text-dflg text-grey margin-top-sm margin-bottom-sm">
-					作者：{{newsData.author}}
+				
+				<view class="contentBox text-lg text-black margin-top-sm margin-tb-lg">
+					<view class="margin-top-sm">
+						{{newsData.content}}
+					</view>
 				</view>
-				<view class="flex justify-between text-df text-gray margin-top-sm margin-bottom-sm">
+				<view>
+					<u-row>
+						<u-col span="6">
+							<view>
+								<u-row>
+									<u-col span="3">
+										<view>
+											<image class="header-img" src="../../static/icon_head_default.png"/>
+										</view>
+									</u-col>
+									<u-col span="9">
+										<view>
+											<u-row>
+												<u-col span="12">
+													<view>
+														{{newsData.createUserName}}
+													</view>
+												</u-col>
+											</u-row>
+											<u-row>
+												<u-col span="12">
+													<view>
+														{{newsData.createTime | formatDate}}
+													</view>
+												</u-col>
+											
+											</u-row>
+										</view>
+									</u-col>
+								</u-row>
+								
+							</view>
+						</u-col>
+						<u-col span="6">
+							<!-- 浏览、点赞、分享数 -->
+							<view class="text-right text-df text-gray margin-top-sm margin-bottom-sm">
+								<u-icon name="heart-fill"></u-icon>
+								<!-- <text class="text-gray cuIcon-attentionfill text-df" style="margin-right: 6rpx;"></text> -->
+								<text class="text-df margin-right-sm" style="margin-top: 2rpx;">{{newsData.satisfaceRate}}%</text>
+								<u-icon name="thumb-up-fill"></u-icon>
+								<!-- <text class="text-gray cuIcon-appreciatefill text-df" style="margin-right: 6rpx;"></text> -->
+								<text class="text-df margin-right-sm" style="margin-top: 2rpx;">{{newsData.praiseCount}}</text>
+								<!-- <text class="text-gray cuIcon-share text-df" style="margin-right: 6rpx;"></text> -->
+								<u-icon name="chat-fill"></u-icon>
+								<text class="text-df" style="margin-top: 2rpx;">{{newsData.commentCount}}</text>
+							</view>
+						</u-col>
+					</u-row>
+				</view>
+				
+			
+				<!-- <view class="text-center text-dflg text-grey margin-top-sm margin-bottom-sm">
+					作者：{{newsData.author}}
+				</view> -->
+				
+				<!-- <view class="flex justify-between text-df text-gray margin-top-sm margin-bottom-sm">
 					<text>{{newsData.createdAt | formatDate}}</text>
 					<text>{{newsData.type | typeF}}</text>
 				</view>
-				<image mode="widthFix" :src="newsData.img"></image>
+				<image mode="widthFix" :src="newsData.img"></image> -->
 
-				<!-- 中间文章区域 -->
-				<view class="contentBox text-lg text-black margin-top-sm margin-tb-lg">
-					<view class="margin-top-sm" v-for="(item, index) in newsData.content.split('&')" v-html="item">
-					</view>
-				</view>
-			</view>	
+				
+			</view>	<!-- 
 			<view class="cu-bar justify-left bg-white margin-top-sm">
 				<view class="action border-title">
 					<text class="text-lg text-bold text-blue">图片展示</text>
 					<text class="bg-gradual-blue" style="width:3rem"></text>
 				</view>
-			</view>
-			<view style="background-color: #FFFFFF;padding: 0rpx 30rpx 30rpx 30rpx;">
-
-				<!-- 图片展示 · 多条 -->
-				<image @click="previewImage(index)" v-for="(item, index) in newsData.imgList.split(',')" :key="index"
-					mode="widthFix" :src="item"></image>
-
-				<!-- 浏览、点赞、分享数 -->
-				<view class="text-right text-df text-gray margin-top-sm margin-bottom-sm">
-					<text class="text-gray cuIcon-attentionfill text-df" style="margin-right: 6rpx;"></text>
-					<text class="text-df margin-right-sm" style="margin-top: 2rpx;">{{newsData.seeNum}}</text>
-					<text class="text-gray cuIcon-appreciatefill text-df" style="margin-right: 6rpx;"></text>
-					<text class="text-df margin-right-sm" style="margin-top: 2rpx;">{{newsData.likesNum}}</text>
-					<text class="text-gray cuIcon-share text-df" style="margin-right: 6rpx;"></text>
-					<text class="text-df" style="margin-top: 2rpx;">{{newsData.commentNum}}</text>
-				</view>
-			</view>
+			</view> -->
+			
 		</view>
 
 		<view style="background-color: #FFFFFF;padding: 0rpx 30rpx 15rpx0rpx;margin: 25rpx 0 100rpx 0;">
@@ -128,21 +167,21 @@
 			}
 		},
 		methods: {
-			// 点赞
+			// 话题详情
 			getData(id) {
 				console.log(id);
 				uni.showLoading({
 					title: '加载中'
 				});
 				let opts = {
-					url: 'api/blog/detail?id=' + id,
+					url: 'saas-hearts-service/api/custTalk/getTalkDetail?talkId=' + id,
 					method: 'get'
 				};
-				request.httpRequest(opts).then(res => {
+				request.httpRequestSaas(opts).then(res => {
 					console.log(res);
 					uni.hideLoading();
-					if (res.data.data.id) {
-						this.newsData = res.data.data;
+					if (res.data) {
+						this.newsData = res.data;
 					} else {
 						console.log('数据请求错误～');
 					}
@@ -228,6 +267,7 @@
 		},
 		filters: {
 			formatDate(value) {
+				
 				if (value == undefined) {
 					return;
 				}
@@ -245,8 +285,11 @@
 				m = m < 10 ? ('0' + m) : m; //分钟补0
 				let s = date.getSeconds();
 				s = s < 10 ? ('0' + s) : s; //秒补0
+				
+				let strDate = y + '-' + MM + '-' + d + ' ' + h + ':' + m;
 				// return y + '-' + MM + '-' + d; //年月日
-				return y + '-' + MM + '-' + d + ' ' + h + ':' + m; //年月日时分秒
+				console.log('strDate:' + strDate);
+				return strDate; //年月日时分秒
 			},
 			typeF(value) {
 				if (!value) {
@@ -283,6 +326,16 @@
 
 	uni-button {
 		background: transparent;
+	}
+	
+	.header-img{
+		width: 27px;
+		height: 27px;
+	}
+	
+	.contentBox{
+		padding-bottom: 10px;
+		border-bottom: 1px #d2d2d2 solid;
 	}
 
 	.container {

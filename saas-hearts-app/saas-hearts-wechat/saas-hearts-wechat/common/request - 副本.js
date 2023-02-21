@@ -4,49 +4,6 @@
 let baseUrl;
 
 // 不带token请求
-const httpRequestSaas = (opts, data) => {
-	
-	
-	baseUrl = 'http://192.168.102.19:9000/';
-	
-	uni.onNetworkStatusChange(function(res) {
-		if (!res.isConnected) {
-			uni.showToast({
-				title: '网络连接不可用！',
-				icon: 'none'
-			});
-		}
-		return false
-	});
-	let httpDefaultOpts = {
-		url: baseUrl + opts.url,
-		data: data,
-		method: opts.method,
-		header: opts.method == 'get' ? {
-			'X-Requested-With': 'XMLHttpRequest',
-			"Accept": "application/json",
-			"Content-Type": "application/json; charset=UTF-8"
-		} : {
-			'X-Requested-With': 'XMLHttpRequest',
-			'Content-Type': 'application/json; charset=UTF-8'
-		},
-		dataType: 'json',
-	}
-	let promise = new Promise(function(resolve, reject) {
-		uni.request(httpDefaultOpts).then(
-			(res) => {
-				resolve(res[1])
-			}
-		).catch(
-			(response) => {
-				reject(response)
-			}
-		)
-	})
-	return promise
-};
-
-// 不带token请求
 const httpRequest = (opts, data) => {
 	if(opts.type == 2){
 		baseUrl = 'https://www.zhoukaiwen.com/';
@@ -200,7 +157,6 @@ const hadToken = () => {
 }
 export default {
 	baseUrl,
-	httpRequestSaas,
 	httpRequest,
 	httpTokenRequest,
 	hadToken

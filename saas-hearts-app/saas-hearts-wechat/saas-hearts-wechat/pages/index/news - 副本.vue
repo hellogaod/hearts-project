@@ -2,7 +2,7 @@
 <template>
 	<view>
 		<cu-custom bgColor="bg-gradual-blue" :isBack="false">
-			<block slot="content">语录</block>
+			<block slot="content">文章资讯</block>
 		</cu-custom>
 
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
@@ -13,54 +13,33 @@
 		</scroll-view>
 
 		<view class="cu-card article no-card">
-			<view class="shadow borderBottom" v-for="(item, index) in newsList" :key="index"
+			<view class="cu-item shadow borderBottom" v-for="(item, index) in newsList" :key="index"
 				@click="goNews(item.id)">
-				<view class="header">
-					<img src="../../static/icon_head_default.png"/>
-					<span>{{item.createUserName}}</span>
-					<span style="float: right;">{{item.createTime | formatDate}}</span>
-				</view>
-				<view class="line"></view>
-				<view class="u-demo-block__content">
-				    <u-row
-				            justify="space-between"
-				            customStyle="margin-bottom: 10px"
-				    >
-				        <u-col
-				                span="3"
-				        >
-				            <view class="demo-layout bg-purple-light"></view>
-				        </u-col>
-				        <u-col
-				                span="3"
-				        >
-				            <view class="demo-layout bg-purple"></view>
-				        </u-col>
-				    </u-row>
-				    
-				</view>
-				<view class="title margin-top-sm">
+				<view class="title">
 					<view class="text-cut text-bold text-lg">{{item.title}}</view>
 				</view>
-				<view class="content margin-top-sm">
+				<view class="content">
+					<image :src="item.img" mode="aspectFit"></image>
 					<view class="desc">
 						<view class="text-content">{{item.content}}</view>
-						<view class="margin-top-xs">
+						<view class="margin-top-xs" style="display: flex;align-items:center;justify-content: space-between;">
 							<view class="text-gray light sm text-df round fl">{{item.createdAt | formatDate}}</view>
 							<view>
 								<view class="text-gray light sm round margin-lr-xs"
 									style="display: inline-flex;align-items:center;">
-									
-									<img src="../../static/icon_like.png"/>
-									<text class="text-df" style="margin-top: 2rpx;">{{item.satisfaceRate}}%</text>
+									<text class="text-gray cuIcon-attentionfill text-df"
+										style="margin-right: 6rpx;"></text>
+									<text class="text-df" style="margin-top: 2rpx;">{{item.seeNum}}</text>
 								</view>
 								<view class="text-gray light sm round margin-lr-xs" style="display: inline-flex;align-items:center;">
-									<img src="../../static/icon_praise.png"/>
-									<text class="text-df" style="margin-top: 2rpx;">{{item.praiseCount}}</text>
+									<text class="text-gray cuIcon-appreciatefill text-df"
+										style="margin-right: 6rpx;"></text>
+									<text class="text-df" style="margin-top: 2rpx;">{{item.likesNum}}</text>
 								</view>
 								<view class="text-gray light sm round" style="display: inline-flex;align-items:center;">
-									<img src="../../static/icon_comment.png"/>
-									<text class="text-df" style="margin-top: 2rpx;">{{item.commentCount}}</text>
+									<text class="text-gray cuIcon-share text-df"
+										style="margin-right: 6rpx;"></text>
+									<text class="text-df" style="margin-top: 2rpx;">{{item.commentNum}}</text>
 								</view>
 							</view>
 						</view>
@@ -99,13 +78,32 @@
 				newsList: '',
 				navTop: [{
 						id: 1,
-						title: '最新'
+						title: '全部'
 					},
 					{
 						id: 2,
-						title: '热门'
+						title: 'Web前端'
 					},
-					
+					{
+						id: 3,
+						title: 'UI设计'
+					},
+					{
+						id: 4,
+						title: 'Node后台'
+					},
+					{
+						id: 5,
+						title: '面试精选'
+					},
+					{
+						id: 6,
+						title: '技术前沿'
+					},
+					{
+						id: 7,
+						title: '更多资讯'
+					}
 				]
 			};
 		},
@@ -143,17 +141,17 @@
 					type = '';
 				}
 				let opts = {
-					url: 'saas-hearts-service/api/custTalk/getTalkList?pageIndex=1&pageSize=10&status=1',
+					url: 'api/blog/list?searchTypeId=' + type,
 					method: 'get'
 				};
 				uni.showLoading({
 					title: '加载中'
 				});
-				request.httpRequestSaas(opts).then(res => {
+				request.httpRequest(opts).then(res => {
 					// console.log(res);
 					uni.hideLoading();
 					if (res.statusCode == 200) {
-						this.newsList = res.data.list;
+						this.newsList = res.data.data;
 						console.log(this.newsList);
 					} else {
 						console.log('数据请求错误～');
@@ -185,40 +183,6 @@
 <style lang="scss" scoped>
 	.borderBottom {
 		border-bottom: 1px solid #f2f2f2;
-		margin-left: 10px;
-		margin-right: 10px;
-		margin-top: 10px;
-		background-color: #efefef;
-		border-radius: 5px;
-		padding: 10px;
-		
-		.line{
-			border-top-width: 1px ;
-			border-bottom-width: 1px;
-			border-top-color: #d2d2d2;
-			border-left-width: 0px;
-			border-right-width: 0px;
-			border-bottom-color:#fff;
-			border-style: solid;
-		}
-		.content {
-			image{
-				width:30rpx;
-				height: 30rpx;
-			}
-		}
-	}
-	
-	.header{
-		height: 40px;
-		line-height: 40px;
-		image{
-			vertical-align:middle;
-			width: 50rpx;
-			margin-right: 10px;
-			height: 50rpx;
-		}
-		
 	}
 	
 	// 暂无数据

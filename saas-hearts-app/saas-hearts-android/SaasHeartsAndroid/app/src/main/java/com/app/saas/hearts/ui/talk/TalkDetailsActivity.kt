@@ -10,6 +10,7 @@ import com.app.saas.hearts.R
 import com.app.saas.hearts.base.IncludeHeaderBaseActivity
 import com.app.saas.hearts.databinding.ActivityTalkDetailsBinding
 import com.app.saas.hearts.ui.talk.comment.CommentFragment
+import com.app.saas.hearts.ui.user.login.LoginActivity
 import com.app.saas.hearts.utils.DateUtils
 import com.app.saas.hearts.utils.StringUtils
 import com.app.saas.hearts.utils.ToastUtil
@@ -62,6 +63,7 @@ class TalkDetailsActivity :
             if (it == true) {
                 getDetail()
                 commentFragment?.refreshData()
+                binding?.etContent?.setText("")
                 ToastUtil.show(this.application, "评论成功")
             }
         }
@@ -98,6 +100,14 @@ class TalkDetailsActivity :
                 }
 
                 R.id.tv_submit -> {//发布
+
+                    val token = CacheUserInfo.getToken(this)
+                    if (StringUtils.isEmpty(token)) {
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        return
+                    }
+
                     viewModel?.createComment(
                         CacheUserInfo.getToken(this),
                         binding?.etContent?.text.toString()
