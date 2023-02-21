@@ -87,53 +87,55 @@
 			
 		</view>
 
-		<view style="background-color: #FFFFFF;padding: 0rpx 30rpx 15rpx0rpx;margin: 25rpx 0 100rpx 0;">
-			<view class="cu-bar justify-left bg-white">
+		<view style="margin: 25rpx 0 100rpx 0;">
+			<!-- <view class="cu-bar justify-left bg-white">
 				<view class="action border-title">
 					<text class="text-lg text-bold text-blue">评论</text>
 					<text class="bg-gradual-blue" style="width:3rem"></text>
 				</view>
-			</view>
+			</view> -->
 
 			<!-- <view class="text-lg text-bold text-center margin-bottom-lg">暂无评论</view> -->
 
 			<view class="cu-list menu-avatar comment solids-top">
-				<view class="cu-item">
-					<view class="cu-avatar round" style="background-image:url(https://cdn.zhoukaiwen.com/logo.png);">
+				<view class="cu-item"  v-for="(item, index) in commentList" :key="index">
+					<view class="cu-avatar round" style="background-image:url(../../static/icon_head_default.png);">
 					</view>
 					<view class="content">
-						<view class="text-grey">凯文童鞋</view>
+						<view class="text-grey">{{item.createUserName}}</view>
 						<view class="text-gray text-content text-df">
-							评论功能暂未开启哦～
+							{{item.createTime | formatDate}}
 						</view>
+						<view class="line"></view>
 						<view class="margin-top-xs flex justify-between">
-							<view class="text-gray text-df">2021-12-05 09:46</view>
+							<view class="text-gray text-df">{{item.content}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="cu-bar bg-white tabbar border shop bottomBox">
-			<button class="action" open-type="share">
+		<view class="cu-bar bg-white tabbar border shop bottomBox" style="display: flex;">
+			<!-- <button class="action" open-type="share">
 				<view class="cuIcon-share text-green">
 					<view class="cu-tag badge">{{newsData.commentNum}}</view>
 				</view>
 				分享
-			</button>
+			</button> -->
+			<u-input v-model="commentContent" style="margin-left: 10px; margin-right: 10px;background-color: #efefef;flex: 1;padding-left: 5px;padding-right: 5px;"/>
 			<button class="action" open-type="contact">
-				<view class="cuIcon-service text-green">
-					<view class="cu-tag badge"></view>
+				<view class="text-green">
+					<view class="badge"></view>
 				</view>
-				联系我们
+				发布
 			</button>
-			<view class="btn-group">
+			<!-- <view class="btn-group">
 				<button style="width: 80%;height: 70rpx;" @click="praiseClick(newsData.id)"
 					class="cu-btn bg-gradual-blue round shadow-blur">
 					<view class="cuIcon-appreciatefill text-white margin-right-xs"></view>
 					赞一下吧
 				</button>
-			</view>
+			</view> -->
 		</view>
 		<view class="safe-area-inset-bottom"></view>
 	</view>
@@ -145,12 +147,15 @@
 		data() {
 			return {
 				newsData: [],
+				commentList: '',
+				commentContent:'',
 				requestStatus: false // 事件防抖
 			}
 		},
 		onLoad(option) {
 			console.log(option)
 			this.getData(option.id);
+			this.getCommentList(option.id)
 		},
 		// 分享小程序
 		// onShareAppMessage(res) {
@@ -182,6 +187,26 @@
 					uni.hideLoading();
 					if (res.data) {
 						this.newsData = res.data;
+					} else {
+						console.log('数据请求错误～');
+					}
+				});
+			},
+			getCommentList(id) {
+				
+				let opts = {
+					url: 'saas-hearts-service/api/custComment/getCommentList?pageIndex=1&pageSize=10&status=1&talkId=' + id,
+					method: 'get'
+				};
+				uni.showLoading({
+					title: '加载中'
+				});
+				request.httpRequestSaas(opts).then(res => {
+					// console.log(res);
+					uni.hideLoading();
+					if (res.statusCode == 200) {
+						this.commentList = res.data.list;
+						console.log(this.commentList);
 					} else {
 						console.log('数据请求错误～');
 					}
@@ -331,6 +356,26 @@
 	.header-img{
 		width: 27px;
 		height: 27px;
+	}
+	
+	.line{
+		border-top-width: 1px ;
+		border-bottom-width: 1px;
+		border-top-color: #d2d2d2;
+		border-left-width: 0px;
+		border-right-width: 0px;
+		border-bottom-color:#fff;
+		border-style: solid;
+	}
+	
+	.cu-item{
+		border-bottom: 1px solid #f2f2f2;
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 10px;
+		background-color: #efefef;
+		border-radius: 5px;
+		padding: 10px;
 	}
 	
 	.contentBox{

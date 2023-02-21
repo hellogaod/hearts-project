@@ -113,6 +113,6 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>(), View.OnClickL
     }
 
     fun isLogin(): Boolean {//是否登录
-        return viewModel?.token?.value != null
+        return StringUtils.isNotEmpty(viewModel?.token?.value)
     }
 }
