@@ -5,39 +5,39 @@
 			<block slot="content">语录</block>
 		</cu-custom>
 
-		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
+		<view
+			style="padding-left: 20rpx;padding-right:20rpx;line-height:90rpx;height:90rpx;position:fixed;right: 0;z-index: 999;"
+			@click="createTalk()">
+			创建
+		</view>
+
+		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft"
+			style="text-align: center;background-color: #fff;height: 90rpx;">
 			<view class="cu-item" :class="index == TabCur?'text-blue cur':''" v-for="(item,index) in navTop"
 				:key="index" @tap="tabSelect" :data-id="index">
 				{{item.title}}
 			</view>
+
 		</scroll-view>
 
 		<view class="cu-card article no-card">
-			<view class="shadow borderBottom" v-for="(item, index) in newsList" :key="index"
-				@click="goNews(item.id)">
+			<view class="shadow borderBottom" v-for="(item, index) in newsList" :key="index" @click="goNews(item.id)">
 				<view class="header">
-					<img src="../../static/icon_head_default.png"/>
+					<img src="../../static/icon_head_default.png" />
 					<span>{{item.createUserName}}</span>
 					<span style="float: right;">{{item.createTime | formatDate}}</span>
 				</view>
 				<view class="line"></view>
 				<view class="u-demo-block__content">
-				    <u-row
-				            justify="space-between"
-				            customStyle="margin-bottom: 10px"
-				    >
-				        <u-col
-				                span="3"
-				        >
-				            <view class="demo-layout bg-purple-light"></view>
-				        </u-col>
-				        <u-col
-				                span="3"
-				        >
-				            <view class="demo-layout bg-purple"></view>
-				        </u-col>
-				    </u-row>
-				    
+					<u-row justify="space-between" customStyle="margin-bottom: 10px">
+						<u-col span="3">
+							<view class="demo-layout bg-purple-light"></view>
+						</u-col>
+						<u-col span="3">
+							<view class="demo-layout bg-purple"></view>
+						</u-col>
+					</u-row>
+
 				</view>
 				<view class="title margin-top-sm">
 					<view class="text-cut text-bold text-lg">{{item.title}}</view>
@@ -50,16 +50,17 @@
 							<view>
 								<view class="text-gray light sm round margin-lr-xs"
 									style="display: inline-flex;align-items:center;">
-									
-									<img src="../../static/icon_like.png"/>
+
+									<img src="../../static/icon_like.png" />
 									<text class="text-df" style="margin-top: 2rpx;">{{item.satisfaceRate}}%</text>
 								</view>
-								<view class="text-gray light sm round margin-lr-xs" style="display: inline-flex;align-items:center;">
-									<img src="../../static/icon_praise.png"/>
+								<view class="text-gray light sm round margin-lr-xs"
+									style="display: inline-flex;align-items:center;">
+									<img src="../../static/icon_praise.png" />
 									<text class="text-df" style="margin-top: 2rpx;">{{item.praiseCount}}</text>
 								</view>
 								<view class="text-gray light sm round" style="display: inline-flex;align-items:center;">
-									<img src="../../static/icon_comment.png"/>
+									<img src="../../static/icon_comment.png" />
 									<text class="text-df" style="margin-top: 2rpx;">{{item.commentCount}}</text>
 								</view>
 							</view>
@@ -67,8 +68,8 @@
 					</view>
 				</view>
 			</view>
-			
-			
+
+
 			<view class="page-box" v-if="newsList.length < 1">
 				<view>
 					<view class="centre">
@@ -84,7 +85,7 @@
 		</view>
 
 		<view style="width: 1rpx;height: 150rpx;"></view>
-	
+
 	</view>
 </template>
 
@@ -105,9 +106,21 @@
 						id: 2,
 						title: '热门'
 					},
-					
+
 				]
 			};
+		},
+		onShow() {
+			
+			uni.$on("refresh", (e) => {
+				this.getData(); //需要重新访问一下接口。
+			})
+		}, 
+		// 用这种方法需要清除，负责会一直调用多次接口
+		onLoad() {
+			console.log("onshow")
+			// 清除监听
+			uni.$off('refresh');
 		},
 		mounted() {
 			this.getData();
@@ -139,7 +152,7 @@
 			getData() {
 				var type = this.navTop[this.TabCur].id;
 				console.log(type)
-				if(type == 1){
+				if (type == 1) {
 					type = '';
 				}
 				let opts = {
@@ -169,14 +182,32 @@
 				this.requestStatus = true;
 				setTimeout(() => {
 					this.getData();
-					this.requestStatus = false;	// 模拟执行完毕，改变 requestStatus
+					this.requestStatus = false; // 模拟执行完毕，改变 requestStatus
 				}, 300);
-				
+
 			},
 			goNews(id) {
 				uni.navigateTo({
 					url: '../news/news?id=' + id,
 				})
+			},
+			createTalk() {
+				uni.getStorage({
+
+					key: 'token',
+					success: function(data) {
+						uni.navigateTo({
+							url: '../news/create-talk',
+						})
+					},
+					fail() {
+						uni.navigateTo({
+							url: '../../tn_components/login/login',
+						})
+					}
+
+				})
+
 			}
 		}
 	}
@@ -191,53 +222,56 @@
 		background-color: #efefef;
 		border-radius: 5px;
 		padding: 10px;
-		
-		.line{
-			border-top-width: 1px ;
+
+		.line {
+			border-top-width: 1px;
 			border-bottom-width: 1px;
 			border-top-color: #d2d2d2;
 			border-left-width: 0px;
 			border-right-width: 0px;
-			border-bottom-color:#fff;
+			border-bottom-color: #fff;
 			border-style: solid;
 		}
+
 		.content {
-			image{
-				width:30rpx;
+			image {
+				width: 30rpx;
 				height: 30rpx;
 			}
 		}
 	}
-	
-	.header{
+
+	.header {
 		height: 40px;
 		line-height: 40px;
-		image{
-			vertical-align:middle;
+
+		image {
+			vertical-align: middle;
 			width: 50rpx;
 			margin-right: 10px;
 			height: 50rpx;
 		}
-		
+
 	}
-	
+
 	// 暂无数据
 	.centre {
 		text-align: center;
 		margin: 200rpx auto;
 		font-size: 32rpx;
-	
+
 		image {
 			width: 300rpx;
 			border-radius: 50%;
 			margin: 0 auto;
 		}
-	
+
 		.tips {
 			font-size: 24rpx;
 			color: #999999;
 			margin-top: 20rpx;
 		}
+
 		.btn {
 			margin: 80rpx auto;
 			width: 200rpx;
@@ -248,6 +282,7 @@
 			background: linear-gradient(270deg, #1cbbb4 0%, #0081ff 100%);
 		}
 	}
+
 	.nav .cu-item.cur {
 		font-weight: 600;
 	}

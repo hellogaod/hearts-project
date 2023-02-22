@@ -112,6 +112,15 @@
 		mounted() {
 			this.getData();
 		},
+		onShow() {
+			console.log("onshow")
+			
+		}, 
+		// 用这种方法需要清除，负责会一直调用多次接口
+		onLoad() {
+			console.log("onLoad")
+			
+		},
 		filters: {
 			formatDate(value) {
 				if (value == undefined) {

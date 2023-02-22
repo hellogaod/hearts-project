@@ -9,7 +9,7 @@
 		<view v-if="newsData.title">
 			<view style="background-color: #FFFFFF;padding: 30rpx 30rpx 30rpx 30rpx;">
 				<view class="titleBox text-xl text-black text-bold">{{newsData.title}}</view>
-				
+
 				<view class="contentBox text-lg text-black margin-top-sm margin-tb-lg">
 					<view class="margin-top-sm">
 						{{newsData.content}}
@@ -22,7 +22,7 @@
 								<u-row>
 									<u-col span="3">
 										<view>
-											<image class="header-img" src="../../static/icon_head_default.png"/>
+											<image class="header-img" src="../../static/icon_head_default.png" />
 										</view>
 									</u-col>
 									<u-col span="9">
@@ -40,12 +40,12 @@
 														{{newsData.createTime | formatDate}}
 													</view>
 												</u-col>
-											
+
 											</u-row>
 										</view>
 									</u-col>
 								</u-row>
-								
+
 							</view>
 						</u-col>
 						<u-col span="6">
@@ -53,10 +53,12 @@
 							<view class="text-right text-df text-gray margin-top-sm margin-bottom-sm">
 								<u-icon name="heart-fill"></u-icon>
 								<!-- <text class="text-gray cuIcon-attentionfill text-df" style="margin-right: 6rpx;"></text> -->
-								<text class="text-df margin-right-sm" style="margin-top: 2rpx;">{{newsData.satisfaceRate}}%</text>
+								<text class="text-df margin-right-sm"
+									style="margin-top: 2rpx;">{{newsData.satisfaceRate}}%</text>
 								<u-icon name="thumb-up-fill"></u-icon>
 								<!-- <text class="text-gray cuIcon-appreciatefill text-df" style="margin-right: 6rpx;"></text> -->
-								<text class="text-df margin-right-sm" style="margin-top: 2rpx;">{{newsData.praiseCount}}</text>
+								<text class="text-df margin-right-sm"
+									style="margin-top: 2rpx;">{{newsData.praiseCount}}</text>
 								<!-- <text class="text-gray cuIcon-share text-df" style="margin-right: 6rpx;"></text> -->
 								<u-icon name="chat-fill"></u-icon>
 								<text class="text-df" style="margin-top: 2rpx;">{{newsData.commentCount}}</text>
@@ -64,27 +66,28 @@
 						</u-col>
 					</u-row>
 				</view>
-				
-			
+
+
 				<!-- <view class="text-center text-dflg text-grey margin-top-sm margin-bottom-sm">
 					作者：{{newsData.author}}
 				</view> -->
-				
+
 				<!-- <view class="flex justify-between text-df text-gray margin-top-sm margin-bottom-sm">
 					<text>{{newsData.createdAt | formatDate}}</text>
 					<text>{{newsData.type | typeF}}</text>
 				</view>
 				<image mode="widthFix" :src="newsData.img"></image> -->
 
-				
-			</view>	<!-- 
+
+			</view>
+			<!-- 
 			<view class="cu-bar justify-left bg-white margin-top-sm">
 				<view class="action border-title">
 					<text class="text-lg text-bold text-blue">图片展示</text>
 					<text class="bg-gradual-blue" style="width:3rem"></text>
 				</view>
 			</view> -->
-			
+
 		</view>
 
 		<view style="margin: 25rpx 0 100rpx 0;">
@@ -98,7 +101,7 @@
 			<!-- <view class="text-lg text-bold text-center margin-bottom-lg">暂无评论</view> -->
 
 			<view class="cu-list menu-avatar comment solids-top">
-				<view class="cu-item"  v-for="(item, index) in commentList" :key="index">
+				<view class="cu-item" v-for="(item, index) in commentList" :key="index">
 					<view class="cu-avatar round" style="background-image:url(../../static/icon_head_default.png);">
 					</view>
 					<view class="content">
@@ -122,11 +125,10 @@
 				</view>
 				分享
 			</button> -->
-			<u-input v-model="commentContent" style="margin-left: 10px; margin-right: 10px;background-color: #efefef;flex: 1;padding-left: 5px;padding-right: 5px;"/>
-			<button class="action" open-type="contact">
-				<view class="text-green">
-					<view class="badge"></view>
-				</view>
+			<u-input v-model="commentContent"
+				style="margin-left: 10px; margin-right: 10px;background-color: #efefef;flex: 1;padding-left: 5px;padding-right: 5px;" />
+			<button @click="createComment()">
+
 				发布
 			</button>
 			<!-- <view class="btn-group">
@@ -148,11 +150,13 @@
 			return {
 				newsData: [],
 				commentList: '',
-				commentContent:'',
+				commentContent: '',
+				talkId: '',
 				requestStatus: false // 事件防抖
 			}
 		},
 		onLoad(option) {
+			this.talkId = option.id;
 			console.log(option)
 			this.getData(option.id);
 			this.getCommentList(option.id)
@@ -172,6 +176,52 @@
 			}
 		},
 		methods: {
+			//新建评论
+			createComment() {
+
+				let token = uni.getStorageSync('token');
+
+				if (token == '' || token == undefined || token == null) {
+					uni.reLaunch({
+						url: '../../tn_components/login/login',
+					});
+					return;
+				}
+
+				var that = this;
+				if (!that.commentContent) {
+					uni.showToast({
+						title: '请输入发布内容',
+						icon: 'none'
+					});
+					return;
+				}
+
+				uni.showLoading({
+					title: '加载中'
+				});
+				let opts = {
+					url: 'saas-hearts-service/api/custComment/addComment',
+					method: 'post'
+				};
+				let custComment = {
+					talkId: this.talkId,
+					content: this.commentContent
+				};
+
+				request.httpTokenRequestSaas(opts, custComment).then(res => {
+					console.log(res);
+					uni.hideLoading();
+					if (res.statusCode === 200) {
+						this.commentContent = '';
+						this.getData(this.talkId);
+						this.getCommentList(this.talkId);
+
+					} else {
+						console.log('数据请求错误～');
+					}
+				});
+			},
 			// 话题详情
 			getData(id) {
 				console.log(id);
@@ -193,9 +243,10 @@
 				});
 			},
 			getCommentList(id) {
-				
+
 				let opts = {
-					url: 'saas-hearts-service/api/custComment/getCommentList?pageIndex=1&pageSize=10&status=1&talkId=' + id,
+					url: 'saas-hearts-service/api/custComment/getCommentList?pageIndex=1&pageSize=10&status=1&talkId=' +
+						id,
 					method: 'get'
 				};
 				uni.showLoading({
@@ -252,7 +303,7 @@
 					urls: seeImgList //预览图片的地址，必须要数组形式，如果不是数组形式就转换成数组形式就可以
 				})
 			},
-			onShareAppMessage (options) {
+			onShareAppMessage(options) {
 				// 自定义分享内容
 				var shareObj = {
 					title: this.newsData.title, // 小程序的名称
@@ -270,7 +321,7 @@
 				return shareObj;
 			},
 			// 分享接口
-			shareFun(id){
+			shareFun(id) {
 				console.log(id);
 				uni.showLoading({
 					title: '加载中'
@@ -292,7 +343,7 @@
 		},
 		filters: {
 			formatDate(value) {
-				
+
 				if (value == undefined) {
 					return;
 				}
@@ -310,7 +361,7 @@
 				m = m < 10 ? ('0' + m) : m; //分钟补0
 				let s = date.getSeconds();
 				s = s < 10 ? ('0' + s) : s; //秒补0
-				
+
 				let strDate = y + '-' + MM + '-' + d + ' ' + h + ':' + m;
 				// return y + '-' + MM + '-' + d; //年月日
 				console.log('strDate:' + strDate);
@@ -352,23 +403,23 @@
 	uni-button {
 		background: transparent;
 	}
-	
-	.header-img{
+
+	.header-img {
 		width: 27px;
 		height: 27px;
 	}
-	
-	.line{
-		border-top-width: 1px ;
+
+	.line {
+		border-top-width: 1px;
 		border-bottom-width: 1px;
 		border-top-color: #d2d2d2;
 		border-left-width: 0px;
 		border-right-width: 0px;
-		border-bottom-color:#fff;
+		border-bottom-color: #fff;
 		border-style: solid;
 	}
-	
-	.cu-item{
+
+	.cu-item {
 		border-bottom: 1px solid #f2f2f2;
 		margin-left: 10px;
 		margin-right: 10px;
@@ -377,8 +428,8 @@
 		border-radius: 5px;
 		padding: 10px;
 	}
-	
-	.contentBox{
+
+	.contentBox {
 		padding-bottom: 10px;
 		border-bottom: 1px #d2d2d2 solid;
 	}

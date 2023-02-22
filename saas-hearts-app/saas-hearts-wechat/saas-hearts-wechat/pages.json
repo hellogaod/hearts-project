@@ -52,6 +52,12 @@
 			}
 		},
 		{
+			"path": "pages/news/create-talk",
+			"style": {
+				"navigationBarTitleText": "新建话题"
+			}
+		},
+		{
 			"path": "pages/video",
 			"style": {
 				"navigationBarTitleText": "视频播放",
@@ -367,6 +373,18 @@
 						"app-plus": {
 							"titleNView": false
 						}
+					}
+				},
+				{
+					"path": "login/login",
+					"style": {
+						"navigationBarTitleText": "登录"
+					}
+				},
+				{
+					"path": "login/register",
+					"style": {
+						"navigationBarTitleText": "注册"
 					}
 				},
 				{

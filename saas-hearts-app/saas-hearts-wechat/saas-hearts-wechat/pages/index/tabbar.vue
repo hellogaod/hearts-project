@@ -91,6 +91,7 @@
 			}
 		},
 		onShow() {
+			console.log("onshow123")
 			this.getData();
 		},
 		methods: {
