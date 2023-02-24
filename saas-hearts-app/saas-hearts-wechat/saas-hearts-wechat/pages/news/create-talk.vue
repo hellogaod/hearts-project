@@ -88,12 +88,13 @@
 					console.log(res);
 					uni.hideLoading();
 					if (res.statusCode === 200) {
-
-						uni.$emit("refresh", {}) //这里可以传个空,也可以传值过去
-						uni.navigateBack({ // 返回上一页
-							delta: 1
-						})
+						let pages = getCurrentPages();
+						let prePage = pages[pages.length - 2];//上一页
+						prePage.$vm.onRefreshNews();
 						
+						uni.navigateBack()
+						
+
 					} else {
 						console.log('数据请求错误～');
 					}

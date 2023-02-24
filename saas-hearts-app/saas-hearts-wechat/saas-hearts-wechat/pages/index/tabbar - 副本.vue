@@ -55,7 +55,7 @@
 
 <script>
 	import request from '@/common/request.js';
-	import index from "./inedx.vue";	//首页
+	import index from "./index.vue";	//首页
 	import search from "./search.vue";	//技术视频
 	import cases from "./main.vue";	//宅家学
 	import news from "./news.vue";	//资讯

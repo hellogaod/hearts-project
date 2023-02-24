@@ -3,8 +3,8 @@
 		<index @ShowNews="ShowNews" v-if="PageCur=='index'"></index>
 		<search v-if="PageCur=='search'"></search>
 		<cases v-if="PageCur=='cases'"></cases>
-		<news v-if="PageCur=='news'"></news>
-		<me v-if="PageCur=='me'"></me>
+		<news v-if="PageCur=='news'" ref="news"></news>
+		<me v-if="PageCur=='me'" ref="me"></me>
 
 		<view class="box">
 			<view class="cu-bar tabbar bg-white shadow foot">
@@ -42,7 +42,7 @@
 
 <script>
 	import request from '@/common/request.js';
-	import index from "./inedx.vue";	//首页
+	import index from "./index.vue";	//首页
 	import search from "./search.vue";	//技术视频
 	import cases from "./main.vue";	//宅家学
 	import news from "./news.vue";	//资讯
@@ -91,10 +91,17 @@
 			}
 		},
 		onShow() {
-			console.log("onshow123")
-			this.getData();
+			this.onRefreshMe();
+			this.onRefreshNews();
 		},
 		methods: {
+			onRefreshNews(){
+				this.$refs.news.getData()
+			},
+			onRefreshMe(){
+				console.log("21")
+				this.$refs.me.getToken()
+			},
 			getData() {
 				let opts = {
 					url: 'api/blog/list',

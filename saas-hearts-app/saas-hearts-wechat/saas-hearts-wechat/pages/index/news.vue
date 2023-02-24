@@ -112,15 +112,12 @@
 		},
 		onShow() {
 			
-			uni.$on("refresh", (e) => {
-				this.getData(); //需要重新访问一下接口。
-			})
 		}, 
 		// 用这种方法需要清除，负责会一直调用多次接口
 		onLoad() {
-			console.log("onshow")
-			// 清除监听
-			uni.$off('refresh');
+			
+			this.getData();
+			
 		},
 		mounted() {
 			this.getData();
@@ -150,6 +147,7 @@
 		},
 		methods: {
 			getData() {
+				
 				var type = this.navTop[this.TabCur].id;
 				console.log(type)
 				if (type == 1) {

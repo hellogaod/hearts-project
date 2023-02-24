@@ -1,86 +1,246 @@
 <!-- 个人中心 -->
 <template>
-	<view>
-		<cu-custom bgColor="bg-gradual-blue" :isBack="false">
-			<block slot="content">我的</block>
-		</cu-custom>
-
-		<view>
-			<view v-if="token == ''|| token == undifined"
-				style="font-size: 38rpx;line-height: 80rpx;height:80rpx;text-align: center;background-color: #fff;">请登录
+	<view class="components-theme">
+		<button open-type="share">
+			<view class="dong">
+				<view class="monster">
+					<view class="monster__face">
+						<view class="monster__eye avatar-eye avatar-eye--green eye--left">
+							<view class="avatar-eye-pupil pupil--green"><span class="avatar-eye-pupil-blackThing"><span class="avatar-eye-pupil-lightReflection"></span></span></view>
+						</view>
+						<view class="monster__eye avatar-eye avatar-eye--violet eye--right">
+							<view class="avatar-eye-pupil pupil--pink"><span class="avatar-eye-pupil-blackThing"><span class="avatar-eye-pupil-lightReflection"></span></span></view>
+						</view>
+						<view class="monster__noses">
+							<view class="monster__nose"></view>
+							<view class="monster__nose"></view>
+						</view>
+						<view class="monster__mouth">
+							<view class="monster__top"></view>
+							<view class="monster__bottom"></view>
+						</view>
+					</view>
+				</view>
 			</view>
-			<view v-if="token != '' && token != undifined" @click="goUpdateUserInfo()" class="wrap padding-xl"
-				style="background-color: #fff;">
-				<u-row gutter="16">
-					<u-col span="9">
-						<u-row gutter="16">
-							<view style="text-align: center;font-size: 52rpx;">{{user.account}}
-								<u-icon name="edit-pen-fill">
-								</u-icon>
-							</view>
-						</u-row>
-						<u-row>
-							<u-col span="6">
-								<u-row gutter="16">
-									<view style="text-align: center;font-size: 42rpx;margin-top: 20rpx;">0%</view>
-								</u-row>
-								<u-row gutter="16">
-
-									<view style="text-align: center;font-size: 42rpx;">用户满意度</view>
-								</u-row>
-							</u-col>
-							<u-col span="6">
-								<u-row gutter="16">
-									<view style="text-align: center;font-size: 42rpx;margin-top: 20rpx;">0</view>
-								</u-row>
-								<u-row gutter="16">
-									<view style="text-align: center;font-size: 42rpx;">收到的赞</view>
-
-								</u-row>
-							</u-col>
-						</u-row>
-					</u-col>
-					<u-col span="3">
-						<image src="../../static/icon_head_default.png" style="height: 120rpx;width: 120rpx;"></image>
-					</u-col>
-
-				</u-row>
+		</button>
+		
+		<!-- 弹窗确认 -->
+		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
+			<view class="cu-dialog" style="padding: 300rpx 0 70rpx;">
+				<view class="modal_bg"></view>
+				<view class="modal_main">
+					<view class='nav-list margin-top'>
+						<view :class="'nav-li bg-zt' + (index+1)" v-for="(item, index) in inter" :key="index" @click="switchImage(index,item.name)">
+							<view class="nav-name">{{item.name}}</view>
+						</view>
+					</view>
+				</view>
 			</view>
-			<view style="height: 10rpx;background-color: #efefef;"></view>
-
-			<view style="background-color: #fff;">
-				<view @click="goUserInfo()"
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="account-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">我的主页</span>
-					<u-icon name="arrow-right" />
-				</view>
-
-				<view
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="more-circle-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">我的消息</span>
-					<u-icon name="arrow-right" />
-				</view>
-
-				<view
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="thumb-up-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">我的点赞</span>
-					<u-icon name="arrow-right" />
-				</view>
-
-				<view @click="goSetting()"
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="setting-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">设置</span>
-					<u-icon name="arrow-right" />
-				</view>
-
-
-			</view>
-
 		</view>
+		<!-- 顶部背景 -->
+		<view class='UCenter-bg' :style="'background-image: url(' + pic[topBackGroupImageIndex].link + ');margin-top:' + CustomBar + 'px;'">
+			<view class='space' v-show="spaceShow">
+				<view class="stars ">
+					<view class="star "></view>
+					<view class="star pink "></view>
+					<view class="star blue "></view>
+					<view class="star yellow "></view>
+				</view>
+			</view>
+
+			<block>
+				<view class='text-center' @click="goMedal">
+					<!-- <view class="cu-avatar2 round xl margin-right-sm shadow-blur-lg bg-img open-data">
+						<open-data type="userAvatarUrl"></open-data>
+					</view> -->
+					<view class="cu-avatar2 round xl margin-right-sm shadow-blur-lg bg-img open-data"
+						style="overflow: hidden;">
+						<image src="../../static/logo.png" style="width: 100%; height: 100%;"></image>
+					</view>
+					<view class="padding text-blue text-xl text-bold">
+						你好，开发者！
+					</view>
+
+				</view>
+			</block>
+
+			<image src='https://cdn.nlark.com/yuque/0/2019/gif/280373/1570670848649-assets/web-upload/3dbaa72a-062b-470f-9b9d-058ff8f85ab8.gif'
+			 mode='scaleToFill' class='gif-wave'></image>
+		</view>
+
+		<block>
+			<view class='padding flex text-center text-grey bg-white shadow-warp-my'>
+				<view class='flex flex-sub flex-direction solid-right'>
+					<view class="text-xxl text-orange">18.6k+</view>
+					<view class="margin-top-sm">
+						<text class='cuIcon-hot'></text> 访客</view>
+				</view>
+				<view class='flex flex-sub flex-direction solid-right'>
+					<view class="text-xxl text-blue">10.6k</view>
+					<view class="margin-top-sm">
+						<text class='cuIcon-share'></text> 分享</view>
+				</view>
+				<view class='flex flex-sub flex-direction'>
+					<view class="text-xxl text-red">3.1k+</view>
+					<view class="margin-top-sm">
+						<text class='cuIcon-like'></text> 点赞</view>
+				</view>
+			</view>
+			
+			
+			
+			<view class="cu-list menu card-menu margin-top-lg shadow-shop bg-white text-black my-radius sm-border">
+				<view class="cu-item" @tap="showModal" data-target="Modal">
+					<view class='content'>
+						<image src='../../static/me/icon/zhuti.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>主题切换</text>
+					</view>
+					<view class='action'>
+						<view class="cu-capsule radius">
+							<view class='cu-tag bg-gradual-blue'>
+								<view style="clear: both;"></view>
+							</view>
+							<view class="cu-tag line-blue">
+								{{picName}}
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="cu-item " @click="mentalTest">
+					<button class='content cu-btn'>
+						<image src='../../static/me/icon/bianqian.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>答题测试</text>
+					</button>
+					<view class="action">
+						<view class="cu-tag round bg-orange light">技术</view>
+						<view class="cu-tag round bg-olive light">性格</view>
+						<view class="cu-tag round bg-blue light">星座</view>
+					</view>
+				</view>
+
+				<!-- 听歌 -->
+				<!-- <view class="cu-item " bindtap="">
+					<button class='content cu-btn'>
+						<image src='../../static/me/icon/youxi.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>休闲小游戏</text>
+					</button>
+					<view class="action">
+						<view class="cu-avatar-group">
+							<view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
+							<view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg);"></view>
+							<view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg);"></view>
+							<view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg);"></view>
+						</view>
+						<text class="text-grey text-sm">共4款</text>
+					</view>
+				</view> -->
+				
+				<view class="cu-item">
+					<button class='content cu-btn' open-type="share">
+						<image src='../../static/me/icon/lvhang.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>分享小程序</text>
+					</button>
+				</view>
+				
+				<!-- <view class="cu-item" @click="playVideo">
+					<button class='content cu-btn'>
+						<image src='../../static/me/icon/shouji.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>支持作者</text>
+					</button>
+					<view class="action">
+						<text class="text-xs text-orange">不需要打钱！</text>
+						<text class="text-xs text-grey">看看广告就很感谢啦～</text>
+					</view>
+				</view> -->
+				
+				<view class="cu-item">
+					<button class='content cu-btn' @tap="showGitee" data-target="ModalGitee">
+						<image style="border-radius: 50rpx;" src='https://zhoukaiwen.com/img/icon/gitee_logo.jpeg' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>下载小程序源码</text>
+					</button>
+				</view>
+
+			</view>
+			
+
+			<view class="cu-list menu card-menu margin-bottom-lg shadow-shop bg-white text-black my-radius sm-border">
+
+				<!-- <view class="cu-item ">
+					<button class='content cu-btn' @click="goSalary">
+						<image src='../../static/me/icon/jisuanqi.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>薪资排名</text>
+					</button>
+				</view>
+				<view class="cu-item " @click="goCourse">
+					<button class='content cu-btn'>
+						<image src='../../static/me/icon/youjian.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>课班信息</text>
+					</button>
+				</view> -->
+
+				<view class="cu-item ">
+					<button class='content cu-btn' open-type="contact">
+						<image src='../../static/me/icon/diannao.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>项目需求</text>
+					</button>
+				</view>
+
+				<view class="cu-item" @click="callPhoneNumber" data-number="18629591093">
+					<view class='content'>
+						<image src='../../static/me/icon/dengta.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>技术支持</text>
+					</view>
+					<view class="action">
+						<view class="cu-tag round bg-blue light">186 2959 1093</view>
+					</view>
+				</view>
+
+				<view class="cu-item">
+					<button class='content cu-btn' open-type="feedback">
+						<image src='../../static/me/icon/chucuo.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>问题反馈</text>
+					</button>
+				</view>
+				<view class="cu-item">
+					<button class='content cu-btn' @click="goAboutMe">
+						<image src='../../static/me/icon/xiaoxi.png' class='png' mode='aspectFit'></image>
+						<text class='text-lg margin-sm'>关于作者</text>
+					</button>
+				</view>
+			</view>
+
+		</block>
+		
+		<!-- Gitee弹窗 -->
+		<view class="cu-modal" :class="modalName=='ModalGitee'?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">Gitee开源</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view style="padding: 10rpx 50rpx 50rpx 50rpx;">
+					<image src="https://cdn.zhoukaiwen.com/logo.png" mode="widthFix" style="width:150rpx;"></image>
+					<view class="text-bold text-xl text-balck margin-top-xs margin-bottom">《前端铺子》· 开源，易上手</view>
+					<view class="flex justify-between margin-bottom-lg">
+						<image src="https://svg.hamm.cn/gitee.svg?type=star&user=kevin_chou&project=qdpz" mode="heightFix" style="height:40rpx;"/>
+						<image src="https://svg.hamm.cn/gitee.svg?type=fork&user=kevin_chou&project=qdpz" mode="heightFix" style="height:40rpx;"/>
+					</view>
+					
+					
+					
+					<p @click="getGitee">
+						<text class="margin-right-xs">[点击复制]</text>
+						<text class="giteeClass">https://gitee.com/kevin_chou</text>
+					</p>
+				</view>
+			</view>
+		</view>
+
+		<view style="height: 110rpx;width: 1rpx;"></view>
+
 	</view>
 </template>
 
@@ -89,11 +249,9 @@
 	export default {
 		data() {
 			return {
-				user: '',
-				token: '',
 				// Custom: this.Custom,
 				// CustomBar: this.CustomBar,
-				spaceShow: true,
+				spaceShow:true,
 				modalName: null,
 				picName: '流星之夜',
 				pic: [{
@@ -150,22 +308,20 @@
 				imageUrl: 'https://cdn.zhoukaiwen.com/qdpz_share.jpg',
 			};
 		},
-		watch: {
+		watch:{
 			topBackGroupImageIndex(val) {
 				console.log(val)
-				if (val == 4 || val == 5) {
+				if (val == 4 || val == 5 ) {
 					this.spaceShow = true;
-				} else {
+				}else{
 					this.spaceShow = false;
 				}
 			}
 		},
 		mounted() {
-			this.getToken();
-			this.getUser();
 			// 在页面中定义激励视频广告
 			// let videoAd = null
-
+			
 			// 在页面onLoad回调事件中创建激励视频广告实例
 			// if (wx.createRewardedVideoAd) {
 			//   videoAd = wx.createRewardedVideoAd({
@@ -182,15 +338,6 @@
 			// });
 		},
 		methods: {
-			getToken() {
-				this.token = uni.getStorageSync("token");
-				console.log("12")
-			},
-			getUser() {
-				this.user = uni.getStorageSync("user");
-
-				console.log("用户：" + JSON.stringify(this.user))
-			},
 			// playVideo(){
 			// 	videoAd.show()
 			// 	.catch(() => {
@@ -201,46 +348,12 @@
 			// 	    })
 			// 	})
 			// },
-			goUpdateUserInfo() {
-
-				if (this.checkLogin()) {
-					let user = uni.getStorageSync("user");
-					uni.navigateTo({
-						url: '../me/update_userinfo?id=' + user.userId,
-					})
-				}
-			},
-			goUserInfo(){
-				if (this.checkLogin()) {
-					uni.navigateTo({
-						url: '../me/user_details',
-					})
-				}
-			},
-			goSetting() {
-				if (this.checkLogin()) {
-					let user = uni.getStorageSync("user");
-					uni.navigateTo({
-						url: '../setting/setting',
-					})
-				}
-			},
-			checkLogin() {
-
-				if (this.token == '' || this.token == undefined || this.token == null) {
-					uni.navigateTo({
-						url: '../../tn_components/login/login',
-					})
-					return false;
-				}
-				return true;
-			},
-			getGitee() {
+			getGitee(){
 				uni.setClipboardData({
-					data: 'https://gitee.com/kevin_chou',
-					success: function() {
-						console.log('success');
-					}
+				    data: 'https://gitee.com/kevin_chou',
+				    success: function () {
+				        console.log('success');
+				    }
 				});
 			},
 			switchImage(index, name) {
@@ -251,7 +364,7 @@
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
 			},
-			showGitee(e) {
+			showGitee(e){
 				this.modalName = e.currentTarget.dataset.target
 			},
 			hideModal(e) {
@@ -270,7 +383,7 @@
 					phoneNumber: "18629591093",
 				});
 			},
-			goMedal() {
+			goMedal(){
 				uni.navigateTo({
 					url: '../../tn_components/medal'
 				})
@@ -298,6 +411,7 @@
 </script>
 
 <style lang="scss" scoped>
+	
 	.UCenter-bg {
 		background: #fff;
 		background-size: 100% 100%;
@@ -461,14 +575,12 @@
 	.margin-bottom-my {
 		margin-bottom: 150rpx;
 	}
-
-	.giteeClass {
+	.giteeClass{
 		margin-top: 30rpx;
 		font-size: 34rpx;
 		color: #2440B3;
 		text-decoration: underline;
 	}
-
 	.cu-dialog {
 		background: #FFFFFF;
 		overflow: visible;
@@ -513,7 +625,7 @@
 		color: #fff;
 		background: #152e9d;
 	}
-
+	
 	.bg-zt6 {
 		color: #fff;
 		background: #0f1358;

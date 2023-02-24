@@ -1,17 +1,14 @@
-<!-- 个人中心 -->
+<!-- 用户主页 -->
 <template>
 	<view>
-		<cu-custom bgColor="bg-gradual-blue" :isBack="false">
-			<block slot="content">我的</block>
-		</cu-custom>
 
 		<view>
-			<view v-if="token == ''|| token == undifined"
-				style="font-size: 38rpx;line-height: 80rpx;height:80rpx;text-align: center;background-color: #fff;">请登录
-			</view>
-			<view v-if="token != '' && token != undifined" @click="goUpdateUserInfo()" class="wrap padding-xl"
-				style="background-color: #fff;">
+
+			<view v-if="token != '' && token != undifined" class="wrap padding-xl" style="background-color: #fff;">
 				<u-row gutter="16">
+					<u-col span="3">
+						<image src="../../static/icon_head_default.png" style="height: 120rpx;width: 120rpx;"></image>
+					</u-col>
 					<u-col span="9">
 						<u-row gutter="16">
 							<view style="text-align: center;font-size: 52rpx;">{{user.account}}
@@ -40,57 +37,91 @@
 							</u-col>
 						</u-row>
 					</u-col>
-					<u-col span="3">
-						<image src="../../static/icon_head_default.png" style="height: 120rpx;width: 120rpx;"></image>
-					</u-col>
+
 
 				</u-row>
 			</view>
 			<view style="height: 10rpx;background-color: #efefef;"></view>
 
-			<view style="background-color: #fff;">
-				<view @click="goUserInfo()"
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="account-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">我的主页</span>
-					<u-icon name="arrow-right" />
+			<view class="cu-card article no-card">
+				<view class="shadow borderBottom" v-for="(item, index) in newsList" :key="index"
+					@click="goNews(item.id)">
+					<view class="header">
+						<img src="../../static/icon_head_default.png" />
+						<span>{{item.createUserName}}</span>
+						<span style="float: right;">{{item.createTime | formatDate}}</span>
+					</view>
+					<view class="line"></view>
+					<view class="u-demo-block__content">
+						<u-row justify="space-between" customStyle="margin-bottom: 10px">
+							<u-col span="3">
+								<view class="demo-layout bg-purple-light"></view>
+							</u-col>
+							<u-col span="3">
+								<view class="demo-layout bg-purple"></view>
+							</u-col>
+						</u-row>
+
+					</view>
+					<view class="title margin-top-sm">
+						<view class="text-cut text-bold text-lg">{{item.title}}</view>
+					</view>
+					<view class="content margin-top-sm">
+						<view class="desc">
+							<view class="text-content">{{item.content}}</view>
+							<view class="margin-top-xs">
+								<view class="text-gray light sm text-df round fl">{{item.createdAt | formatDate}}</view>
+								<view>
+									<view class="text-gray light sm round margin-lr-xs"
+										style="display: inline-flex;align-items:center;">
+
+										<img src="../../static/icon_like.png" />
+										<text class="text-df" style="margin-top: 2rpx;">{{item.satisfaceRate}}%</text>
+									</view>
+									<view class="text-gray light sm round margin-lr-xs"
+										style="display: inline-flex;align-items:center;">
+										<img src="../../static/icon_praise.png" />
+										<text class="text-df" style="margin-top: 2rpx;">{{item.praiseCount}}</text>
+									</view>
+									<view class="text-gray light sm round"
+										style="display: inline-flex;align-items:center;">
+										<img src="../../static/icon_comment.png" />
+										<text class="text-df" style="margin-top: 2rpx;">{{item.commentCount}}</text>
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
 				</view>
 
-				<view
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="more-circle-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">我的消息</span>
-					<u-icon name="arrow-right" />
+
+				<view class="page-box" v-if="newsList.length < 1">
+					<view>
+						<view class="centre">
+							<image src="https://cos.qhskis.com/kevin_7ny/noData1.png" mode="widthFix"></image>
+							<view class="explain">
+								暂无数据
+								<view class="tips">可以去看看有其他</view>
+							</view>
+							<!-- <view class="btn">随便逛逛</view> -->
+						</view>
+					</view>
 				</view>
-
-				<view
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="thumb-up-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">我的点赞</span>
-					<u-icon name="arrow-right" />
-				</view>
-
-				<view @click="goSetting()"
-					style="height: 92rpx;padding-left: 20rpx;padding-right: 20rpx;border-bottom: #efefef solid 2rpx;display: flex;font-size: 36rpx;">
-					<u-icon name="setting-fill" />
-					<span style="flex: 1;margin-left: 20rpx;line-height: 92rpx;">设置</span>
-					<u-icon name="arrow-right" />
-				</view>
-
-
 			</view>
+
 
 		</view>
 	</view>
 </template>
 
 <script>
-	var videoAd = null
+	import request from '@/common/request.js';
 	export default {
 		data() {
 			return {
 				user: '',
 				token: '',
+				newsList: '',
 				// Custom: this.Custom,
 				// CustomBar: this.CustomBar,
 				spaceShow: true,
@@ -163,6 +194,7 @@
 		mounted() {
 			this.getToken();
 			this.getUser();
+			this.geList();
 			// 在页面中定义激励视频广告
 			// let videoAd = null
 
@@ -191,6 +223,26 @@
 
 				console.log("用户：" + JSON.stringify(this.user))
 			},
+			geList() {
+				
+				let opts = {
+					url: 'saas-hearts-service/api/custTalk/getTalkList?pageIndex=1&pageSize=10&status=1',
+					method: 'get'
+				};
+				uni.showLoading({
+					title: '加载中'
+				});
+				request.httpRequestSaas(opts).then(res => {
+					console.log(res);
+					uni.hideLoading();
+					if (res.statusCode == 200) {
+						this.newsList = res.data.list;
+						console.log(this.newsList);
+					} else {
+						console.log('数据请求错误～');
+					}
+				});
+			},
 			// playVideo(){
 			// 	videoAd.show()
 			// 	.catch(() => {
@@ -207,13 +259,6 @@
 					let user = uni.getStorageSync("user");
 					uni.navigateTo({
 						url: '../me/update_userinfo?id=' + user.userId,
-					})
-				}
-			},
-			goUserInfo(){
-				if (this.checkLogin()) {
-					uni.navigateTo({
-						url: '../me/user_details',
 					})
 				}
 			},
@@ -1129,5 +1174,78 @@
 			-webkit-transform: scale(1) rotate(0) translate3d(-300rpx, 300rpx, 0);
 			-moz-transform: scale(1) rotate(0) translate3d(-300rpx, 300rpx, 0);
 		}
+	}
+	
+	.borderBottom {
+		border-bottom: 1px solid #f2f2f2;
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 10px;
+		background-color: #efefef;
+		border-radius: 5px;
+		padding: 10px;
+	
+		.line {
+			border-top-width: 1px;
+			border-bottom-width: 1px;
+			border-top-color: #d2d2d2;
+			border-left-width: 0px;
+			border-right-width: 0px;
+			border-bottom-color: #fff;
+			border-style: solid;
+		}
+	
+		.content {
+			image {
+				width: 30rpx;
+				height: 30rpx;
+			}
+		}
+	}
+	
+	.header {
+		height: 40px;
+		line-height: 40px;
+	
+		image {
+			vertical-align: middle;
+			width: 50rpx;
+			margin-right: 10px;
+			height: 50rpx;
+		}
+	
+	}
+	
+	// 暂无数据
+	.centre {
+		text-align: center;
+		margin: 200rpx auto;
+		font-size: 32rpx;
+	
+		image {
+			width: 300rpx;
+			border-radius: 50%;
+			margin: 0 auto;
+		}
+	
+		.tips {
+			font-size: 24rpx;
+			color: #999999;
+			margin-top: 20rpx;
+		}
+	
+		.btn {
+			margin: 80rpx auto;
+			width: 200rpx;
+			border-radius: 32rpx;
+			line-height: 64rpx;
+			color: #ffffff;
+			font-size: 26rpx;
+			background: linear-gradient(270deg, #1cbbb4 0%, #0081ff 100%);
+		}
+	}
+	
+	.nav .cu-item.cur {
+		font-weight: 600;
 	}
 </style>

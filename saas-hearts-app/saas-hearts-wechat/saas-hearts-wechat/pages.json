@@ -10,11 +10,30 @@
 				"navigationStyle": "custom"
 			}
 		},
+		
 		{
 			"path": "pages/me/salary",
 			"style": {
 				"navigationBarTitleText": "薪资排行",
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/me/update_userinfo",
+			"style": {
+				"navigationBarTitleText": "修改资料"
+			}
+		},
+		{
+			"path": "pages/me/user_details",
+			"style": {
+				"navigationBarTitleText": "个人主页"
+			}
+		},
+		{
+			"path": "pages/setting/setting",
+			"style": {
+				"navigationBarTitleText": "设置"
 			}
 		},
 		{
@@ -468,8 +487,7 @@
 		},
 		{
 			"root": "os_project",
-			"pages": [
-				{
+			"pages": [{
 					"path": "index",
 					"style": {
 						"navigationBarTitleText": "客户定制",
@@ -479,30 +497,30 @@
 				// 临时工单
 				{
 					"path": "workOrder/index",
-					"style" : {
-						"navigationBarBackgroundColor":"#2695FE",
-						"navigationBarTextStyle":"white",
-						"navigationBarTitleText":"订单详情",
-						"backgroundColorTop":"#2695FE",
-						"backgroundColorBottom":"#2695FE"
+					"style": {
+						"navigationBarBackgroundColor": "#2695FE",
+						"navigationBarTextStyle": "white",
+						"navigationBarTitleText": "订单详情",
+						"backgroundColorTop": "#2695FE",
+						"backgroundColorBottom": "#2695FE"
 					}
 				},
 				{
 					"path": "workOrder/index2",
-					"style" : {
-						"navigationBarBackgroundColor":"#2695FE",
-						"navigationBarTextStyle":"white",
-						"navigationBarTitleText":"计划详情",
-						"backgroundColorTop":"#2695FE",
-						"backgroundColorBottom":"#2695FE"
+					"style": {
+						"navigationBarBackgroundColor": "#2695FE",
+						"navigationBarTextStyle": "white",
+						"navigationBarTitleText": "计划详情",
+						"backgroundColorTop": "#2695FE",
+						"backgroundColorBottom": "#2695FE"
 					}
 				},
 				{
 					"path": "workOrder/index3",
 					"style": {
 						"navigationStyle": "custom",
-						"app-plus": {  
-						    "titleNView": false
+						"app-plus": {
+							"titleNView": false
 						}
 					}
 				},
@@ -510,8 +528,8 @@
 					"path": "workOrder/index4",
 					"style": {
 						"navigationStyle": "custom",
-						"app-plus": {  
-						    "titleNView": false
+						"app-plus": {
+							"titleNView": false
 						}
 					}
 				},
@@ -519,8 +537,8 @@
 					"path": "workOrder/index_map",
 					"style": {
 						"navigationStyle": "custom",
-						"app-plus": {  
-						    "titleNView": false
+						"app-plus": {
+							"titleNView": false
 						}
 					}
 				},
@@ -528,8 +546,8 @@
 					"path": "workOrder/index5",
 					"style": {
 						"navigationStyle": "custom",
-						"app-plus": {  
-						    "titleNView": false
+						"app-plus": {
+							"titleNView": false
 						}
 					}
 				}
